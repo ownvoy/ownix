@@ -122,7 +122,7 @@ pkgs.writeShellScriptBin "zcli" ''
   # doom [sub]          - Doom Emacs management (install/status/remove/update)
   #
   # Variables:
-  # PROJECT             - Base directory name (ddubsos/zaneyos)
+  # PROJECT             - Base directory name (ddubsos/ownix)
   # PROFILE             - Hardware profile from the current host config
   # BACKUP_FILES        - Array of backup file paths to clean
   # FLAKE_NIX_PATH      - Path to flake.nix for machine registry updates
@@ -130,7 +130,7 @@ pkgs.writeShellScriptBin "zcli" ''
 
 
   # --- Configuration ---
-  PROJECT="zaneyos"   #ddubos or zaneyos
+  PROJECT="ownix"   #ddubos or ownix
   PROFILE="${profile}"
   BACKUP_FILES_STR="${backupFilesString}"
   VERSION="1.0.2"
