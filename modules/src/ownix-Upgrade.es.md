@@ -10,7 +10,7 @@
 >
 > **Usa el nuevo sistema:**
 > - Revisa: `UPGRADE-2.3-to-2.4.md` (documentación completa)
-> - Ejecuta: `./upgrade-2.3-to-2.4.sh` (actualización automatizada)
+> - Ejecuta: `./upgrade-ownix-2.3-to-2.4.sh` (actualización automatizada)
 > - Incluye respaldos automáticos, migración de variables y reversión sencilla
 
 ---
@@ -29,18 +29,18 @@ Proporciona:
 ```bash
 # Obtén el script sin modificar tu repo
 git -C ~/ownix fetch origin && \
-  git -C ~/ownix show origin/main:upgrade-2.3-to-2.4.sh > ~/upgrade-2.3-to-2.4.sh && \
-  chmod +x ~/upgrade-2.3-to-2.4.sh
+  git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh && \
+  chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 
 # Ejecuta el script (crea respaldo completo antes de cambiar ramas)
-~/upgrade-2.3-to-2.4.sh
+~/upgrade-ownix-2.3-to-2.4.sh
 ```
 
 Alternativa (curl):
 ```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-2.3-to-2.4.sh -o ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
-~/upgrade-2.3-to-2.4.sh
+curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
+~/upgrade-ownix-2.3-to-2.4.sh
 ```
 
 ### Instrucciones Detalladas

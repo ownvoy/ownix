@@ -259,7 +259,7 @@ ownix incluye un sistema de actualización completo que migra tu configuración 
 
 ```bash
 cd ~/ownix
-./upgrade-2.3-to-2.4.sh
+./upgrade-ownix-2.3-to-2.4.sh
 ```
 
 ### 🔍 ¿Qué hace el sistema de actualización?
@@ -298,7 +298,7 @@ Si algo falla, vuelve a 2.3 fácilmente:
 
 ```bash
 cd ~/ownix
-./upgrade-2.3-to-2.4.sh --revert
+./upgrade-ownix-2.3-to-2.4.sh --revert
 ```
 
 ---

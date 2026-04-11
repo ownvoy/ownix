@@ -25,7 +25,7 @@ Enlaces
 - El script de actualización SOLO está pensado para pasar de v2.3 → v2.4.
 - Si tienes una v2.3 muy modificada, NO uses el script de actualización. Considera una instalación limpia de v2.4 y migra tus cambios manualmente.
 - Copias de seguridad: Los scripts de instalación y actualización hacen copia de tu `~/ownix` actual, pero recomendamos encarecidamente que hagas tu propia copia de seguridad adicional.
-- Reversión: Hay un script de reversión (por ejemplo, `./revert-to-2.3.sh`) si necesitas volver atrás usando tu copia de seguridad.
+- Reversión: Hay un script de reversión (por ejemplo, `./revert-ownix-to-2.3.sh`) si necesitas volver atrás usando tu copia de seguridad.
 - Alcance: No podemos probar todas las combinaciones y personalizaciones posibles al actualizar de v2.3 a v2.4. Procede con cuidado y revisa las diferencias.
 
 Nota sobre la rama

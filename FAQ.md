@@ -818,15 +818,15 @@ Use the automated v2.3 → v2.4 upgrade. See `ownix-Upgrade.md` and `UPGRADE-2.3
 - Git (recommended):
 ```bash
 git -C ~/ownix fetch origin
-git -C ~/ownix show origin/main:upgrade-2.3-to-2.4.sh > ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
 - Curl:
 ```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-2.3-to-2.4.sh -o ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
-Then run the script: `~/upgrade-2.3-to-2.4.sh`. It will create a full backup before switching branches and migrate your hosts safely from the backup.
+Then run the script: `~/upgrade-ownix-2.3-to-2.4.sh`. It will create a full backup before switching branches and migrate your hosts safely from the backup.
 
 **IMPORTANT:**
 - Do NOT use the `fu` or `fr` aliases for this upgrade; the script uses a safe boot build.
@@ -1998,15 +1998,15 @@ Use the automated v2.3 → v2.4 upgrade. See ownix-Upgrade.md and UPGRADE-2.3-to
 - Git (recommended):
 ```bash
 git -C ~/ownix fetch origin
-git -C ~/ownix show origin/main:upgrade-2.3-to-2.4.sh > ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
 - Curl:
 ```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-2.3-to-2.4.sh -o ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
-Then run the script: `~/upgrade-2.3-to-2.4.sh`. It will create a full backup before switching branches and migrate your hosts safely from the backup.
+Then run the script: `~/upgrade-ownix-2.3-to-2.4.sh`. It will create a full backup before switching branches and migrate your hosts safely from the backup.
 
 **IMPORTANT:**
 - Do NOT use the `fu` or `fr` aliases for this upgrade; the script uses a safe boot build.

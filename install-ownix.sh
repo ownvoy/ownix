@@ -246,7 +246,7 @@ if [ -d "ownix" ]; then
   echo -e "${RED}║                                                                       ║${NC}"
   echo -e "${RED}║  If you want to upgrade an existing ownix checkout:                 ║${NC}"
   echo -e "${RED}║  1. Press Ctrl+C to cancel this installer                            ║${NC}"
-  echo -e "${RED}║  2. Run: cd ~/ownix && ./upgrade-2.3-to-2.4.sh                     ║${NC}"
+  echo -e "${RED}║  2. Run: cd ~/ownix && ./upgrade-ownix-2.3-to-2.4.sh                     ║${NC}"
   echo -e "${RED}║                                                                       ║${NC}"
   echo -e "${RED}║  The upgrade script preserves ALL your customizations!               ║${NC}"
   echo -e "${RED}╚═══════════════════════════════════════════════════════════════════════╝${NC}"
@@ -255,7 +255,7 @@ if [ -d "ownix" ]; then
   read -p "Type 'REPLACE' to continue with fresh install or Ctrl+C to cancel: " confirmation
   if [ "$confirmation" != "REPLACE" ]; then
     echo -e "${GREEN}Installation cancelled. Use the upgrade script instead!${NC}"
-    echo -e "${GREEN}Run: cd ~/ownix && ./upgrade-2.3-to-2.4.sh${NC}"
+    echo -e "${GREEN}Run: cd ~/ownix && ./upgrade-ownix-2.3-to-2.4.sh${NC}"
     exit 0
   fi
   echo -e "${GREEN}ownix exists, backing up to .config/ownix-backups folder.${NC}"

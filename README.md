@@ -279,7 +279,7 @@ configuration:
 
 ```bash
 cd ~/ownix
-./upgrade-2.3-to-2.4.sh
+./upgrade-ownix-2.3-to-2.4.sh
 ```
 
 ### 🔍 What the Upgrade System Does:
@@ -319,7 +319,7 @@ If anything goes wrong, easily revert to 2.3:
 
 ```bash
 cd ~/ownix
-./upgrade-2.3-to-2.4.sh --revert
+./upgrade-ownix-2.3-to-2.4.sh --revert
 ```
 
 ---

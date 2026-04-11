@@ -42,14 +42,14 @@ Option A — Using your existing git remote (recommended):
 git -C ~/ownix fetch origin
 
 # Write the script from origin/main into your home directory
-git -C ~/ownix show origin/main:upgrade-2.3-to-2.4.sh > ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
 
 Option B — Using curl (if you don't have a usable origin remote):
 ```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-2.3-to-2.4.sh -o ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
 
 Both methods keep your local repo unchanged. The script will create a full backup before switching branches.
@@ -58,7 +58,7 @@ Both methods keep your local repo unchanged. The script will create a full backu
 
 ```bash
 # You can run the script from anywhere; it operates on ~/ownix
-~/upgrade-2.3-to-2.4.sh
+~/upgrade-ownix-2.3-to-2.4.sh
 ```
 
 ### Step 2: Review the Pre-Upgrade Analysis
@@ -143,13 +143,13 @@ If you encounter any issues, you can easily revert:
 ### Option 1: Use the Revert Script
 ```bash
 cd ~/ownix
-./revert-to-2.3.sh
+./revert-ownix-to-2.3.sh
 ```
 
 ### Option 2: Use the Main Script
 ```bash
 cd ~/ownix
-./upgrade-2.3-to-2.4.sh --revert
+./upgrade-ownix-2.3-to-2.4.sh --revert
 ```
 
 ### Option 3: Manual Revert
@@ -218,8 +218,8 @@ If you encounter issues:
 
 ## Script Files
 
-- **`upgrade-2.3-to-2.4.sh`** - Main upgrade script
-- **`revert-to-2.3.sh`** - Simple revert wrapper
+- **`upgrade-ownix-2.3-to-2.4.sh`** - Main upgrade script
+- **`revert-ownix-to-2.3.sh`** - Simple revert wrapper
 - **`UPGRADE-2.3-to-2.4.md`** - This documentation
 
 Remember: The upgrade creates a complete backup before making any changes, so your system is always recoverable.

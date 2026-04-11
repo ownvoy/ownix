@@ -25,7 +25,7 @@ Links
 - The upgrade script is ONLY intended for upgrades from v2.3 → v2.4.
 - If you have a heavily modified v2.3, do NOT use the upgrade script. Consider a fresh install of v2.4 and manually migrate your changes.
 - Backups: The install and upgrade scripts back up your current `~/ownix`, but we strongly recommend making your own backup as well.
-- Revert: A revert script is provided (e.g., `./revert-to-2.3.sh`) if you need to roll back using your backup.
+- Revert: A revert script is provided (e.g., `./revert-ownix-to-2.3.sh`) if you need to roll back using your backup.
 - Scope: We cannot test every possible customization and combination when upgrading from v2.3 to v2.4. Proceed with care and review differences.
 
 Branch note

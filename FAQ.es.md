@@ -766,15 +766,15 @@ Usa el upgrade automatizado v2.3 → v2.4. Ve `ownix-Upgrade.md` y `UPGRADE-2.3-
 - Git (recomendado):
 ```bash
 git -C ~/ownix fetch origin
-git -C ~/ownix show origin/main:upgrade-2.3-to-2.4.sh > ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
 - Curl:
 ```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-2.3-to-2.4.sh -o ~/upgrade-2.3-to-2.4.sh
-chmod +x ~/upgrade-2.3-to-2.4.sh
+curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
+chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
-Luego ejecuta el script: `~/upgrade-2.3-to-2.4.sh`. Creará un respaldo completo antes de cambiar branches y migrará tus hosts de forma segura desde el respaldo.
+Luego ejecuta el script: `~/upgrade-ownix-2.3-to-2.4.sh`. Creará un respaldo completo antes de cambiar branches y migrará tus hosts de forma segura desde el respaldo.
 
 **IMPORTANTE:**
 - NO uses los alias `fu` o `fr` para este upgrade; el script usa un boot build seguro.
