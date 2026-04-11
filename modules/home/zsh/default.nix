@@ -1,4 +1,5 @@
 { host
+, username
 , pkgs
 , lib
 , ...
@@ -53,8 +54,8 @@
       sv = "sudo nvim";
       v = "nvim";
       c = "clear";
-      fr = "nh os switch --hostname ${host}";
-      fu = "nh os switch --hostname ${host} --update";
+      fr = "nh os switch /home/${username}/ownix --hostname ${host}";
+      fu = "nh os switch /home/${username}/ownix --hostname ${host} --update";
       zu = "sh <(curl -L https://gitlab.com/Zaney/zaneyos/-/releases/latest/download/install-zaneyos.sh)";
       ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
       cat = "bat";

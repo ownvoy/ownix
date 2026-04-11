@@ -36,7 +36,7 @@ in
     ./zotero.nix
     ./ssh.nix
     # ./nvf.nix
-    # ./neovim.nix
+    ./neovim.nix
     # ./imagemagick.nix
     ./fctix.nix
     ./obs-studio.nix
