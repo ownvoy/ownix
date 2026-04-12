@@ -10,6 +10,23 @@
 
     extraConfig = ''
               set-option -g status-position top
+              set-option -g status-justify left
+              set-option -g status-style "bg=#1a1b26,fg=#c0caf5"
+              set-option -g status-left-length 24
+              set-option -g status-right-length 48
+              set-option -g status-left " tmux "
+              set-option -g status-right " #{session_name}  %H:%M "
+
+              set-window-option -g window-status-separator "  "
+              set-window-option -g window-status-style "bg=#1a1b26,fg=#7aa2f7"
+              set-window-option -g window-status-current-style "bg=#1a1b26,fg=#e0af68,bold"
+              set-window-option -g window-status-format " #{window_index} #{window_name} "
+              set-window-option -g window-status-current-format " (#{window_index}) #{window_name} "
+
+              set-option -g pane-border-style "fg=#414868"
+              set-option -g pane-active-border-style "fg=#7aa2f7"
+              set-option -g message-style "bg=#1f2335,fg=#c0caf5"
+              set-option -g message-command-style "bg=#1f2335,fg=#e0af68,bold"
 
               #set -g default-terminal "screen-256color"
               set-option -g history-limit 5000
@@ -59,10 +76,18 @@
 
             bind -r m resize-pane -Z
 
-            bind-key  t clock-mode
-            bind-key  q display-panes
-            bind-key  u refresh-client
-            bind-key  o select-pane -t :.+
+              bind-key  t clock-mode
+              bind-key  q display-panes
+              bind-key  u refresh-client
+              bind-key  o select-pane -t :.+
+
+              # Vim-like copy mode: prefix+[ -> v to select -> y to yank
+              bind-key -T copy-mode-vi v send-keys -X begin-selection
+              bind-key -T copy-mode-vi V send-keys -X select-line
+              bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
+              bind-key -T copy-mode-vi y send-keys -X copy-selection \; run-shell "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy" \; send-keys -X cancel
+              bind-key -T copy-mode-vi Enter send-keys -X copy-selection \; run-shell "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy" \; send-keys -X cancel
+              bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection \; run-shell "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy" \; send-keys -X cancel
 
 
       ##### Display Popups #####

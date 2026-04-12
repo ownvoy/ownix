@@ -48,6 +48,12 @@
       if [ -f $HOME/.zshrc-personal ]; then
         source $HOME/.zshrc-personal
       fi
+
+      # Start a dedicated tmux session for each kitty-launched interactive shell.
+      if [[ $- == *i* ]] && [ -n "$KITTY_WINDOW_ID" ] && [ -z "$TMUX" ] && command -v tmux >/dev/null 2>&1; then
+        session_name="kitty-''${KITTY_WINDOW_ID}-''${PPID}-$(date +%s)"
+        exec tmux new-session -s "$session_name" -c "$PWD"
+      fi
     '';
 
     shellAliases = {
