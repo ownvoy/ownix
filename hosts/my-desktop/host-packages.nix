@@ -44,6 +44,7 @@ in
     unstable.antigravity-fhs
     lazygit
     hyprutils
+    winboat
   ];
 
   fonts.fontDir.enable = true;
