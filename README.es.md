@@ -108,7 +108,7 @@ A continuación los atajos de Hyprland, en formato de referencia rápida.
 - `$modifier + W` → Abrir `Navegador web`
 - `$modifier + Y` → Abrir `kitty` con `yazi`
 - `$modifier + E` → Abrir `emopicker9000`
-- `$modifier + S` → Tomar captura de pantalla
+- `$modifier + Shift + S` → Tomar captura de pantalla
 - `$modifier + D` → Abrir `Discord`
 - `$modifier + O` → Lanzar `OBS Studio`
 - `$modifier + C` → Ejecutar `hyprpicker -a`

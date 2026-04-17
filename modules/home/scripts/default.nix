@@ -23,6 +23,7 @@
       inherit pkgs profile;
       backupFiles = [
         ".config/mimeapps.list.backup"
+        ".config/nvim/init.lua.backup"
       ];
     })
   ];

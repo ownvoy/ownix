@@ -110,7 +110,7 @@ Below are the keybindings for Hyprland, formatted for easy reference.
 ## Application Launching
 
 - `$modifier + Return` → Launch `terminal`
-- `$modifier + K` → List keybinds
+- `$modifier + /` → List keybinds
 - `$modifier + Shift + Return` → Launch `rofi-launcher`
 - `$modifier + Shift + W` → Open `web-search`
 - `$modifier + Alt + W` → Open `wallsetter`
@@ -118,7 +118,7 @@ Below are the keybindings for Hyprland, formatted for easy reference.
 - `$modifier + W` → Launch `Web Browser`
 - `$modifier + Y` → Open `kitty` with `yazi`
 - `$modifier + E` → Open `emopicker9000`
-- `$modifier + S` → Take a screenshot
+- `$modifier + Shift + S` → Take a screenshot
 - `$modifier + D` → Open `Discord`
 - `$modifier + O` → Launch `OBS Studio`
 - `$modifier + C` → Run `hyprpicker -a`

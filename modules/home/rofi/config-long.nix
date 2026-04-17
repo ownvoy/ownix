@@ -1,4 +1,7 @@
-{ ... }: {
+{ host, ... }:
+let
+  inherit (import ../../../hosts/${host}/variables.nix) stylixImage;
+in {
   home.file.".config/rofi/config-long.rasi".text = ''
     @import "~/.config/rofi/config.rasi"
     window {
@@ -12,7 +15,7 @@
     inputbar {
       padding: 75px 40px;
       background-color: transparent;
-      background-image: url("~/Pictures/Wallpapers/Rainnight.jpg", width);
+      background-image: url("${toString stylixImage}", width);
       text-color: @foreground;
       children: [ "textbox-prompt-colon", "entry" ];
     }

@@ -10,7 +10,7 @@ in
   wayland.windowManager.hyprland.settings = {
     bind = [
       "$modifier,T,exec,${terminal}"
-      "$modifier,K,exec,list-keybinds"
+      "$modifier,slash,exec,list-keybinds"
       "$modifier SHIFT,Return,exec,rofi-launcher"
       "$modifier ,A,exec,rofi-launcher"
       "$modifier ALT,W,exec,web-search"
@@ -20,7 +20,7 @@ in
       "$modifier,G,exec,${browser}"
       "$modifier,Y,exec,kitty -e yazi"
       "$modifier,E,exec,emopicker9000"
-      "$modifier,S,exec,screenshootin"
+      "$modifier SHIFT,S,exec,screenshootin"
       "$modifier,D,exec,discord"
       "$modifier,O,exec,obs"
       "$modifier,C,exec,hyprpicker -a"

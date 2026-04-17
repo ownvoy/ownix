@@ -33,14 +33,14 @@
 - SHIFT+ALT+S — Hyprshot region (non-SUPER shortcut)
 
 ## 🧭 Hyprland UI/Plugins
+- SUPERKEY+/ — List keybinds
 - SUPERKEY+TAB — Hyprspace Overview toggle (all)
 - SUPERKEY+SHIFT+TAB — Hyprspace Overview close (all)
 - ALT+Space — Hyprexpo toggle
 - SUPERKEY+A — AGS Overview toggle
 
 ## 📸 Screenshots
-- SUPERKEY+S — screenshootin
-- SUPERKEY+SHIFT+S — screenshootin-satty
+- SUPERKEY+SHIFT+S — screenshootin
 - SUPERKEY+ALT+S — hyprpanel toggleWindow settings-dialog
 
 ## 🪟 Window Management
@@ -88,4 +88,3 @@
 ## 🖱️ Mouse Bindings
 - SUPERKEY + Left Mouse — Move window
 - SUPERKEY + Right Mouse — Resize window
-

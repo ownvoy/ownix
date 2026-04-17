@@ -45,6 +45,8 @@ in
     lazygit
     hyprutils
     unstable.winboat
+    obsidian
+    poppler-utils
   ];
 
   fonts.fontDir.enable = true;

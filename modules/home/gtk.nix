@@ -1,15 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 {
   gtk = {
     enable = true;
-
-    theme = {
-      # "Adwaita-dark" 대신 "adw-gtk3"를 사용합니다.
-      # 이 테마가 다크모드 지원이 훨씬 완벽합니다.
-      name = lib.mkForce "adw-gtk3";
-      package = lib.mkForce pkgs.adw-gtk3;
-    };
 
     iconTheme = {
       name = "Papirus-Dark";

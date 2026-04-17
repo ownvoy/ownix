@@ -52,6 +52,7 @@ in
     ./tealdeer.nix
     ./virtmanager.nix
     waybarChoice
+    ./winboat.nix
     ./wlogout
     ./xdg.nix
     ./yazi

@@ -127,7 +127,7 @@ A continuación se muestran los atajos de teclado para Hyprland, formateados par
 - `$modifier + W` → Lanzar `Web Browser`
 - `$modifier + Y` → Abrir `kitty` con `yazi`
 - `$modifier + E` → Abrir `emopicker9000`
-- `$modifier + S` → Tomar captura de pantalla
+- `$modifier + Shift + S` → Tomar captura de pantalla
 - `$modifier + D` → Abrir `Discord`
 - `$modifier + O` → Lanzar `OBS Studio`
 - `$modifier + C` → Ejecutar `hyprpicker -a`

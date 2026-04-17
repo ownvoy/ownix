@@ -24,6 +24,13 @@
   };
 
   home.activation.linkNeovimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    mkdir -p "/home/ownvoy/dotfiles/nvim"
+    rm -f "/home/ownvoy/dotfiles/nvim/init.lua"
+    printf '%s\n%s\n' \
+      '-- bootstrap lazy.nvim, LazyVim and your plugins' \
+      'require("config.lazy")' \
+      > "/home/ownvoy/dotfiles/nvim/init.lua"
+
     mkdir -p "$HOME/.config"
     ln -sfnT "/home/ownvoy/dotfiles/nvim" "$HOME/.config/nvim"
   '';

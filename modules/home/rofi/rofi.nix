@@ -1,7 +1,11 @@
 { pkgs
 , config
+, host
 , ...
-}: {
+}:
+let
+  inherit (import ../../../hosts/${host}/variables.nix) stylixImage;
+in {
   programs = {
     rofi = {
       enable = true;
@@ -58,7 +62,7 @@
           "imagebox" = {
             padding = mkLiteral "20px";
             background-color = mkLiteral "transparent";
-            background-image = mkLiteral ''url("~/Pictures/Wallpapers/Rainnight.jpg", height)'';
+            background-image = mkLiteral ''url("${toString stylixImage}", height)'';
             orientation = mkLiteral "vertical";
             children = map mkLiteral [
               "inputbar"
