@@ -12,6 +12,7 @@
     stylix.url = "github:danth/stylix/release-25.05";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    agenix.url = "github:ryantm/agenix";
     # antigravity-nix = {
     #   url = "github:jacopone/antigravity-nix";
     #   inputs.nixpkgs.follows = "nixpkgs";
@@ -33,6 +34,7 @@
       home-manager,
       nix-flatpak,
       nixpkgs-unstable,
+      agenix,
       # antigravity-nix,
       ...
     }@inputs:

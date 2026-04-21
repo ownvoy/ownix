@@ -553,6 +553,11 @@
         run = "plugin smart-enter";
         desc = "Enter the child directory, or open the file";
       }
+      {
+        on = "<C-x>";
+        run = "shell 'ripdrag \"$@\" -x 2>/dev/null &' --confirm";
+        desc = "ripdrag로 선택한 파일 드래그 앤 드롭";
+      }
     ];
   };
   tasks = {

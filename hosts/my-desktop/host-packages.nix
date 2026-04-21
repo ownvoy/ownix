@@ -47,6 +47,10 @@ in
     unstable.winboat
     obsidian
     poppler-utils
+    unstable.pear-desktop
+    thunderbird
+    ripdrag
+    # taskwarrior3
   ];
 
   fonts.fontDir.enable = true;

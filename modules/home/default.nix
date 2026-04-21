@@ -14,6 +14,7 @@ in
 {
   imports = [
     ./amfora.nix
+    ./agenix.nix
     ./bash.nix
     ./bashrc-personal.nix
     ./bat.nix
@@ -46,6 +47,7 @@ in
     ./scripts/gemini-cli.nix
     #./starship.nix
     #./starship-ddubs-1.nix
+    ./taskwarrior.nix
     ./stylix.nix
     ./swappy.nix
     ./swaync.nix
