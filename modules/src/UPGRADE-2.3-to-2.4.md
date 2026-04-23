@@ -1,5 +1,3 @@
-[English](UPGRADE-2.3-to-2.4.md) | [Español](UPGRADE-2.3-to-2.4.es.md)
-
 # ownix 2.3 → 2.4 Upgrade Guide
 
 This guide provides safe upgrade scripts to migrate from ownix 2.3 to 2.4, handling all the breaking changes and ensuring your custom configuration is preserved.
@@ -37,6 +35,7 @@ This guide provides safe upgrade scripts to migrate from ownix 2.3 to 2.4, handl
 To avoid overwriting your local configuration before a backup is created, fetch just the upgrade script without modifying your working tree.
 
 Option A — Using your existing git remote (recommended):
+
 ```bash
 # Fetch the latest refs without touching your working tree
 git -C ~/ownix fetch origin
@@ -47,6 +46,7 @@ chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
 ```
 
 Option B — Using curl (if you don't have a usable origin remote):
+
 ```bash
 curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
 chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
@@ -64,6 +64,7 @@ Both methods keep your local repo unchanged. The script will create a full backu
 ### Step 2: Review the Pre-Upgrade Analysis
 
 The script will first perform a comprehensive analysis of your current configuration:
+
 - **Analyze flake.nix** for custom inputs and current profile
 - **Scan all host configurations** and detect customizations
 - **Check global packages** in modules/core/packages.nix
@@ -72,6 +73,7 @@ The script will first perform a comprehensive analysis of your current configura
 - **Generate a detailed report** saved as `~/ownix-upgrade-analysis-TIMESTAMP.txt`
 
 **The analysis will clearly show:**
+
 - ✅ **What WILL be automatically migrated** (variables, packages, configs)
 - ⚠️ **What requires manual attention** (custom inputs, personal shell files)
 - 📋 **Summary of all hosts and customizations** found
@@ -79,6 +81,7 @@ The script will first perform a comprehensive analysis of your current configura
 ### Step 3: Follow the Prompts
 
 After reviewing the analysis, the script will:
+
 - Create a backup (you'll see the location)
 - Ask for confirmation before proceeding
 - Download ownix 2.4 from main branch
@@ -89,18 +92,21 @@ After reviewing the analysis, the script will:
 ### Step 4: Reboot Your System
 
 After successful build:
+
 ```bash
 sudo reboot
 ```
 
 Your system will now boot with:
+
 - SDDM as the login manager
 - All your previous settings preserved
 - New 2.4 features available
 
 ## 🔧 Configuration Migration Details
 
-### Automatically Preserved Settings:
+### Automatically Preserved Settings
+
 - Git username and email
 - Browser preference
 - Terminal choice (with automatic enabling)
@@ -116,8 +122,10 @@ Your system will now boot with:
 - **Host-specific packages** (hosts/[hostname]/host-packages.nix)
 - **Custom module imports** (hosts/[hostname]/default.nix if customized)
 
-### Terminal Handling:
+### Terminal Handling
+
 If you were using a specific terminal in 2.3:
+
 - **Kitty**: Already enabled by default in 2.4
 - **Alacritty**: Script automatically enables `alacrittyEnable = true`
 - **WezTerm**: Script automatically enables `weztermEnable = true`
@@ -126,12 +134,15 @@ If you were using a specific terminal in 2.3:
 ## ⚠️ Important Notes
 
 ### SDDM Display Manager
+
 - 2.4 uses SDDM as default login manager
 - The upgrade uses `boot` instead of `switch` to prevent display issues
 - You **must reboot** after upgrade - don't use `switch` command
 
 ### Backup Location
+
 Your backup is stored at:
+
 ```
 ~/.config/ownix-backups/ownix-2.3-upgrade-backup-TIMESTAMP/
 ```
@@ -141,18 +152,21 @@ Your backup is stored at:
 If you encounter any issues, you can easily revert:
 
 ### Option 1: Use the Revert Script
+
 ```bash
 cd ~/ownix
 ./revert-ownix-to-2.3.sh
 ```
 
 ### Option 2: Use the Main Script
+
 ```bash
 cd ~/ownix
 ./upgrade-ownix-2.3-to-2.4.sh --revert
 ```
 
 ### Option 3: Manual Revert
+
 1. Remove current ownix directory: `rm -rf ~/ownix`
 2. Restore from backup: `cp -r ~/.config/ownix-backups/[backup-name]/ownix ~/`
 3. Rebuild system: `nh os boot ~/ownix --hostname [profile]`
@@ -161,26 +175,31 @@ cd ~/ownix
 ## 🔍 Troubleshooting
 
 ### Build Failures
+
 - Check the log file (location shown in script output)
 - Ensure you have sufficient disk space
 - Try the revert option and report the issue
 
 ### Display Issues After Reboot
+
 - If you get a blank screen, wait a few moments for SDDM to start
 - You can switch to TTY (Ctrl+Alt+F2) if needed
 - Login and run `systemctl status display-manager`
 
 ### Missing Applications
+
 - Check if your preferred terminal is enabled in `~/ownix/hosts/[hostname]/variables.nix`
 - Verify browser and other applications are still available
 - Some applications may need to be re-enabled in the new configuration
 
 ### Log File Location
+
 Each run creates a log file at: `~/ownix-upgrade-TIMESTAMP.log`
 
 ## 📁 File Structure After Upgrade
 
 Your host configuration will be updated with new 2.4 structure:
+
 ```
 ~/ownix/hosts/[your-hostname]/
 ├── hardware.nix          (preserved from 2.3)
@@ -190,6 +209,7 @@ Your host configuration will be updated with new 2.4 structure:
 ## 🆘 Emergency Recovery
 
 If something goes very wrong:
+
 1. Your complete 2.3 backup is preserved
 2. Boot from NixOS live USB if needed
 3. Mount your system and restore the backup
@@ -198,6 +218,7 @@ If something goes very wrong:
 ## ✅ Post-Upgrade Checklist
 
 After successful upgrade and reboot:
+
 - [ ] SDDM login screen appears
 - [ ] Desktop environment loads correctly
 - [ ] Preferred terminal opens and works
@@ -209,6 +230,7 @@ After successful upgrade and reboot:
 ## 🤝 Getting Help
 
 If you encounter issues:
+
 1. Check the log file for error details
 2. Try the revert option to restore 2.3
 3. Report issues with log file contents
