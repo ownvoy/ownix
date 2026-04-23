@@ -4,47 +4,13 @@
 
 ## ownix ❄️ NixOS configs
 
-** Updated: June 3rd,2025
-
-ownix is a simple way of reproducing my configuration on any NixOS system.
-This includes the wallpaper, scripts, applications, config files, and more.
-
-<img align="center" width="80%" src="https://github.com/ownvoy/ownix/raw/main/img/demo.png" />
-
-**Inspiration for the Waybar config
-[here](https://github.com/justinlime/dotfiles).**
-
-<img align="center" width="80%" src="https://github.com/ownvoy/ownix/raw/main/img/demo-img2.png" />
-
-**Third waybar option**
-
-<img align="center" width="80%" src="https://github.com/ownvoy/ownix/raw/main/img/demo-img3.png" />
-
-</div>
-
-### Cheatsheets and Guides
-
-- Nix Beginner Guide: [English](cheatsheets/nix-beginner-guide.md) |
-  [Español](cheatsheets/nix-beginner-guide.es.md)
-- Hyprland Customization Guide:
-  [English](cheatsheets/hyprland-customization-guide.md) |
-  [Español](cheatsheets/hyprland-customization-guide.es.md)
-
-### Please note:
-
-> **This project has a [Wiki](https://zaney.org/wiki/ownix-2.3/). Find out how
-> to use ownix here!** **ddubs has put a lot of effort into the
-> [FAQ](https://zaney.org/wiki/ownix-2.3/faq) so it should be accurate.
-> However, please if you notice that something is wrong with it create an issue
-> or reach out to us on Discord.**
-
 #### 🍖 Requirements
 
 - You must be running on NixOS, version 23.11+.
 - The `ownix` folder (this repo) is expected to be in your home directory.
 - You must have installed NIXOS using **GPT** parition with booting with
   **UEFI**.
-- ** 500MB minimum /boot partition required. **
+- **500MB minimum /boot partition required.**
 - Systemd-boot is what is supported.
 - For GRUB you will have to brave the internet for a how-to. ☺️
 - Manually editing your host specific files.
@@ -80,7 +46,6 @@ This includes the wallpaper, scripts, applications, config files, and more.
 <div align="center">
 
 Please do yourself a favor and
-[read the wiki](https://zaney.org/wiki/ownix-2.3/).
 
 </div>
 
@@ -100,8 +65,6 @@ Please do yourself a favor and
   with the title beginning with [feature request], thank you!
 - Contact us on [Discord](https://discord.gg/2cRdBs8) as well, for a potentially
   faster response.
-
-- Don't forget to checkout the [FAQ](https://zaney.org/wiki/ownix-2.3/faq)
 
 # Hyprland Keybindings
 
@@ -162,7 +125,7 @@ Below are the keybindings for Hyprland, formatted for easy reference.
 - `Alt + Tab` → Cycle to next window
 - `Alt + Tab` → Bring active window to top
 
-## Installation:
+## Installation
 
 > **⚠️ IMPORTANT:** These installation methods are for **NEW INSTALLATIONS
 > ONLY**. If you already have this setup installed and want to upgrade to v2.4, see
@@ -172,7 +135,7 @@ Below are the keybindings for Hyprland, formatted for easy reference.
 <details>
 <summary><strong> ⬇️ Install with script (NEW INSTALLATIONS ONLY)</strong></summary>
 
-### 📜 Script:
+### 📜 Script
 
 This is the easiest and recommended way of starting out for **new
 installations**. The script is not meant to allow you to change every option
@@ -186,33 +149,15 @@ and then fiddle to your hearts content!
 
 Simply copy this and run it:
 
-![ownix First Install Command](img/first-install-cmd.jpg)
-
 ```
 nix-shell -p git curl pciutils
 ```
 
 Then:
 
-![ownix Install Script Command](img/install-script.jpg)
-
 ```
 sh <(curl -L https://github.com/ownvoy/ownix/raw/main/install-ownix.sh)
 ```
-
-#### The install process will look something like this:
-
-![First Part Of Install](img/1.jpg)
-
-![Second Part Of Install](img/2.jpg)
-
-#### After the install completes your environment will probably look broken. Just reboot and you will see this as your login:
-
-![Display Manager](img/3.jpg)
-
-#### Then after login you should see a screen like this:
-
-![Desktop Example](img/4.jpg)
 
 </details>
 
@@ -257,7 +202,7 @@ nixos-generate-config --show-hardware-config > hosts/<your-desired-hostname>/har
    profile. I.e. `intel`, `nvidia` `nvidia-laptop`, or `vm`
 
 ```
-NIX_CONFIG="experimental-features = nix-command flakes" 
+NIX_CONFIG="experimental-features = nix-command flakes"
 sudo nixos-rebuild switch --flake .#profile
 ```
 
@@ -267,69 +212,31 @@ called `fr` that will rebuild the flake and you do not have to be in the
 
 </details>
 
-## Upgrading from ownix 2.3 to 2.4 -- Do NOT use the upgrade script at this timel.
+## Upgrading from ownix 2.3 to 2.4
 
-> **🚀 IMPORTANT:** If you already have ownix 2.3 or an earlier fork installed, use the automated
-> upgrade system instead of reinstalling!
+> **IMPORTANT:** The legacy automated upgrade shell scripts are no longer
+> shipped in this checkout.
 
-### ✅ Automated Upgrade Process:
+If you are upgrading an older ownix installation, treat it as a manual
+migration:
 
-ownix includes a comprehensive upgrade system that safely migrates your
-configuration:
+- Back up your existing `~/ownix` checkout first.
+- Copy your host-specific settings into the current `hosts/<hostname>/` layout.
+- Regenerate `hardware.nix` for the target machine if needed.
+- Rebuild explicitly with `sudo nixos-rebuild switch --flake .#<hostname>`.
 
-```bash
-cd ~/ownix
-./upgrade-ownix-2.3-to-2.4.sh
-```
-
-### 🔍 What the Upgrade System Does:
-
-1. **Pre-Upgrade Analysis** - Comprehensive scan of your customizations
-2. **Complete Backup** - Full backup of your current configuration
-3. **Automatic Migration** - Preserves all your settings and customizations
-4. **Safe Upgrade** - Uses `boot` option to prevent display manager conflicts
-5. **Easy Revert** - One-command rollback if needed
-
-### 📋 What Gets Automatically Migrated:
-
-- ✅ All host configurations and variables
-- ✅ Hardware configurations
-- ✅ Custom packages (both global and per-host)
-- ✅ Themes, wallpapers, and monitor settings
-- ✅ Git configuration and personal settings
-- ✅ Terminal preferences with automatic enabling
-
-### ⚠️ What Requires Manual Attention:
-
-- Custom flake.nix inputs
-- Personal shell configuration files (zshrc-personal.nix, etc.)
-- Custom module modifications
-
-### 📚 Complete Documentation:
-
-For detailed upgrade instructions, troubleshooting, and safety information:
-
-- **Read**: `UPGRADE-2.3-to-2.4.md` in your `ownix` directory
-- **Analysis Report**: Saved automatically as
-  `~/ownix-upgrade-analysis-TIMESTAMP.txt`
-
-### 🔄 Easy Revert:
-
-If anything goes wrong, easily revert to 2.3:
-
-```bash
-cd ~/ownix
-./upgrade-ownix-2.3-to-2.4.sh --revert
-```
+Historical upgrade notes are still kept under `modules/src/` for reference, but
+the old scripted upgrade and revert commands are not part of this repository
+state anymore.
 
 ---
 
-### Special Recognitions:
+### Special Recognitions
 
 Thank you for all your assistance
 
-- Jakookit https://github.com/jakookit
-- Justaguylinux https://github.com/drewgrif
-- Jerry Starke https://github.com/JerrySM64
+- Jakookit <https://github.com/jakookit>
+- Justaguylinux <https://github.com/drewgrif>
+- Jerry Starke <https://github.com/JerrySM64>
 
-## Hope you enjoy!
+## Hope you enjoy

@@ -6,10 +6,11 @@
 - **Date:** 01-September-2025
 
 > IMPORTANT: Upgrading from v2.3 to v2.4?
-> - Strongly recommended: Read `ownix-Upgrade.md` fully before attempting the upgrade.
-> - It explains the automated upgrade, full backup, host migration, and revert process.
-> - Do NOT use the `fu` or `fr` aliases for this upgrade.
-> - If you've made extensive modifications, do not run the script—review the docs and migrate manually.
+>
+> - The old upgrade helper scripts and companion docs are not shipped in this checkout.
+> - Back up your existing `~/ownix` before migrating.
+> - Do NOT use the `fu` or `fr` aliases for a major migration.
+> - If you've made extensive modifications, migrate manually by reviewing the current host layout.
 
 **⌨ Where can I see the Hyprland keybindings?**
 
@@ -28,7 +29,8 @@ and managing Doom Emacs.
 To use it, open a terminal and type `zcli` followed by one of the commands
 listed below:
 
-## Core System Commands:
+## Core System Commands
+
 - `cleanup`: Clean up old system generations. You can specify the number of generations to keep. Includes automated log cleanup for old build logs.
 - `diag`: Create a comprehensive system diagnostic report using `inxi --full`, saved to `~/diag.txt`. Perfect for troubleshooting.
 - `list-gens`: List both user and system generations with detailed information.
@@ -37,7 +39,8 @@ listed below:
 - `trim`: Trim filesystems to improve SSD performance with user confirmation prompts.
 - `update`: Update the flake and rebuild the system with comprehensive error handling.
 
-## Host Management:
+## Host Management
+
 - `update-host`: Automatically set the host and profile in `flake.nix`. Features intelligent GPU detection and hostname validation.
 - `add-host`: Create new host configurations with automated GPU detection, hardware.nix generation, and git integration.
 - `del-host`: Safely delete host configurations with confirmation prompts to prevent accidental removal.
@@ -45,8 +48,10 @@ listed below:
 **Usage:** `zcli add-host [hostname] [profile]`  
 **GPU Profiles:** `amd`, `intel`, `nvidia`, `nvidia-hybrid`, and `vm`
 
-## Advanced Build Options:
+## Advanced Build Options
+
 The `rebuild`, `rebuild-boot`, and `update` commands support enhanced options for fine-grained control:
+
 - `--dry, -n`: Preview mode - shows what would be done without executing (dry run)
 - `--ask, -a`: Interactive confirmation prompts for safety-critical operations
 - `--cores N`: Limit build operations to N CPU cores (essential for VMs and resource-constrained systems)
@@ -55,8 +60,10 @@ The `rebuild`, `rebuild-boot`, and `update` commands support enhanced options fo
 
 **Multiple options can be combined** for precise control over your build process.
 
-## Doom Emacs Management:
+## Doom Emacs Management
+
 Complete Doom Emacs lifecycle management with safety features:
+
 - `doom install`: Automated Doom Emacs installation using the get-doom script with all required packages
 - `doom status`: Check installation status and display version information for verification
 - `doom remove`: Safely remove Doom Emacs installation with confirmation prompts to prevent accidental deletion
@@ -100,6 +107,7 @@ Doom Emacs:
 ```
 
 **Examples:**
+
 ```bash
 # System management
 zcli rebuild --dry                # Show what would be rebuilt
@@ -177,7 +185,7 @@ Below are the keybindings for Hyprland, formatted for easy reference.
 - `Alt + Tab` → Cycle to next window
 - `Alt + Tab` → Bring active window to top
 
-## Questions, settings, updating, misc...
+## Questions, settings, updating, misc
 
 <details>
 
@@ -327,26 +335,26 @@ to this:
 ```text
 hyprctl monitors
 Monitor HDMI-A-1 (ID 0):
-	2560x1440@143.91200 at 0x0
-	description: Dell Inc. DELL S3222DGM F45WJK3
-	make: Dell Inc.
-	model: DELL S3222DGM
-	serial: F45WJK3
-	active workspace: 1 (1)
-	special workspace: 0 ()
-	reserved: 0 52 0 0
-	scale: 1.00
-	transform: 0
-	focused: yes
-	dpmsStatus: 1
-	vrr: false
-	solitary: 0
-	activelyTearing: false
-	directScanoutTo: 0
-	disabled: false
-	currentFormat: XRGB8888
-	mirrorOf: none
-	availableModes: 2560x1440@59.95Hz 2560x1440@143.91Hz 2560x1440@120.00Hz 1920x1200@59.95Hz 1920x1080@143.86Hz 1920x1080@120.00Hz 1920x1080@119.88Hz 1920x1080@60.00Hz 1920x1080@60.00Hz 1920x1080@59.94Hz 1920x1080@50.00Hz 1600x1200@60.00Hz 1680x1050@59.88Hz 1280x1024@75.03Hz 1280x1024@60.02Hz 1440x900@59.95Hz 1280x800@59.91Hz 1152x864@75.00Hz 1280x720@120.00Hz 1280x720@119.88Hz 1280x720@60.00Hz 1280x720@59.94Hz 1280x720@50.00Hz 1024x768@75.03Hz 1024x768@60.00Hz 800x600@75.00Hz 800x600@60.32Hz 720x576@50.00Hz 720x576@50.00Hz 720x480@60.00Hz 720x480@60.00Hz 720x480@59.94Hz 720x480@59.94Hz 640x480@75.00Hz 640x480@60.00Hz 640x480@59.94Hz 640x480@59.94Hz 720x400@70.08Hz
+ 2560x1440@143.91200 at 0x0
+ description: Dell Inc. DELL S3222DGM F45WJK3
+ make: Dell Inc.
+ model: DELL S3222DGM
+ serial: F45WJK3
+ active workspace: 1 (1)
+ special workspace: 0 ()
+ reserved: 0 52 0 0
+ scale: 1.00
+ transform: 0
+ focused: yes
+ dpmsStatus: 1
+ vrr: false
+ solitary: 0
+ activelyTearing: false
+ directScanoutTo: 0
+ disabled: false
+ currentFormat: XRGB8888
+ mirrorOf: none
+ availableModes: 2560x1440@59.95Hz 2560x1440@143.91Hz 2560x1440@120.00Hz 1920x1200@59.95Hz 1920x1080@143.86Hz 1920x1080@120.00Hz 1920x1080@119.88Hz 1920x1080@60.00Hz 1920x1080@60.00Hz 1920x1080@59.94Hz 1920x1080@50.00Hz 1600x1200@60.00Hz 1680x1050@59.88Hz 1280x1024@75.03Hz 1280x1024@60.02Hz 1440x900@59.95Hz 1280x800@59.91Hz 1152x864@75.00Hz 1280x720@120.00Hz 1280x720@119.88Hz 1280x720@60.00Hz 1280x720@59.94Hz 1280x720@50.00Hz 1024x768@75.03Hz 1024x768@60.00Hz 800x600@75.00Hz 800x600@60.32Hz 720x576@50.00Hz 720x576@50.00Hz 720x480@60.00Hz 720x480@60.00Hz 720x480@59.94Hz 720x480@59.94Hz 640x480@75.00Hz 640x480@60.00Hz 640x480@59.94Hz 640x480@59.94Hz 720x400@70.08Hz
 ```
 
 Edit the `extraMonitorSettings` line. **Examples:**
@@ -354,9 +362,9 @@ Edit the `extraMonitorSettings` line. **Examples:**
 - Single Monitor: `extraMonitorSettings = "monitor=eDP-1,1920x1080@60,auto,1";`
 - Multiple Monitors:
   `extraMonitorSettings = "
-            monitor=eDP-1,1920x1080@60,auto,auto
-            monitor=HDMI-A-1,2560x1440@75,auto,auto
-            ";`
+  monitor=eDP-1,1920x1080@60,auto,auto
+  monitor=HDMI-A-1,2560x1440@75,auto,auto
+  ";`
 
 - For more complex, multi-monitor configurations, you may wish to use the GUI
   application, `nwg-displays` This will show your currently connected monitors
@@ -391,7 +399,7 @@ More information on configuring monitors is available on the
 <details>
 <summary>**How do I add applications to ownix? **</summary>
 
-### There are two options. One for all hosts you have, another for a specific host.
+### There are two options. One for all hosts you have, another for a specific host
 
 1. For applications to be included in all defined hosts edit the
    `~/ownix/modules/core/packages.nix` file.
@@ -407,7 +415,7 @@ packages.
     ...
     virt-viewer
     wget
-    ###  My Apps ### 
+    ###  My Apps ###
     bottom
     dua
     emacs-nox
@@ -479,7 +487,7 @@ will be created.
 
 - Use the `zcli` utility. `zcli rebuild`
 - The legacy `fr`, Flake Rebuild alias, is depreciated but still available **
-  NOTE: If you **created a new file**
+  NOTE: If you**created a new file\*\*
 - you will need to run a `git add .` command in the `ownix` folder
 - If successful a new generation will be generated with your changes
 - A logout or reboot could be required depending on what you changed
@@ -655,7 +663,7 @@ make the change effective.
     enable = true;
     image = ../../wallpapers/Anime-girl-sitting-night-sky_1952x1120.jpg;
     #image = ../../wallpapers/Rainnight.jpg;
-    #image = ../../wallpapers/zaney-wallpaper.jpg;
+    #image = ../../wallpapers/wallpaper.jpg;
     #  base16Scheme = {
     #  base00 = "282936";
     #  base01 = "3a3c4e";
@@ -778,7 +786,7 @@ settings = {
        "nm-applet --indicator"
        "lxqt-policykit-agent"
        "pypr &"
-       #"sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/zaney-wallpaper.jpg"
+       #"sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/wallpaper.jpg"
        "sleep 1 && wallsetter"
      ];
 ```
@@ -811,26 +819,16 @@ settings = {
 <details>
 <summary> For version v2.3 </summary>
 
-Strongly recommended: Read `ownix-Upgrade.md` before proceeding. It details the safe, automated upgrade, backup, and revert process.
-
-Use the automated v2.3 → v2.4 upgrade. See `ownix-Upgrade.md` and `UPGRADE-2.3-to-2.4.md`. To avoid overwriting your config before a backup is created, fetch just the script without modifying your working tree:
-
-- Git (recommended):
-```bash
-git -C ~/ownix fetch origin
-git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh
-chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
-```
-- Curl:
-```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
-chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
-```
-Then run the script: `~/upgrade-ownix-2.3-to-2.4.sh`. It will create a full backup before switching branches and migrate your hosts safely from the backup.
+The automated v2.3 → v2.4 upgrade shell scripts are no longer shipped in this
+checkout. If you are migrating an older setup, back up `~/ownix`, review the
+current host layout, and move your host-specific settings into the current
+`hosts/<hostname>/` files manually.
 
 **IMPORTANT:**
-- Do NOT use the `fu` or `fr` aliases for this upgrade; the script uses a safe boot build.
-- If you have made extensive modifications, do not run the script. Read the docs above and migrate manually instead.
+
+- Do NOT overwrite your existing checkout before you have a backup.
+- If you have made extensive modifications, migrate manually instead of trying
+  to replay old scripted upgrade steps.
 
 </details>
 
@@ -864,13 +862,6 @@ Then run the script: `~/upgrade-ownix-2.3-to-2.4.sh`. It will create a full back
 
 </details>
 
-<details>
-<summary> How do I know when a new version of ownix is released? </summary>
-
-It will be announced on the Zaney [Discord](https://discord.gg/W7efsSDS) server.
-
-</details>
-
 </div>
 
 </details>
@@ -881,19 +872,19 @@ It will be announced on the Zaney [Discord](https://discord.gg/W7efsSDS) server.
 
 <div style="margin-left: 25px;">
 
-** 📂 ~/ownix **
+**📂 ~/ownix**
 
 ```text
 ~/ownix/
     ├── hosts/                      # Folder where host configs are saved
     │   ├── default                 # Default host template
-    │   └── nixstation              # Zaney's host 
+    │   └── nixstation              # host
     ├── img/                        # Images for README.md
     ├── modules/                    # Core, HomeMgr, drivers config files
     │   └── drivers/                # AMD,NVIDA,Intel,VM config files
     │   └── core/                   # Services, packages, fonts, etc
     │   └── home/                   # Home Manager config files
-    │    ├── fastfetch/             # Fastfetch config 
+    │    ├── fastfetch/             # Fastfetch config
     │    ├── hyprland/              # Hyrprland configs
     │    ├── rofi/                  # rofi menu configs
     │    ├── scripts/               # screenshots, wallpaper, etc.
@@ -907,9 +898,9 @@ It will be announced on the Zaney [Discord](https://discord.gg/W7efsSDS) server.
     │    ├── nvidia/                # NVIDIA discrete video config files
     │    ├── nvidia-laptop/         # NVIDIA Hybrid video config files
     │    └── vm/                    # Virtual Machine config files
-    ├── wallpapers/                 # Add your wallpapers here 
+    ├── wallpapers/                 # Add your wallpapers here
     ├── CHANGELOG.md                # List of changes
-    ├── CONTRIBUTING.md             # How you can help 
+    ├── CONTRIBUTING.md             # How you can help
     ├── FAQ.md                      # Frequently Asked Questions
     ├── flake.lock                  # Saves version info on all installed packages
     ├── flake.nix                   # flake that controls ownix config
@@ -1052,7 +1043,7 @@ The keymap is in the `~/ownix/modules/home/yazi/keymap.toml` file
       roboto-mono
       symbola
       terminus_font
-      # NERD fonts 
+      # NERD fonts
       nerd-fonts.0xproto
       nerd-fonts._3270
       nerd-fonts.agave
@@ -1129,7 +1120,7 @@ The keymap is in the `~/ownix/modules/home/yazi/keymap.toml` file
 
 </details>
 
-**---> 🖥️ Terminals **
+**---> 🖥️ Terminals**
 
 <details>
 <summary>**🐱  Kitty**</summary>
@@ -1248,7 +1239,7 @@ ALT is the defined META key for WezTerm
 ALT + t                 Open new Tab
 ALT + w                 Close current Tab
 ALT + n                 Move to next Tab
-ALT + p                 Move to previous Tab 
+ALT + p                 Move to previous Tab
   -- Pane management
 ALT + v                 Create Vertical Split
 ALT + h                 Create Horizontal Split
@@ -1344,7 +1335,7 @@ theme = Dracula
 </details>
 
 **
---> 🪧  General NixOS related topics
+--> 🪧 General NixOS related topics
 **
 
 <details>
@@ -1357,7 +1348,7 @@ standardizes how configurations, dependencies, and packages are managed. If
 you're familiar with tools like `package.json` in JavaScript or `Cargo.toml` in
 Rust, flakes serve a similar purpose in the Nix ecosystem.
 
-** Key Features of Flakes: **
+**Key Features of Flakes:**
 
 1. **Pin Dependencies**:
    - Flakes lock the versions of dependencies in a `flake.lock` file, ensuring
@@ -1386,7 +1377,7 @@ declaratively manage user-specific configurations and environments. With Home
 Manager, you can streamline the setup of dotfiles, shell settings, applications,
 and system packages for your user profile.
 
-### Key Features of Home Manager:
+### Key Features of Home Manager
 
 1. **Declarative Configuration**:
    - Define all your settings and preferences in a single `home.nix` file,
@@ -1417,7 +1408,7 @@ software or updating the configuration) is applied in a safe and fail-proof way.
 This means that a system update is either fully successful or has no effect at
 all, eliminating the risk of a partially applied or broken system state.
 
-### How Atomic Builds Work:
+### How Atomic Builds Work
 
 1. **Immutable System Generation**:
    - Every configuration change creates a new "generation" of the system, while
@@ -1433,7 +1424,7 @@ all, eliminating the risk of a partially applied or broken system state.
    - In case of errors or issues, you can reboot and select a previous system
      generation from the boot menu to return to a working state.
 
-### Benefits of Atomic Builds:
+### Benefits of Atomic Builds
 
 - **Reliability**: Your system is always in a consistent state, even if a
   configuration change fails.
@@ -1442,7 +1433,7 @@ all, eliminating the risk of a partially applied or broken system state.
 - **Ease of Rollback**: Reverting to a working configuration is as simple as
   rebooting and selecting the previous generation.
 
-### Why NixOS Uses Atomic Builds:
+### Why NixOS Uses Atomic Builds
 
 This feature is a cornerstone of NixOS's declarative and reproducible design
 philosophy, ensuring that system management is predictable and stress-free.
@@ -1513,26 +1504,26 @@ to this:
 ```text
 hyprctl monitors
 Monitor HDMI-A-1 (ID 0):
-	2560x1440@143.91200 at 0x0
-	description: Dell Inc. DELL S3222DGM F45WJK3
-	make: Dell Inc.
-	model: DELL S3222DGM
-	serial: F45WJK3
-	active workspace: 1 (1)
-	special workspace: 0 ()
-	reserved: 0 52 0 0
-	scale: 1.00
-	transform: 0
-	focused: yes
-	dpmsStatus: 1
-	vrr: false
-	solitary: 0
-	activelyTearing: false
-	directScanoutTo: 0
-	disabled: false
-	currentFormat: XRGB8888
-	mirrorOf: none
-	availableModes: 2560x1440@59.95Hz 2560x1440@143.91Hz 2560x1440@120.00Hz 1920x1200@59.95Hz 1920x1080@143.86Hz 1920x1080@120.00Hz 1920x1080@119.88Hz 1920x1080@60.00Hz 1920x1080@60.00Hz 1920x1080@59.94Hz 1920x1080@50.00Hz 1600x1200@60.00Hz 1680x1050@59.88Hz 1280x1024@75.03Hz 1280x1024@60.02Hz 1440x900@59.95Hz 1280x800@59.91Hz 1152x864@75.00Hz 1280x720@120.00Hz 1280x720@119.88Hz 1280x720@60.00Hz 1280x720@59.94Hz 1280x720@50.00Hz 1024x768@75.03Hz 1024x768@60.00Hz 800x600@75.00Hz 800x600@60.32Hz 720x576@50.00Hz 720x576@50.00Hz 720x480@60.00Hz 720x480@60.00Hz 720x480@59.94Hz 720x480@59.94Hz 640x480@75.00Hz 640x480@60.00Hz 640x480@59.94Hz 640x480@59.94Hz 720x400@70.08Hz
+ 2560x1440@143.91200 at 0x0
+ description: Dell Inc. DELL S3222DGM F45WJK3
+ make: Dell Inc.
+ model: DELL S3222DGM
+ serial: F45WJK3
+ active workspace: 1 (1)
+ special workspace: 0 ()
+ reserved: 0 52 0 0
+ scale: 1.00
+ transform: 0
+ focused: yes
+ dpmsStatus: 1
+ vrr: false
+ solitary: 0
+ activelyTearing: false
+ directScanoutTo: 0
+ disabled: false
+ currentFormat: XRGB8888
+ mirrorOf: none
+ availableModes: 2560x1440@59.95Hz 2560x1440@143.91Hz 2560x1440@120.00Hz 1920x1200@59.95Hz 1920x1080@143.86Hz 1920x1080@120.00Hz 1920x1080@119.88Hz 1920x1080@60.00Hz 1920x1080@60.00Hz 1920x1080@59.94Hz 1920x1080@50.00Hz 1600x1200@60.00Hz 1680x1050@59.88Hz 1280x1024@75.03Hz 1280x1024@60.02Hz 1440x900@59.95Hz 1280x800@59.91Hz 1152x864@75.00Hz 1280x720@120.00Hz 1280x720@119.88Hz 1280x720@60.00Hz 1280x720@59.94Hz 1280x720@50.00Hz 1024x768@75.03Hz 1024x768@60.00Hz 800x600@75.00Hz 800x600@60.32Hz 720x576@50.00Hz 720x576@50.00Hz 720x480@60.00Hz 720x480@60.00Hz 720x480@59.94Hz 720x480@59.94Hz 640x480@75.00Hz 640x480@60.00Hz 640x480@59.94Hz 640x480@59.94Hz 720x400@70.08Hz
 ```
 
 Edit the `extraMonitorSettings` line. **Examples:**
@@ -1540,9 +1531,9 @@ Edit the `extraMonitorSettings` line. **Examples:**
 - Single Monitor: `extraMonitorSettings = "monitor=eDP-1,1920x1080@60,auto,1";`
 - Multiple Monitors:
   `extraMonitorSettings = "
-            monitor=eDP-1,1920x1080@60,auto,auto
-            monitor=HDMI-A-1,2560x1440@75,auto,auto
-            ";`
+  monitor=eDP-1,1920x1080@60,auto,auto
+  monitor=HDMI-A-1,2560x1440@75,auto,auto
+  ";`
 
 - For more complex, multi-monitor configurations, you may wish to use the GUI
   application, `nwg-displays` This will show your currently connected monitors
@@ -1577,7 +1568,7 @@ More information on configuring monitors is available on the
 <details>
 <summary>**How do I add applications to ownix? **</summary>
 
-### There are two options. One for all hosts you have, another for a specific host.
+### There are two options. One for all hosts you have, another for a specific host
 
 1. For applications to be included in all defined hosts edit the
    `~/ownix/modules/core/packages.nix` file.
@@ -1593,7 +1584,7 @@ packages.
     ...
     virt-viewer
     wget
-    ###  My Apps ### 
+    ###  My Apps ###
     bottom
     dua
     emacs-nox
@@ -1837,7 +1828,7 @@ make the change effective.
     enable = true;
     image = ../../wallpapers/Anime-girl-sitting-night-sky_1952x1120.jpg;
     #image = ../../wallpapers/Rainnight.jpg;
-    #image = ../../wallpapers/zaney-wallpaper.jpg;
+    #image = ../../wallpapers/wallpaper.jpg;
     #  base16Scheme = {
     #  base00 = "282936";
     #  base01 = "3a3c4e";
@@ -1960,7 +1951,7 @@ settings = {
        "nm-applet --indicator"
        "lxqt-policykit-agent"
        "pypr &"
-       #"sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/zaney-wallpaper.jpg"
+       #"sleep 1.5 && swww img /home/${username}/Pictures/Wallpapers/wallpaper.jpg"
        "sleep 1 && wallsetter"
      ];
 ```
@@ -1993,24 +1984,16 @@ settings = {
 <details>
 <summary> For version v2.3 </summary>
 
-Use the automated v2.3 → v2.4 upgrade. See ownix-Upgrade.md and UPGRADE-2.3-to-2.4.md. To avoid overwriting your config before a backup is created, fetch just the script without modifying your working tree:
-
-- Git (recommended):
-```bash
-git -C ~/ownix fetch origin
-git -C ~/ownix show origin/main:upgrade-ownix-2.3-to-2.4.sh > ~/upgrade-ownix-2.3-to-2.4.sh
-chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
-```
-- Curl:
-```bash
-curl -fsSL https://github.com/ownvoy/ownix/raw/main/upgrade-ownix-2.3-to-2.4.sh -o ~/upgrade-ownix-2.3-to-2.4.sh
-chmod +x ~/upgrade-ownix-2.3-to-2.4.sh
-```
-Then run the script: `~/upgrade-ownix-2.3-to-2.4.sh`. It will create a full backup before switching branches and migrate your hosts safely from the backup.
+The automated v2.3 → v2.4 upgrade shell scripts are no longer shipped in this
+checkout. If you are migrating an older setup, back up `~/ownix`, review the
+current host layout, and move your host-specific settings into the current
+`hosts/<hostname>/` files manually.
 
 **IMPORTANT:**
-- Do NOT use the `fu` or `fr` aliases for this upgrade; the script uses a safe boot build.
-- If you have made extensive modifications, do not run the script. Read the docs above and migrate manually instead.
+
+- Do NOT overwrite your existing checkout before you have a backup.
+- If you have made extensive modifications, migrate manually instead of trying
+  to replay old scripted upgrade steps.
 
 </details>
 
@@ -2045,11 +2028,6 @@ Then run the script: `~/upgrade-ownix-2.3-to-2.4.sh`. It will create a full back
 </details>
 
 <details>
-<summary> How do I know when a new version of ownix is released? </summary>
-
-It will be announced on the Zaney [Discord](https://discord.gg/W7efsSDS) server.
-
-</details>
 
 </div>
 
@@ -2061,19 +2039,19 @@ It will be announced on the Zaney [Discord](https://discord.gg/W7efsSDS) server.
 
 <div style="margin-left: 25px;">
 
-** 📂 ~/ownix **
+**📂 ~/ownix**
 
 ```text
 ~/ownix/
     ├── hosts/                      # Folder where host configs are saved
     │   ├── default                 # Default host template
-    │   └── nixstation              # Zaney's host 
+    │   └── nixstation              # host
     ├── img/                        # Images for README.md
     ├── modules/                    # Core, HomeMgr, drivers config files
     │   └── drivers/                # AMD,NVIDA,Intel,VM config files
     │   └── core/                   # Services, packages, fonts, etc
     │   └── home/                   # Home Manager config files
-    │    ├── fastfetch/             # Fastfetch config 
+    │    ├── fastfetch/             # Fastfetch config
     │    ├── hyprland/              # Hyrprland configs
     │    ├── rofi/                  # rofi menu configs
     │    ├── scripts/               # screenshots, wallpaper, etc.
@@ -2087,9 +2065,9 @@ It will be announced on the Zaney [Discord](https://discord.gg/W7efsSDS) server.
     │    ├── nvidia/                # NVIDIA discrete video config files
     │    ├── nvidia-laptop/         # NVIDIA Hybrid video config files
     │    └── vm/                    # Virtual Machine config files
-    ├── wallpapers/                 # Add your wallpapers here 
+    ├── wallpapers/                 # Add your wallpapers here
     ├── CHANGELOG.md                # List of changes
-    ├── CONTRIBUTING.md             # How you can help 
+    ├── CONTRIBUTING.md             # How you can help
     ├── FAQ.md                      # Frequently Asked Questions
     ├── flake.lock                  # Saves version info on all installed packages
     ├── flake.nix                   # flake that controls ownix config
@@ -2226,7 +2204,7 @@ The keymap is in the `~/ownix/modules/home/yazi/keymap.toml` file
       roboto-mono
       symbola
       terminus_font
-      # NERD fonts 
+      # NERD fonts
       nerd-fonts.0xproto
       nerd-fonts._3270
       nerd-fonts.agave
@@ -2303,7 +2281,7 @@ The keymap is in the `~/ownix/modules/home/yazi/keymap.toml` file
 
 </details>
 
-**---> 🖥️ Terminals **
+**---> 🖥️ Terminals**
 
 <details>
 <summary>**🐱  Kitty**</summary>
@@ -2423,7 +2401,7 @@ ALT is the defined META key for WezTerm
 ALT + t                 Open new Tab
 ALT + w                 Close current Tab
 ALT + n                 Move to next Tab
-ALT + p                 Move to previous Tab 
+ALT + p                 Move to previous Tab
   -- Pane management
 ALT + v                 Create Vertical Split
 ALT + h                 Create Horizontal Split
@@ -2519,7 +2497,7 @@ theme = Dracula
 </details>
 
 **
---> 🪧  General NixOS related topics
+--> 🪧 General NixOS related topics
 **
 
 <details>
@@ -2532,7 +2510,7 @@ standardizes how configurations, dependencies, and packages are managed. If
 you're familiar with tools like `package.json` in JavaScript or `Cargo.toml` in
 Rust, flakes serve a similar purpose in the Nix ecosystem.
 
-** Key Features of Flakes: **
+**Key Features of Flakes:**
 
 1. **Pin Dependencies**:
    - Flakes lock the versions of dependencies in a `flake.lock` file, ensuring
@@ -2561,7 +2539,7 @@ declaratively manage user-specific configurations and environments. With Home
 Manager, you can streamline the setup of dotfiles, shell settings, applications,
 and system packages for your user profile.
 
-### Key Features of Home Manager:
+### Key Features of Home Manager
 
 1. **Declarative Configuration**:
    - Define all your settings and preferences in a single `home.nix` file,
@@ -2592,7 +2570,7 @@ software or updating the configuration) is applied in a safe and fail-proof way.
 This means that a system update is either fully successful or has no effect at
 all, eliminating the risk of a partially applied or broken system state.
 
-### How Atomic Builds Work:
+### How Atomic Builds Work
 
 1. **Immutable System Generation**:
    - Every configuration change creates a new "generation" of the system, while
@@ -2608,7 +2586,7 @@ all, eliminating the risk of a partially applied or broken system state.
    - In case of errors or issues, you can reboot and select a previous system
      generation from the boot menu to return to a working state.
 
-### Benefits of Atomic Builds:
+### Benefits of Atomic Builds
 
 - **Reliability**: Your system is always in a consistent state, even if a
   configuration change fails.
@@ -2617,7 +2595,7 @@ all, eliminating the risk of a partially applied or broken system state.
 - **Ease of Rollback**: Reverting to a working configuration is as simple as
   rebooting and selecting the previous generation.
 
-### Why NixOS Uses Atomic Builds:
+### Why NixOS Uses Atomic Builds
 
 This feature is a cornerstone of NixOS's declarative and reproducible design
 philosophy, ensuring that system management is predictable and stress-free.
