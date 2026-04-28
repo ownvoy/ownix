@@ -62,6 +62,7 @@
           bbenoist.nix
           jeff-hykin.better-nix-syntax
           ms-vscode.cpptools-extension-pack
+          ms-vscode-remote.vscode-remote-extensionpack
           vscodevim.vim # Vim emulation
           mads-hartmann.bash-ide-vscode
           tamasfe.even-better-toml

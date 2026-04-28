@@ -6,16 +6,16 @@
 }:
 let
   betterTransition = "all 0.3s cubic-bezier(.55,-0.68,.48,1.682)";
-  panelBg = "rgba(12, 14, 18, 0.0)";
-  surface = "16181d";
-  surfaceHover = "252a33";
-  border = "2a3039";
-  text = "e7e1d7";
-  textMuted = "a9b0bb";
-  accent = "c6a36a";
-  accentSoft = "7f9486";
-  accentWarm = "d9b67a";
-  danger = "d17b88";
+  panelBg = "rgba(54, 54, 61, 0.20)";
+  surface = "36363d";
+  surfaceHover = "50655c";
+  border = "4b5d56";
+  text = "d6dcc8";
+  textMuted = "a8b09f";
+  accent = "b69860";
+  accentSoft = "5e8675";
+  accentWarm = "947551";
+  danger = "c77967";
   inherit (import ../../../hosts/${host}/variables.nix) clock24h;
 in
 with lib; {
@@ -37,7 +37,6 @@ with lib; {
           "idle_inhibitor"
         ];
         modules-right = [
-          "custom/hyprbindings"
           "custom/notification"
           "custom/exit"
           "battery"
@@ -143,11 +142,6 @@ with lib; {
           #on-click = "sleep 0.1 && rofi-launcher";
           on-click = "sleep 0.1 && nwg-drawer -mb 200 -mt 200 -mr 200 -ml 200";
         };
-        "custom/hyprbindings" = {
-          tooltip = false;
-          format = "󱕴";
-          on-click = "sleep 0.1 && list-keybinds";
-        };
         "idle_inhibitor" = {
           format = "{icon}";
           format-icons = {
@@ -214,7 +208,7 @@ with lib; {
         }
         #workspaces {
           color: #${text};
-          background: rgba(22, 24, 29, 0.92);
+          background: rgba(54, 54, 61, 0.92);
           margin: 4px 4px;
           padding: 5px 6px;
           border-radius: 16px;
@@ -238,7 +232,7 @@ with lib; {
           padding: 0px 10px;
           margin: 0px 1px;
           border-radius: 16px;
-          color: #101114;
+          color: #1f2123;
           background: linear-gradient(135deg, #${accentWarm}, #${accent});
           transition: ${betterTransition};
           opacity: 1.0;
@@ -290,16 +284,15 @@ with lib; {
           color: #${accentSoft};
         }
         #custom-startmenu {
-          color: #101114;
-          background: #${accent};
+          color: #1f2123;
+          background: #${accentSoft};
           font-size: 22px;
           margin: 4px 0px 4px 6px;
           padding: 0px 10px;
           border-radius: 16px 16px 16px 16px;
           border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        #custom-hyprbindings, #network, #battery,
-        #custom-notification, #tray, #custom-exit {
+        #network, #battery, #custom-notification, #tray, #custom-exit {
           /* font-weight: bold; */
           font-size: 20px;
           background: #${surface};
@@ -316,7 +309,7 @@ with lib; {
         #cpu, #memory, #window {
           color: #${text};
         }
-        #custom-hyprbindings, #network, #idle_inhibitor {
+        #network, #idle_inhibitor {
           color: #${accentSoft};
         }
         #battery {
@@ -328,7 +321,7 @@ with lib; {
         #clock {
           font-weight: bold;
           font-size: 16px;
-          color: #101114;
+          color: #1f2123;
           background: linear-gradient(135deg, #${accentWarm}, #${accent});
           margin: 4px 6px 4px 0px;
           padding: 0px 12px;

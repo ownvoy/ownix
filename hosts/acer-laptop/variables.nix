@@ -29,7 +29,7 @@
   printEnable = false;
   thunarEnable = true;
 
-  stylixImage = ../../wallpapers/Rainnight.jpg;
+  stylixImage = ../../wallpapers/girl-vs-monster.jpg;
   waybarChoice = ../../modules/home/waybar/waybar-ddubs.nix;
   animChoice = ../../modules/home/hyprland/animations-dynamic.nix;
 

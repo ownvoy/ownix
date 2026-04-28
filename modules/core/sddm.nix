@@ -14,6 +14,7 @@
       then {
         FormPosition = "left";
         Blur = "2.0";
+        FontSize = "15";
       }
       else if lib.hasSuffix "studio.png" config.stylix.image
       then {
@@ -21,6 +22,7 @@
           url = "https://raw.githubusercontent.com/anotherhadi/nixy-wallpapers/refs/heads/main/wallpapers/studio.gif";
           sha256 = "sha256-qySDskjmFYt+ncslpbz0BfXiWm4hmFf5GPWF2NlTVB8=";
         };
+        FontSize = "15";
         HeaderTextColor = "#${textColor}";
         DateTextColor = "#${textColor}";
         TimeTextColor = "#${textColor}";
@@ -40,6 +42,7 @@
         FormPosition = "left";
         Blur = "4.0";
         Background = "${toString config.stylix.image}";
+        FontSize = "15";
         HeaderTextColor = "#${textColor}";
         DateTextColor = "#${textColor}";
         TimeTextColor = "#${textColor}";

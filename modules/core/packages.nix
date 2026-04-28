@@ -3,6 +3,12 @@
   inputs,
   ...
 }:
+let
+  unstable = import inputs.nixpkgs-unstable {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
+in
 {
   programs = {
     neovim = {
@@ -33,48 +39,88 @@
     #inputs.hyprsysteminfo.packages.${pkgs.system}.default
 
     amfora # Fancy Terminal Browser For Gemini Protocol
+    audacity
     appimage-run # Needed For AppImage Support
+    black
     brightnessctl # For Screen Brightness Control
+    bun
+    chromedriver
     cliphist # Clipboard manager using rofi menu
     cmatrix # Matrix Movie Effect In Terminal
     cowsay # Great Fun Terminal Program
+    (unstable.chromium.override {
+      enableWideVine = true;
+    })
+    discord
     docker-compose # Allows Controlling Docker From A Single File
     duf # Utility For Viewing Disk Usage In Terminal
     dysk # Disk space util nice formattting
     eza # Beautiful ls Replacement
     ffmpeg # Terminal Video / Audio Editing
     file-roller # Archive Manager
+    figma-linux
     gedit # Simple Graphical Text Editor
     #gemini-cli # CLI AI client ONLY (optional)
     gimp # Great Photo Editor
+    ghostscript
+    git-lfs
+    gnumake
+    gnumake42
     glxinfo # needed for inxi diag util
     greetd.tuigreet # The Login Manager (Sometimes Referred To As Display Manager)
     htop # Simple Terminal Based System Monitor
+    hyprutils
     hyprpicker # Color Picker
     eog # For Image Viewing
     inxi # CLI System Information Tool
     killall # For Killing All Instances Of Programs
+    lazygit
     libnotify # For Notifications
     lm_sensors # Used For Getting Hardware Temps
     lolcat # Add Colors To Your Terminal Command Output
     lshw # Detailed Hardware Information
+    lua
+    mermaid-cli
     mpv # Incredible Video Player
     ncdu # Disk Usage Analyzer With Ncurses Interface
+    neovide
     nixfmt-rfc-style # Nix Formatter
+    nodejs
     nwg-displays # configure monitor configs via GUI
     onefetch # provides zsaneyos build info on current system
+    obsidian
+    onlyoffice-documentserver
+    onlyoffice-desktopeditors
+    opencode
     pavucontrol # For Editing Audio Levels & Devices
     pciutils # Collection Of Tools For Inspecting PCI Devices
     picard # For Changing Music Metadata & Getting Cover Art
     pkg-config # Wrapper Script For Allowing Packages To Get Info On Others
     playerctl # Allows Changing Media Volume Through Scripts
+    poppler-utils
+    python312
+    quickemu
     rhythmbox # audio player
+    ripdrag
     ripgrep # Improved Grep
+    ruff
     socat # Needed For Screenshots
+    stylua
+    tectonic-unwrapped
+    thunderbird
+    tree-sitter
+    trash-cli
+    ueberzugpp
     unrar # Tool For Handling .rar Files
     unzip # Tool For Handling .zip Files
+    unstable.antigravity-fhs
+    unstable.codex
+    unstable.pear-desktop
+    unstable.winboat
+    unstable.zotero
     usbutils # Good Tools For USB Devices
     uwsm # Universal Wayland Session Manager (optional must be enabled)
+    uv
     v4l-utils # Used For Things Like OBS Virtual Camera
     waypaper  # wallpaper changer
     warp-terminal # Terminal with AI support build in
@@ -82,5 +128,6 @@
     ytmdl # Tool For Downloading Audio From YouTube
     fd
     gcc
+    zip
   ];
 }

@@ -14,7 +14,7 @@ in
 {
   imports = [
     ./amfora.nix
-    ./agenix.nix
+    #./agenix.nix
     ./bash.nix
     ./bashrc-personal.nix
     ./bat.nix

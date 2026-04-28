@@ -2,6 +2,7 @@
 {
   nixpkgs.config.allowUnfree = true;
   fonts = {
+    fontDir.enable = true;
     packages = with pkgs; [
       cascadia-code
       fira-code

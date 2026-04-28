@@ -878,7 +878,7 @@ current host layout, and move your host-specific settings into the current
 ~/ownix/
     ├── hosts/                      # Folder where host configs are saved
     │   ├── default                 # Default host template
-    │   └── nixstation              # host
+    │   └── <hostname>              # example host
     ├── img/                        # Images for README.md
     ├── modules/                    # Core, HomeMgr, drivers config files
     │   └── drivers/                # AMD,NVIDA,Intel,VM config files
@@ -2045,7 +2045,7 @@ current host layout, and move your host-specific settings into the current
 ~/ownix/
     ├── hosts/                      # Folder where host configs are saved
     │   ├── default                 # Default host template
-    │   └── nixstation              # host
+    │   └── <hostname>              # example host
     ├── img/                        # Images for README.md
     ├── modules/                    # Core, HomeMgr, drivers config files
     │   └── drivers/                # AMD,NVIDA,Intel,VM config files

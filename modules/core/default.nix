@@ -10,6 +10,7 @@ in
 {
   imports = [
     ./boot.nix
+    ./chromium.nix
     ./flatpak.nix
     ./fonts.nix
     ./hardware.nix

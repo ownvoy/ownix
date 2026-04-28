@@ -1,5 +1,5 @@
 {
-  description = "ZaneyOS";
+  description = "Ownix";
 
   inputs = {
     home-manager = {
@@ -13,6 +13,7 @@
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:ryantm/agenix";
+    cava-bg.url = "github:leriart/cava-bg";
     # antigravity-nix = {
     #   url = "github:jacopone/antigravity-nix";
     #   inputs.nixpkgs.follows = "nixpkgs";
