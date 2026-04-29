@@ -60,6 +60,8 @@
       sv = "sudo nvim";
       v = "nvim";
       c = "clear";
+      lzg = "lazygit";
+      lzd = "lazydocker";
       fr = "nh os switch /home/${username}/ownix --hostname ${host}";
       fu = "nh os switch /home/${username}/ownix --hostname ${host} --update";
       zu = "sh <(curl -L https://gitlab.com/Zaney/zaneyos/-/releases/latest/download/install-zaneyos.sh)";
