@@ -60,7 +60,16 @@
   enableNFS = true;
 
   # Enable Printing Support
-  printEnable = false;
+  printEnable = true;
+  printerName = "Samsung";
+  printerLocation = "Office";
+  printerDescription = "Samsung C3060 Series";
+  printerUri = "ipp://192.168.1.3/ipp/print";
+  printerModel = "everywhere";
+  printerPPDOptions = {
+    PageSize = "A4";
+    Duplex = "DuplexNoTumble";
+  };
 
   # Enable Thunar GUI File Manager
   # Yazi is default File Manager

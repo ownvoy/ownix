@@ -24,8 +24,8 @@
     (import ./zcli.nix {
       inherit pkgs profile;
       backupFiles = [
-        ".config/mimeapps.list.backup"
-        ".config/nvim/init.lua.backup"
+        ".config/mimeapps.list.hm-backup"
+        ".config/nvim/init.lua.hm-backup"
       ];
     })
   ];
