@@ -38,7 +38,7 @@ in
     ./ssh.nix
     # ./nvf.nix
     ./neovim.nix
-    ./noctalia.nix
+    ./noctalia
     # ./imagemagick.nix
     ./fctix.nix
     ./obs-studio.nix
