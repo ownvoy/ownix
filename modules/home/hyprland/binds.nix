@@ -3,8 +3,24 @@ let
   inherit
     (import ../../../hosts/${host}/variables.nix)
     browser
+    desktopShell
     terminal
     ;
+  launcherBind =
+    if desktopShell == "noctalia" then
+      "$modifier ,A,exec,noctalia-shell ipc call launcher toggle"
+    else
+      "$modifier ,A,exec,rofi-launcher";
+  sessionBind =
+    if desktopShell == "noctalia" then
+      "$modifier, backspace,exec,noctalia-shell ipc call sessionMenu toggle"
+    else
+      "$modifier, backspace,exec,wlogout";
+  clipboardBind =
+    if desktopShell == "noctalia" then
+      "$modifier,V,exec,noctalia-shell ipc call launcher clipboard"
+    else
+      "$modifier,V,exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 in
 {
   wayland.windowManager.hyprland.settings = {
@@ -12,9 +28,11 @@ in
       "$modifier,T,exec,${terminal}"
       "$modifier,slash,exec,list-keybinds"
       "$modifier SHIFT,Return,exec,rofi-launcher"
-      "$modifier ,A,exec,rofi-launcher"
+      launcherBind
       "$modifier ALT,W,exec,web-search"
-      "$modifier, backspace,exec,wlogout"
+      sessionBind
+      "$modifier CTRL,B,exec,start-classic-shell"
+      "$modifier SHIFT,B,exec,start-noctalia-shell"
       "$modifier SHIFT,W,exec,wallsetter"
       "$modifier SHIFT,N,exec,swaync-client -rs"
       "$modifier,G,exec,${browser}"
@@ -28,7 +46,7 @@ in
       "$modifier,M,exec,pavucontrol"
       "$modifier,Q,killactive,"
       "$modifier,P,pseudo,"
-      "$modifier,V,exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
+      clipboardBind
       "$modifier SHIFT,I,togglesplit,"
       "$modifier,F,fullscreen,"
       "$modifier SHIFT,F,togglefloating,"

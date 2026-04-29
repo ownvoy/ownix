@@ -2,8 +2,14 @@
 let
   inherit
     (import ../../../hosts/${host}/variables.nix)
+    desktopShell
     stylixImage
     ;
+  shellStartup =
+    if desktopShell == "noctalia" then
+      "start-noctalia-shell"
+    else
+      "start-classic-shell";
 in
 {
   wayland.windowManager.hyprland.settings = {
@@ -16,8 +22,7 @@ in
       "systemctl --user start hyprpolkitagent"
 
       "killall -q swww;sleep .5 && swww-daemon"
-      "killall -q waybar;sleep .5 && waybar"
-      "killall -q swaync;sleep .5 && swaync"
+      shellStartup
       "#wallsetter &"
       "pypr &"
       "nm-applet --indicator"

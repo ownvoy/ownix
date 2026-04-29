@@ -10,6 +10,20 @@ let
     keyboardLayout
     stylixImage
     ;
+  monitorConfig =
+    if host == "my-desktop" then
+      "
+        # Desktop multi-monitor layout
+        monitor=DP-1,3840x2160@60,0x0,1.5
+        monitor=HDMI-A-1,3840x2160@60,2560x0,1.5,transform,3
+        workspace=1,monitor:DP-1,default:true
+        workspace=2,monitor:HDMI-A-1,default:true
+      "
+    else
+      "
+        # Portable-safe fallback
+        monitor=,preferred,auto,auto
+      ";
 in
 {
   home.packages = with pkgs; [
@@ -160,21 +174,8 @@ in
       };
     };
     extraConfig = "
-      # 1. 메인 모니터 (DP-2) : 4K 해상도, 1.5배율, 0x0 위치
-      # 논리적 가로 크기: 3840 / 1.5 = 2560
-      monitor=DP-1,3840x2160@60,0x0,1.5
-
-      # 2. 새 서브 모니터 (HDMI-A-1) : 4K 제 성능 발휘!
-      # 4K 세로 모드(transform,3)에 1.5배율을 적용하여 메인 모니터와 글자 크기 통일
-      monitor=HDMI-A-1,3840x2160@60,2560x0,1.5,transform,3
-
-      # 3. 가상 모니터 및 폴백 설정
-      monitor=,preferred,auto,auto
+      ${monitorConfig}
       monitor=Virtual-1,1920x1080@60,auto,1
-
-      # 4. 워크스페이스 강제 고정 (공백 없이 작성하는 것이 더 확실하게 먹힙니다)
-      workspace=1,monitor:DP-2,default:true
-      workspace=2,monitor:HDMI-A-1,default:true
 
       ${extraMonitorSettings}
     ";

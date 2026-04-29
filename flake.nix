@@ -14,6 +14,10 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:ryantm/agenix";
     cava-bg.url = "github:leriart/cava-bg";
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     # antigravity-nix = {
     #   url = "github:jacopone/antigravity-nix";
     #   inputs.nixpkgs.follows = "nixpkgs";

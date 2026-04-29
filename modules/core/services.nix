@@ -16,6 +16,8 @@
     blueman.enable = true; # Bluetooth Support
     tumbler.enable = true; # Image/video preview
     gnome.gnome-keyring.enable = true;
+    upower.enable = true;
+    power-profiles-daemon.enable = true;
 
     smartd = {
       enable =

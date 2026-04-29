@@ -14,6 +14,8 @@
     (import ./screenshootin.nix { inherit pkgs; })
     (import ./squirtle.nix { inherit pkgs; })
     (import ./task-waybar.nix { inherit pkgs; })
+    (import ./start-classic-shell.nix { inherit pkgs; })
+    (import ./start-noctalia-shell.nix { inherit pkgs; })
     (import ./wallsetter.nix {
       inherit pkgs;
       inherit username;

@@ -32,6 +32,7 @@
 
   # Waybar Settings
   clock24h = false;
+  desktopShell = "noctalia";
 
   # Program Options
   # Set Default Browser (google-chrome-stable for google-chrome)

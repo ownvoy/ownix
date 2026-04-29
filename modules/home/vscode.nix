@@ -10,6 +10,7 @@
           "workbench.preferredDarkColorTheme" = lib.mkForce "Default Dark Modern";
           "workbench.colorTheme" = lib.mkForce "Default Dark Modern";
           "editor.cursorBlinking" = "solid";
+          "vim.useSystemClipboard" = true;
           "workbench.colorCustomizations" = {
             "editor.background" = "#111317";
             "editor.foreground" = "#E7E1D7";

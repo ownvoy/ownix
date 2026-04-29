@@ -15,6 +15,7 @@
   extraMonitorSettings = "";
 
   clock24h = false;
+  desktopShell = "noctalia";
 
   browser = "chromium";
   terminal = "kitty";
