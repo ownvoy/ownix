@@ -21,6 +21,7 @@ in
     ./btop.nix
     ./bottom.nix
     ./cava.nix
+    ./codex.nix
     ./emoji.nix
     ./eza.nix
     ./fastfetch

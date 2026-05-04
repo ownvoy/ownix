@@ -14,6 +14,11 @@ in
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
+  home.file.".config/noctalia/plugins/todo" = {
+    source = ./plugins/todo;
+    recursive = true;
+  };
+
   programs.noctalia-shell = {
     enable = true;
     inherit settings;
@@ -27,6 +32,10 @@ in
       ];
       states = {
         clipper = {
+          enabled = true;
+          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
+        };
+        todo = {
           enabled = true;
           sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
         };

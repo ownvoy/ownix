@@ -1,5 +1,6 @@
 { pkgs
 , inputs
+, self
 , username
 , host
 , profile
@@ -14,7 +15,9 @@ in
     useUserPackages = true;
     useGlobalPkgs = false;
     backupFileExtension = "hm-backup";
-    extraSpecialArgs = { inherit inputs username host profile; };
+    extraSpecialArgs = {
+      inherit inputs self username host profile;
+    };
     users.${username} = {
       imports = [ ./../home ];
       home = {
