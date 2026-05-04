@@ -35,6 +35,7 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
       nix-flatpak,
@@ -46,6 +47,7 @@
     let
       system = "x86_64-linux";
       username = "ownvoy";
+      rufloVersion = "3.5.80";
       machines = {
         my-desktop = {
           profile = "amd";
@@ -62,25 +64,41 @@
           profile,
         }:
         nixpkgs.lib.nixosSystem {
-        inherit system;
-        specialArgs = {
-          inherit inputs;
-          inherit username;
-          inherit host;
-          inherit profile;
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            inherit self;
+            inherit username;
+            inherit host;
+            inherit profile;
+          };
+          modules = [
+            ./profiles/${profile}
+            nix-flatpak.nixosModules.nix-flatpak
+            # {
+            #   environment.systemPackages = [
+            #     antigravity-nix.packages.${system}.default
+            #   ];
+            # }
+          ];
         };
-        modules = [
-          ./profiles/${profile}
-          nix-flatpak.nixosModules.nix-flatpak
-          # {
-          #   environment.systemPackages = [
-          #     antigravity-nix.packages.${system}.default
-          #   ];
-          # }
-        ];
-      };
     in
     {
+      packages.${system}.ruflo = nixpkgs.legacyPackages.${system}.buildNpmPackage {
+        pname = "ruflo";
+        version = rufloVersion;
+
+        src = nixpkgs.legacyPackages.${system}.fetchFromGitHub {
+          owner = "ruvnet";
+          repo = "ruflo";
+          rev = "v${rufloVersion}";
+          hash = "sha256-kAXmt+52VkFPkT1K1u0X61ZDfL+W3jJYT5Hyq1iixlw=";
+        };
+
+        npmDepsHash = "sha256-V7Rzd49RKahxmYjyQSr5u0dUVv8JQGoAyro+yVh4aCk=";
+        npmBuildScript = "build:ts";
+      };
+
       nixosConfigurations = nixpkgs.lib.mapAttrs (
         host: machine:
         mkNixosConfig {
