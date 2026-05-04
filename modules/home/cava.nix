@@ -1,6 +1,44 @@
 { pkgs, inputs, ... }:
 let
   cavaBg = inputs.cava-bg.packages.${pkgs.system}.default;
+  cavaBgSinkWatcher = pkgs.writeShellApplication {
+    name = "cava-bg-sink-watcher";
+    runtimeInputs = with pkgs; [
+      cavaBg
+      gnused
+      pulseaudio
+    ];
+    text = ''
+      set -eu
+
+      get_default_sink() {
+        pactl info 2>/dev/null | sed -n 's/^Default Sink: //p'
+      }
+
+      restart_cava_bg() {
+        cava-bg off >/dev/null 2>&1 || true
+        sleep 0.3
+        cava-bg on >/dev/null 2>&1 || true
+      }
+
+      last_sink="$(get_default_sink)"
+
+      pactl subscribe 2>/dev/null | while IFS= read -r event; do
+        case "$event" in
+          *"on server"*|*"on sink"*)
+            current_sink="$(get_default_sink)"
+
+            if [ -z "$current_sink" ] || [ "$current_sink" = "$last_sink" ]; then
+              continue
+            fi
+
+            last_sink="$current_sink"
+            restart_cava_bg
+            ;;
+        esac
+      done
+    '';
+  };
 in
 {
   programs.cava = {
@@ -10,6 +48,10 @@ in
         bar_spacing = 1;
         bar_width = 2;
         frame_rate = 60;
+      };
+      input = {
+        method = "pipewire";
+        source = "auto";
       };
       color = {
         #gradient = 1;
@@ -45,7 +87,24 @@ in
     };
   };
 
-  home.packages = [ cavaBg ];
+  home.packages = [
+    cavaBg
+    cavaBgSinkWatcher
+  ];
+
+  systemd.user.services.cava-bg-sink-watcher = {
+    Unit = {
+      Description = "Restart cava-bg when the default PipeWire sink changes";
+      After = [ "graphical-session.target" "pipewire.service" "wireplumber.service" ];
+      PartOf = [ "graphical-session.target" ];
+    };
+    Service = {
+      ExecStart = "${cavaBgSinkWatcher}/bin/cava-bg-sink-watcher";
+      Restart = "always";
+      RestartSec = 2;
+    };
+    Install.WantedBy = [ "graphical-session.target" ];
+  };
 
   xdg.configFile."cava-bg/config.toml".text = ''
     [general]

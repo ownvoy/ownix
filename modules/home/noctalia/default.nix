@@ -1,6 +1,9 @@
-{ inputs, lib, username, host, ... }:
+{ config, inputs, lib, pkgs, username, host, ... }:
 let
-  inherit (import ../../../hosts/${host}/variables.nix) terminal;
+  inherit (import ../../../hosts/${host}/variables.nix)
+    desktopShell
+    terminal
+    ;
   settings = lib.foldl' lib.recursiveUpdate { } [
     (import ./app-launcher-audio.nix { inherit terminal; })
     (import ./bar.nix)
@@ -34,4 +37,23 @@ in
       version = 2;
     };
   };
+
+  home.activation.reloadNoctaliaShell = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    if [ "${desktopShell}" != "noctalia" ]; then
+      exit 0
+    fi
+
+    if [ -z "''${WAYLAND_DISPLAY:-}" ] && [ -z "''${DISPLAY:-}" ]; then
+      exit 0
+    fi
+
+    if ! ${pkgs.procps}/bin/pgrep -x Hyprland >/dev/null 2>&1; then
+      exit 0
+    fi
+
+    export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(${pkgs.coreutils}/bin/id -u)}"
+    export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
+
+    ${config.home.profileDirectory}/bin/start-noctalia-shell >/dev/null 2>&1 || true
+  '';
 }

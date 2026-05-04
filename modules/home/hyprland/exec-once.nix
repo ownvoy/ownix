@@ -24,12 +24,10 @@ in
       "killall -q swww;sleep .5 && swww-daemon"
       shellStartup
       "#wallsetter &"
-      "pypr &"
       "nm-applet --indicator"
       "sleep 1.0 && swww img ${stylixImage}"
       "sleep 2.0 && cava-bg off >/dev/null 2>&1; sleep .2 && cava-bg on"
       "fcitx5 -d -r"
-      "hyprctl dispatch focusmonitor DP-2"
     ];
   };
 }
