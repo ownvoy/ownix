@@ -10,6 +10,6 @@ pkgs.writeShellScriptBin "start-noctalia-shell" ''
   pkill -x swaync >/dev/null 2>&1 || true
 
   if ! pgrep -x noctalia-shell >/dev/null 2>&1; then
-    noctalia-shell >/dev/null 2>&1 &
+    env QT_IM_MODULE=wayland noctalia-shell >/dev/null 2>&1 &
   fi
 ''

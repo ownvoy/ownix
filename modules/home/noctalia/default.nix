@@ -60,6 +60,10 @@ in
       exit 0
     fi
 
+    if ! ${pkgs.procps}/bin/pgrep -x noctalia-shell >/dev/null 2>&1; then
+      exit 0
+    fi
+
     export XDG_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(${pkgs.coreutils}/bin/id -u)}"
     export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=$XDG_RUNTIME_DIR/bus}"
 
