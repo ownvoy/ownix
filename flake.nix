@@ -84,20 +84,18 @@
         };
     in
     {
-      packages.${system}.ruflo = nixpkgs.legacyPackages.${system}.buildNpmPackage {
-        pname = "ruflo";
-        version = rufloVersion;
+      packages.${system}.ruflo =
+        nixpkgs.legacyPackages.${system}.writeShellApplication {
+          name = "claude-flow";
+          runtimeInputs = [ nixpkgs.legacyPackages.${system}.nodejs ];
+          text = ''
+            export npm_config_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/npm"
+            export npm_config_fund=false
+            export npm_config_update_notifier=false
 
-        src = nixpkgs.legacyPackages.${system}.fetchFromGitHub {
-          owner = "ruvnet";
-          repo = "ruflo";
-          rev = "v${rufloVersion}";
-          hash = "sha256-kAXmt+52VkFPkT1K1u0X61ZDfL+W3jJYT5Hyq1iixlw=";
+            exec npx --yes @claude-flow/cli@${rufloVersion} "$@"
+          '';
         };
-
-        npmDepsHash = "sha256-V7Rzd49RKahxmYjyQSr5u0dUVv8JQGoAyro+yVh4aCk=";
-        npmBuildScript = "build:ts";
-      };
 
       nixosConfigurations = nixpkgs.lib.mapAttrs (
         host: machine:

@@ -31,5 +31,6 @@ in
     [mcp_servers.ruflo]
     command = "${rufloBin}"
     args = ["mcp", "start"]
+    startup_timeout_sec = 180
   '';
 }
