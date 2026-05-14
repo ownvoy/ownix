@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=/home/ownvoy/.local/bin/innorixas start
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name[ko_KR]=innorix-agent
+Name=innorix-agent
+Comment[ko_KR]=innorix-agent starter
+Comment=innorix-agent starter

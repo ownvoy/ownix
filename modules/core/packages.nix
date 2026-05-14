@@ -98,7 +98,13 @@ in
     pkg-config # Wrapper Script For Allowing Packages To Get Info On Others
     playerctl # Allows Changing Media Volume Through Scripts
     poppler-utils
-    python312
+    (python312.withPackages (
+      ps: with ps; [
+        openpyxl
+        pillow
+        python-docx
+      ]
+    ))
     quickemu
     rhythmbox # audio player
     ripdrag

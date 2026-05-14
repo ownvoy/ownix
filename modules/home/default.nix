@@ -14,7 +14,7 @@ in
 {
   imports = [
     ./amfora.nix
-    #./agenix.nix
+    ./agenix.nix
     ./bash.nix
     ./bashrc-personal.nix
     ./bat.nix
@@ -32,9 +32,11 @@ in
     ./gtk.nix
     ./htop.nix
     ./hyprland
+    ./innorix.nix
     ./kitty.nix
     ./lazygit.nix
     ./obs-studio.nix
+    ./open-design.nix
     ./zotero.nix
     ./ssh.nix
     # ./nvf.nix

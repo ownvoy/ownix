@@ -14,6 +14,7 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:ryantm/agenix";
     cava-bg.url = "github:leriart/cava-bg";
+    open-design.url = "github:nexu-io/open-design";
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs-unstable";

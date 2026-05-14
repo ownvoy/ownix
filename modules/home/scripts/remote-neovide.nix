@@ -135,7 +135,7 @@ EOF
           exit 1
         fi
 
-        nvim --server "$control_socket" --remote-send "<Cmd>RemoteStop $host<CR><Cmd>qaall!<CR>"
+        nvim --server "$control_socket" --remote-send "<Cmd>RemoteStop $host<CR><Cmd>qall!<CR>"
         echo "remote-neovide: stopping $host"
         ;;
       status)

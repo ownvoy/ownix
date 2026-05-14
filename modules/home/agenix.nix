@@ -1,5 +1,5 @@
 # modules/home/agenix.nix
-{ inputs, pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 
 {
   # 1. NixOS 모듈이 아닌 Home Manager용 agenix 모듈을 불러옵니다.
@@ -9,6 +9,9 @@
 
   # 2. environment.systemPackages 대신 home.packages를 사용합니다.
   home.packages = [ inputs.agenix.packages.${pkgs.system}.default ];
+
+  # Reuse the user's SSH key to decrypt age secrets declaratively.
+  age.identityPaths = [ "${config.home.homeDirectory}/.ssh/id_ed25519" ];
 
   # 3. 비밀값 마운트 설정
   age.secrets = {

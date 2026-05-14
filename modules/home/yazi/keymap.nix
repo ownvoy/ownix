@@ -228,8 +228,8 @@
       }
       {
         on = "Y";
-        run = "unyank";
-        desc = "Cancel the yank status";
+        run = "copy path";
+        desc = "Copy the file path";
       }
       {
         on = "X";
