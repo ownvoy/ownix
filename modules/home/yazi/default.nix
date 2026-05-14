@@ -3,6 +3,8 @@ let
   settings = import ./yazi.nix;
   keymap = import ./keymap.nix;
   theme = import ./theme.nix;
+  vfs = import ./vfs.nix;
+  tomlFormat = pkgs.formats.toml { };
 in
 {
   programs.yazi = {
@@ -29,4 +31,6 @@ in
          }
     '';
   };
+
+  xdg.configFile."yazi/vfs.toml".source = tomlFormat.generate "yazi-vfs.toml" vfs;
 }

@@ -8,6 +8,10 @@ let
     system = pkgs.system;
     config.allowUnfree = true;
   };
+  endcord = pkgs.callPackage ../../pkgs/endcord.nix {
+    protobuf = unstable.python312Packages.protobuf;
+    src = inputs.endcord-src;
+  };
 in
 {
   programs = {
@@ -52,6 +56,7 @@ in
       enableWideVine = true;
     })
     discord
+    endcord
     docker-compose # Allows Controlling Docker From A Single File
     duf # Utility For Viewing Disk Usage In Terminal
     dysk # Disk space util nice formattting
@@ -128,7 +133,7 @@ in
     uwsm # Universal Wayland Session Manager (optional must be enabled)
     uv
     v4l-utils # Used For Things Like OBS Virtual Camera
-    waypaper  # wallpaper changer
+    waypaper # wallpaper changer
     warp-terminal # Terminal with AI support build in
     wget # Tool For Fetching Files With Links
     ytmdl # Tool For Downloading Audio From YouTube

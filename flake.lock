@@ -154,6 +154,22 @@
         "type": "github"
       }
     },
+    "endcord-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1778413475,
+        "narHash": "sha256-pN9+szWstzgeEHF3ovDT09Y80OMHuhy6PcVsFxoWlPE=",
+        "owner": "sparklost",
+        "repo": "endcord",
+        "rev": "e3435628d1c9a2b51367b551b18294ecbe670e98",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sparklost",
+        "repo": "endcord",
+        "type": "github"
+      }
+    },
     "fenix": {
       "inputs": {
         "nixpkgs": [
@@ -763,6 +779,7 @@
       "inputs": {
         "agenix": "agenix",
         "cava-bg": "cava-bg",
+        "endcord-src": "endcord-src",
         "home-manager": "home-manager_2",
         "nix-flatpak": "nix-flatpak",
         "nixpkgs": "nixpkgs_4",

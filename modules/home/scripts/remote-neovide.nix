@@ -6,6 +6,9 @@ let
     workspace_file="''${XDG_DATA_HOME:-$HOME/.local/share}/nvim/remote-nvim.nvim/workspace.json"
     state_dir="''${XDG_STATE_HOME:-$HOME/.local/state}/remote-neovide"
     runtime_dir="''${XDG_RUNTIME_DIR:-/tmp}/remote-neovide"
+    nvim_config_dir="''${XDG_CONFIG_HOME:-$HOME/.config}/nvim"
+    nvim_init_file="$nvim_config_dir/init.lua"
+    remote_neovide_lua="$nvim_config_dir/lua/config/remote_neovide.lua"
 
     usage() {
       cat <<'EOF'
@@ -83,6 +86,16 @@ EOF
 
     mkdir -p "$runtime_dir" "$state_dir"
 
+    if [ ! -f "$nvim_init_file" ]; then
+      echo "remote-neovide: missing nvim init file: $nvim_init_file" >&2
+      exit 1
+    fi
+
+    if [ ! -f "$remote_neovide_lua" ]; then
+      echo "remote-neovide: missing remote neovide module: $remote_neovide_lua" >&2
+      exit 1
+    fi
+
     is_running() {
       nvim --server "$control_socket" --remote-expr "1" >/dev/null 2>&1
     }
@@ -114,8 +127,8 @@ EOF
         fi
 
         REMOTE_NVIM_NEOVIDE_DETACH=1 REMOTE_NVIM_HOST="$host" nohup \
-          nvim --listen "$control_socket" --headless -i NONE \
-          '+lua require("config.remote_neovide").start_from_env()' \
+          nvim --listen "$control_socket" --headless -u "$nvim_init_file" -i NONE \
+          "+lua (assert(dofile([[''${remote_neovide_lua}]]))).start_from_env()" \
           >>"$log_file" 2>&1 </dev/null &
 
         if wait_for_server; then

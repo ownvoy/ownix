@@ -15,6 +15,10 @@
     agenix.url = "github:ryantm/agenix";
     cava-bg.url = "github:leriart/cava-bg";
     open-design.url = "github:nexu-io/open-design";
+    endcord-src = {
+      url = "github:sparklost/endcord";
+      flake = false;
+    };
     noctalia = {
       url = "github:noctalia-dev/noctalia-shell";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -85,18 +89,17 @@
         };
     in
     {
-      packages.${system}.ruflo =
-        nixpkgs.legacyPackages.${system}.writeShellApplication {
-          name = "claude-flow";
-          runtimeInputs = [ nixpkgs.legacyPackages.${system}.nodejs ];
-          text = ''
-            export npm_config_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/npm"
-            export npm_config_fund=false
-            export npm_config_update_notifier=false
+      packages.${system}.ruflo = nixpkgs.legacyPackages.${system}.writeShellApplication {
+        name = "claude-flow";
+        runtimeInputs = [ nixpkgs.legacyPackages.${system}.nodejs ];
+        text = ''
+          export npm_config_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/npm"
+          export npm_config_fund=false
+          export npm_config_update_notifier=false
 
-            exec npx --yes @claude-flow/cli@${rufloVersion} "$@"
-          '';
-        };
+          exec npx --yes @claude-flow/cli@${rufloVersion} "$@"
+        '';
+      };
 
       nixosConfigurations = nixpkgs.lib.mapAttrs (
         host: machine:

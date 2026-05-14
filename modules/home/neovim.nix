@@ -24,15 +24,26 @@
   };
 
   home.activation.linkNeovimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    mkdir -p "/home/ownvoy/dotfiles/nvim"
-    rm -f "/home/ownvoy/dotfiles/nvim/init.lua"
+    mkdir -p "$HOME/.config"
+
+    if [ -L "$HOME/.config/nvim" ]; then
+      old_target="$(readlink -f "$HOME/.config/nvim")"
+      tmp_dir="$(mktemp -d "$HOME/.config/nvim.migrate.XXXXXX")"
+      cp -aT "$old_target" "$tmp_dir"
+      rm "$HOME/.config/nvim"
+      mv "$tmp_dir" "$HOME/.config/nvim"
+    elif [ ! -d "$HOME/.config/nvim" ]; then
+      mkdir -p "$HOME/.config/nvim"
+    fi
+
+    rm -f "$HOME/.config/nvim/init.lua"
     printf '%s\n%s\n' \
       '-- bootstrap lazy.nvim, LazyVim and your plugins' \
       'require("config.lazy")' \
-      > "/home/ownvoy/dotfiles/nvim/init.lua"
+      > "$HOME/.config/nvim/init.lua"
 
-    mkdir -p "/home/ownvoy/dotfiles/nvim/lua/plugins"
-    cat > "/home/ownvoy/dotfiles/nvim/lua/plugins/neovide.lua" <<'EOF'
+    mkdir -p "$HOME/.config/nvim/lua/plugins"
+    cat > "$HOME/.config/nvim/lua/plugins/neovide.lua" <<'EOF'
     return {
       {
         "LazyVim/LazyVim",
@@ -68,8 +79,5 @@
       },
     }
     EOF
-
-    mkdir -p "$HOME/.config"
-    ln -sfnT "/home/ownvoy/dotfiles/nvim" "$HOME/.config/nvim"
   '';
 }

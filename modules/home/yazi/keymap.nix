@@ -558,6 +558,31 @@
         run = "shell 'ripdrag \"$@\" -x 2>/dev/null &' --confirm";
         desc = "ripdrag로 선택한 파일 드래그 앤 드롭";
       }
+      {
+        on = [ "g" "1" ];
+        run = "cd sftp://hanbat-a100";
+        desc = "Go to hanbat-a100 over SFTP";
+      }
+      {
+        on = [ "g" "2" ];
+        run = "cd sftp://seoultech-h100";
+        desc = "Go to seoultech-h100 over SFTP";
+      }
+      {
+        on = [ "g" "3" ];
+        run = "cd sftp://seoultech-a6000";
+        desc = "Go to seoultech-a6000 over SFTP";
+      }
+      {
+        on = [ "g" "4" ];
+        run = "cd sftp://a6000";
+        desc = "Go to A6000 over SFTP";
+      }
+      {
+        on = [ "g" "5" ];
+        run = "cd sftp://h200-up-up";
+        desc = "Go to h200-up-up over SFTP";
+      }
     ];
   };
   tasks = {
