@@ -583,6 +583,14 @@
         run = "cd sftp://h200-up-up";
         desc = "Go to h200-up-up over SFTP";
       }
+      {
+        on = [ "g" "6" ];
+        run = [
+          ''shell 'pgrep -af "127.0.0.1:10022:117.17.185.235:22" >/dev/null || ssh -fN -L 127.0.0.1:10022:117.17.185.235:22 A6000 -o ExitOnForwardFailure=yes -o ServerAliveInterval=30 -o ServerAliveCountMax=3' --block''
+          "cd sftp://h100-proxy"
+        ];
+        desc = "Start H100 proxy tunnel and connect over SFTP";
+      }
     ];
   };
   tasks = {

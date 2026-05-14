@@ -1,5 +1,13 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  inputs,
+  ...
+}:
 let
+  unstable = import inputs.nixpkgs-unstable {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
   settings = import ./yazi.nix;
   keymap = import ./keymap.nix;
   theme = import ./theme.nix;
@@ -9,6 +17,7 @@ in
 {
   programs.yazi = {
     enable = true;
+    package = unstable.yazi;
     enableZshIntegration = true;
     enableBashIntegration = true;
     enableFishIntegration = true;
@@ -17,10 +26,10 @@ in
     keymap = keymap;
     theme = theme;
     plugins = {
-      lazygit = pkgs.yaziPlugins.lazygit;
-      full-border = pkgs.yaziPlugins.full-border;
-      git = pkgs.yaziPlugins.git;
-      smart-enter = pkgs.yaziPlugins.smart-enter;
+      lazygit = unstable.yaziPlugins.lazygit;
+      full-border = unstable.yaziPlugins.full-border;
+      git = unstable.yaziPlugins.git;
+      smart-enter = unstable.yaziPlugins.smart-enter;
     };
 
     initLua = ''

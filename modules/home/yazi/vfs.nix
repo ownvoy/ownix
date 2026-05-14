@@ -35,5 +35,12 @@
       port = 22;
       key_file = "~/.ssh/kaist.pem";
     };
+
+    h100-proxy = {
+      type = "sftp";
+      host = "127.0.0.1";
+      user = "seoultech";
+      port = 10022;
+    };
   };
 }
