@@ -39,6 +39,7 @@ in
     ./open-design.nix
     ./zotero.nix
     ./ssh.nix
+    ./steam-compat.nix
     # ./nvf.nix
     ./neovim.nix
     ./noctalia

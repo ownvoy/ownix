@@ -103,6 +103,7 @@ in
     pkg-config # Wrapper Script For Allowing Packages To Get Info On Others
     playerctl # Allows Changing Media Volume Through Scripts
     poppler-utils
+    protontricks
     (python312.withPackages (
       ps: with ps; [
         openpyxl
