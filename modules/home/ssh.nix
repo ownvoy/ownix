@@ -53,6 +53,13 @@
         # NixOS니까 nc 경로를 명확히 찾기 위해 경로 없이 쓰거나, 아래 2단계 확인 필수
         ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
 
+      Host bai-vscode
+        User work
+        HostName proxy3.nipa2025.ktcloud.com
+        Port 10524
+        StrictHostKeyChecking no
+        UserKnownHostsFile /dev/null
+
           '';
   };
 

@@ -128,9 +128,6 @@ PY
           rm -f "$TRAY_FILE"
         fi
 
-        mkdir -p "$HOME/.config/autostart"
-        cp -f "${config.xdg.dataHome}/applications/innorix-agent.desktop" "$HOME/.config/autostart/innorix-agent.desktop"
-
         (
           run_agent start
         ) >/dev/null 2>&1 &
