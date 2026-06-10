@@ -53,6 +53,7 @@
       system = "x86_64-linux";
       username = "ownvoy";
       rufloVersion = "3.5.80";
+      ouroborosVersion = "0.41.0";
       machines = {
         my-desktop = {
           profile = "amd";
@@ -89,16 +90,38 @@
         };
     in
     {
-      packages.${system}.ruflo = nixpkgs.legacyPackages.${system}.writeShellApplication {
-        name = "claude-flow";
-        runtimeInputs = [ nixpkgs.legacyPackages.${system}.nodejs ];
-        text = ''
-          export npm_config_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/npm"
-          export npm_config_fund=false
-          export npm_config_update_notifier=false
+      packages.${system} = {
+        ruflo = nixpkgs.legacyPackages.${system}.writeShellApplication {
+          name = "claude-flow";
+          runtimeInputs = [ nixpkgs.legacyPackages.${system}.nodejs ];
+          text = ''
+            export npm_config_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/npm"
+            export npm_config_fund=false
+            export npm_config_update_notifier=false
 
-          exec npx --yes @claude-flow/cli@${rufloVersion} "$@"
-        '';
+            exec npx --yes @claude-flow/cli@${rufloVersion} "$@"
+          '';
+        };
+
+        ouroboros = nixpkgs.legacyPackages.${system}.writeShellApplication {
+          name = "ouroboros";
+          runtimeInputs = [
+            nixpkgs.legacyPackages.${system}.python312
+            nixpkgs.legacyPackages.${system}.uv
+          ];
+          text = ''
+            export UV_PYTHON="${nixpkgs.legacyPackages.${system}.python312}/bin/python3"
+            export UV_PYTHON_DOWNLOADS=never
+            export LD_LIBRARY_PATH="${
+              nixpkgs.legacyPackages.${system}.stdenv.cc.cc.lib
+            }/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+
+            exec uvx \
+              --python "${nixpkgs.legacyPackages.${system}.python312}/bin/python3" \
+              --from "ouroboros-ai[mcp]==${ouroborosVersion}" \
+              ouroboros "$@"
+          '';
+        };
       };
 
       nixosConfigurations = nixpkgs.lib.mapAttrs (

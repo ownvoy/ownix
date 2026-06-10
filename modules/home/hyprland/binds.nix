@@ -1,7 +1,6 @@
 { host, ... }:
 let
-  inherit
-    (import ../../../hosts/${host}/variables.nix)
+  inherit (import ../../../hosts/${host}/variables.nix)
     browser
     desktopShell
     terminal
@@ -112,6 +111,7 @@ in
       ",XF86AudioPrev, exec, playerctl previous"
       ",XF86MonBrightnessDown,exec,brightnessctl set 5%-"
       ",XF86MonBrightnessUp,exec,brightnessctl set +5%"
+      ",XF86Tools,exec,${terminal} -e camera-ocr-video"
     ];
 
     bindm = [

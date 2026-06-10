@@ -716,11 +716,11 @@
         "nixpkgs": "nixpkgs_6"
       },
       "locked": {
-        "lastModified": 1778662002,
-        "narHash": "sha256-+lcmmNfxUPGCvhAGjZPSFahn1iexN47ODU9lEAJHc0I=",
+        "lastModified": 1780902656,
+        "narHash": "sha256-DKD2dGw8IlBZJ5z5ToiYkzbH0/1+HUpXK++hgTRvyic=",
         "owner": "nexu-io",
         "repo": "open-design",
-        "rev": "cd30ec6fef1002b65111f2ec9c3ad1b6e5054658",
+        "rev": "532ced93f1064262a9b550ac488f6dfa51cda19d",
         "type": "github"
       },
       "original": {

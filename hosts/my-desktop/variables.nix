@@ -61,10 +61,12 @@
 
   # Enable Printing Support
   printEnable = true;
-  printerName = "Samsung";
+  printerName = "Samsung_C3060_Series_SEC84251976DF29";
   printerLocation = "Office";
   printerDescription = "Samsung C3060 Series";
-  printerUri = "ipp://192.168.1.3/ipp/print";
+  # The previously configured fixed IP queue was unreachable; use the queue CUPS
+  # actually discovered on this network instead.
+  printerUri = "implicitclass://Samsung_C3060_Series_SEC84251976DF29/";
   printerModel = "everywhere";
   printerPPDOptions = {
     PageSize = "A4";

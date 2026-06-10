@@ -1,10 +1,11 @@
-{ pkgs
-, inputs
-, self
-, username
-, host
-, profile
-, ...
+{
+  pkgs,
+  inputs,
+  self,
+  username,
+  host,
+  profile,
+  ...
 }:
 let
   inherit (import ../../hosts/${host}/variables.nix) gitUsername;
@@ -16,7 +17,13 @@ in
     useGlobalPkgs = false;
     backupFileExtension = "hm-backup";
     extraSpecialArgs = {
-      inherit inputs self username host profile;
+      inherit
+        inputs
+        self
+        username
+        host
+        profile
+        ;
     };
     users.${username} = {
       imports = [ ./../home ];
@@ -33,13 +40,15 @@ in
     description = "${gitUsername}";
     extraGroups = [
       "adbusers"
-      "docker" #access to docker as non-root
-      "libvirtd" #Virt manager/QEMU access
+      "dialout"
+      "docker" # access to docker as non-root
+      "libvirtd" # Virt manager/QEMU access
       "lp"
       "networkmanager"
       "scanner"
-      "wheel" #subdo access
-      "vboxusers" #Virtual Box
+      "video"
+      "wheel" # subdo access
+      "vboxusers" # Virtual Box
     ];
     shell = pkgs.zsh;
     ignoreShellProgramCheck = true;
