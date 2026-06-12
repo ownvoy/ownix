@@ -20,6 +20,10 @@ sessions. Keep it short, factual, and easy to overwrite.
   `docs/HANDOFF.md`, and run `git status --short` before repository changes.
 - Decided not to use a path-based commit helper. Commit messages should be
   suggested by Codex after reviewing the actual diff.
+- Decided that `ruflo` should be used implicitly in the background when it
+  helps with memory, workflow, or task-state recall.
+- Decided that end-of-session flow should include a short `ruflo` memory update
+  when available.
 
 ## Recent Changes
 
@@ -37,6 +41,11 @@ sessions. Keep it short, factual, and easy to overwrite.
 
 - Keep handoff state in the repo as the primary source.
 - Use `ruflo` memory only as a secondary helper when available.
+- Use `ruflo` opportunistically even without explicit user wording when it adds
+  value, but do not let it override repo-local source of truth.
+- End repository-changing work by updating this handoff file, checking
+  `git status --short`, and, when available, writing a short `ownix handoff`
+  summary to `ruflo` memory.
 - Avoid a dedicated `RUFLO.md`; mention ruflo only where it directly affects
   repo configuration.
 - End repository-changing work by updating this handoff file and checking
@@ -64,5 +73,18 @@ sessions. Keep it short, factual, and easy to overwrite.
 - If continuing documentation work, update this file again before stopping.
 - Before ending repository-changing work, update this file and run
   `git status --short`.
-- If using ruflo, search memory for `ownix handoff` or record a short completion
-  note after the task.
+- If `ruflo` is available, search memory for `ownix handoff` on resume and
+  record a short `ownix handoff` summary at the end of the task.
+
+## Ruflo Handoff Template
+
+Use a short memory note like this:
+
+```text
+ownix handoff
+goal: ...
+changed: ...
+decision: ...
+validation: ...
+next: ...
+```

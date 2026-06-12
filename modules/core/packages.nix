@@ -38,6 +38,11 @@ in
 
   nixpkgs.config.allowUnfree = true;
 
+  environment.variables = {
+    PLAYWRIGHT_BROWSERS_PATH = "${pkgs.playwright-driver.browsers}";
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+  };
+
   environment.systemPackages = with pkgs; [
     # Hyprland systeminfo QT  (Optional)
     #inputs.hyprsysteminfo.packages.${pkgs.system}.default
@@ -94,11 +99,12 @@ in
     nwg-displays # configure monitor configs via GUI
     onefetch # provides zsaneyos build info on current system
     obsidian
-    onlyoffice-documentserver
-    onlyoffice-desktopeditors
     opencode
     pavucontrol # For Editing Audio Levels & Devices
     pciutils # Collection Of Tools For Inspecting PCI Devices
+    libreoffice-qt # Wayland-friendly office suite with PPTX support
+    playwright
+    playwright-driver.browsers
     picard # For Changing Music Metadata & Getting Cover Art
     pkg-config # Wrapper Script For Allowing Packages To Get Info On Others
     playerctl # Allows Changing Media Volume Through Scripts

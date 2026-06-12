@@ -21,16 +21,27 @@ This repository is a declarative NixOS/Home Manager configuration.
 - `modules/` contains reusable NixOS/Home Manager modules and most package/config declarations.
 - Many files under `~/.config` are generated or symlinked outputs, not the authoring source.
 
+## Ruflo Usage
+
+- Do not wait for the user to explicitly say `ruflo` when its background use would materially help.
+- Use available `ruflo` tools opportunistically for memory search, workflow recommendation, progress lookup, and task-state recall.
+- Prefer repo-local files as the source of truth. Treat `ruflo` as a secondary helper for recall and coordination.
+- Use `ruflo` especially when resuming work across sessions, when earlier decisions may matter, or when the next step is unclear from git diff and local files alone.
+- Do not block straightforward repository work on `ruflo`. If local source is sufficient, proceed.
+
 ## Session Handoff
 
 - Keep `docs/HANDOFF.md` short and current when work spans sessions.
 - Update it after meaningful repository changes, before stopping with unfinished work, or when the next step would be hard to infer from git diff alone.
 - Record only durable context: goal, changed files, decisions, validation, risks, and next actions.
+- When possible, use this compact handoff structure: `goal`, `changed`, `decision`, `validation`, and `next`.
 - Do not use handoff notes as a substitute for committing or checking `git status`.
 - At the end of repository-changing work, update `docs/HANDOFF.md` and check `git status --short`.
+- At the end of repository-changing work, if `ruflo` memory is available, record a short `ownix handoff` summary in the background.
+- Keep `ruflo` handoff memory short. Prefer a few durable lines over a long narrative.
 - Do not auto-commit. The user commits manually after reviewing changes and, for Nix changes, usually after a successful `fr`.
 - If the user asks to commit, review `git status --short` and the relevant diff, suggest a commit message, then ask for confirmation before running `git add`, `git commit`, or `git push`.
-- If `ruflo` memory is available, use it as a secondary recall layer for important decisions, but keep the repo-local handoff file as the primary source.
+- If `ruflo` memory is available, use it as a secondary recall layer for important decisions even when the user did not explicitly request it, but keep the repo-local handoff file as the primary source.
 
 ## Response Preference
 
