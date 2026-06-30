@@ -1,5 +1,6 @@
 { lib, pkgs, ... }:
 let
+  nvimConfigRepo = "https://github.com/ownvoy/nvim.git";
   linuxClipboardPackages = with pkgs; [
     wl-clipboard
     xsel
@@ -17,6 +18,7 @@ in
     extraPackages = with pkgs; [
       # LazyVim build dependencies
       gcc
+      git
       gnumake
       unzip
       ripgrep
@@ -28,59 +30,39 @@ in
 
   home.activation.linkNeovimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     mkdir -p "$HOME/.config"
+    nvim_config="$HOME/.config/nvim"
+    nvim_repo="${nvimConfigRepo}"
 
-    if [ -L "$HOME/.config/nvim" ]; then
-      old_target="$(readlink -f "$HOME/.config/nvim")"
+    if [ -L "$nvim_config" ]; then
+      old_target="$(readlink "$nvim_config")"
       tmp_dir="$(mktemp -d "$HOME/.config/nvim.migrate.XXXXXX")"
-      cp -aT "$old_target" "$tmp_dir"
-      rm "$HOME/.config/nvim"
-      mv "$tmp_dir" "$HOME/.config/nvim"
-    elif [ ! -d "$HOME/.config/nvim" ]; then
-      mkdir -p "$HOME/.config/nvim"
+      cp -R "$old_target"/. "$tmp_dir"/
+      rm "$nvim_config"
+      mv "$tmp_dir" "$nvim_config"
     fi
 
-    rm -f "$HOME/.config/nvim/init.lua"
-    printf '%s\n%s\n' \
-      '-- bootstrap lazy.nvim, LazyVim and your plugins' \
-      'require("config.lazy")' \
-      > "$HOME/.config/nvim/init.lua"
-
-    mkdir -p "$HOME/.config/nvim/lua/plugins"
-    cat > "$HOME/.config/nvim/lua/plugins/neovide.lua" <<'EOF'
-    return {
-      {
-        "LazyVim/LazyVim",
-        opts = function()
-          if not vim.g.neovide then
-            return
-          end
-
-          local function sync_neovide_background()
-            local normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
-            if not normal or not normal.bg then
-              return
-            end
-
-            local opacity = vim.g.neovide_opacity or 1.0
-            local alpha = math.max(0, math.min(255, math.floor(opacity * 255 + 0.5)))
-            vim.g.neovide_background_color = string.format("#%06x%02x", normal.bg, alpha)
-          end
-
-          local group = vim.api.nvim_create_augroup("OwnixNeovideTheme", { clear = true })
-          vim.api.nvim_create_autocmd("ColorScheme", {
-            group = group,
-            callback = sync_neovide_background,
-          })
-          vim.api.nvim_create_autocmd("VimEnter", {
-            group = group,
-            once = true,
-            callback = function()
-              vim.schedule(sync_neovide_background)
-            end,
-          })
-        end,
-      },
-    }
-    EOF
+    if [ ! -e "$nvim_config" ]; then
+      ${pkgs.git}/bin/git clone "$nvim_repo" "$nvim_config"
+    elif [ -d "$nvim_config/.git" ]; then
+      current_remote="$(${pkgs.git}/bin/git -C "$nvim_config" remote get-url origin 2>/dev/null || true)"
+      if [ "$current_remote" = "$nvim_repo" ]; then
+        if ${pkgs.git}/bin/git -C "$nvim_config" diff --quiet \
+          && ${pkgs.git}/bin/git -C "$nvim_config" diff --cached --quiet; then
+          ${pkgs.git}/bin/git -C "$nvim_config" pull --ff-only
+        else
+          echo "Skipping nvim config update because $nvim_config has local changes."
+        fi
+      else
+        backup="$nvim_config.before-ownix-$(date +%Y%m%d%H%M%S)"
+        mv "$nvim_config" "$backup"
+        ${pkgs.git}/bin/git clone "$nvim_repo" "$nvim_config"
+        echo "Moved existing nvim config with different origin to $backup"
+      fi
+    else
+      backup="$nvim_config.before-ownix-$(date +%Y%m%d%H%M%S)"
+      mv "$nvim_config" "$backup"
+      ${pkgs.git}/bin/git clone "$nvim_repo" "$nvim_config"
+      echo "Moved existing non-git nvim config to $backup"
+    fi
   '';
 }
