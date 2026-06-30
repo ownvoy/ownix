@@ -57,6 +57,10 @@
     let
       system = "x86_64-linux";
       darwinSystem = "aarch64-darwin";
+      packageSystems = [
+        system
+        darwinSystem
+      ];
       username = "ownvoy";
       rufloVersion = "3.5.80";
       ouroborosVersion = "0.41.0";
@@ -99,6 +103,7 @@
         {
           host,
           system,
+          username,
         }:
         nix-darwin.lib.darwinSystem {
           inherit system;
@@ -114,10 +119,14 @@
         };
     in
     {
-      packages.${system} = {
-        ruflo = nixpkgs.legacyPackages.${system}.writeShellApplication {
+      packages = nixpkgs.lib.genAttrs packageSystems (packageSystem:
+      let
+        pkgs = nixpkgs.legacyPackages.${packageSystem};
+      in
+      {
+        ruflo = pkgs.writeShellApplication {
           name = "claude-flow";
-          runtimeInputs = [ nixpkgs.legacyPackages.${system}.nodejs ];
+          runtimeInputs = [ pkgs.nodejs ];
           text = ''
             export npm_config_cache="''${XDG_CACHE_HOME:-$HOME/.cache}/npm"
             export npm_config_fund=false
@@ -127,26 +136,26 @@
           '';
         };
 
-        ouroboros = nixpkgs.legacyPackages.${system}.writeShellApplication {
+        ouroboros = pkgs.writeShellApplication {
           name = "ouroboros";
           runtimeInputs = [
-            nixpkgs.legacyPackages.${system}.python312
-            nixpkgs.legacyPackages.${system}.uv
+            pkgs.python312
+            pkgs.uv
           ];
           text = ''
-            export UV_PYTHON="${nixpkgs.legacyPackages.${system}.python312}/bin/python3"
+            export UV_PYTHON="${pkgs.python312}/bin/python3"
             export UV_PYTHON_DOWNLOADS=never
-            export LD_LIBRARY_PATH="${
-              nixpkgs.legacyPackages.${system}.stdenv.cc.cc.lib
-            }/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+            ${nixpkgs.lib.optionalString pkgs.stdenv.isLinux ''
+              export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+            ''}
 
             exec uvx \
-              --python "${nixpkgs.legacyPackages.${system}.python312}/bin/python3" \
+              --python "${pkgs.python312}/bin/python3" \
               --from "ouroboros-ai[mcp]==${ouroborosVersion}" \
               ouroboros "$@"
           '';
         };
-      };
+      });
 
       nixosConfigurations = nixpkgs.lib.mapAttrs (
         host: machine:
@@ -160,6 +169,7 @@
         Wonjuns-MacBook-Air = mkDarwinConfig {
           host = "Wonjuns-MacBook-Air";
           system = darwinSystem;
+          username = "wonjun";
         };
       };
     };

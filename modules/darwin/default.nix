@@ -8,6 +8,10 @@
 }:
 let
   inherit (import ../../hosts/${host}/variables.nix) gitUsername;
+  unstable = import inputs.nixpkgs-unstable {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  };
 in
 {
   imports = [
@@ -25,11 +29,14 @@ in
     git
     google-chrome
     nh
+    unstable.codex
     vim
     zotero
   ];
 
   programs.zsh.enable = true;
+
+  services.tailscale.enable = true;
 
   users.users.${username} = {
     name = username;

@@ -15,7 +15,9 @@ let
   ouroborosMcp = pkgs.writeShellApplication {
     name = "ouroboros-mcp";
     text = ''
-      export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+      ${lib.optionalString pkgs.stdenv.isLinux ''
+        export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+      ''}
       exec "${ouroborosToolBin}" "$@"
     '';
   };

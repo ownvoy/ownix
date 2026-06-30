@@ -15,6 +15,7 @@ in
     ./bat.nix
     ./btop.nix
     ./bottom.nix
+    ./codex.nix
     ./eza.nix
     ./fastfetch
     ./gh.nix
