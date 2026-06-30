@@ -73,7 +73,7 @@ in
       ZSH_AUTOSUGGEST_STRATEGY=(history)
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 
-      if [[ -n "''${SSH_CONNECTION:-}" || -n "''${SSH_TTY:-}" ]]; then
+      if [[ -n "''${SSH_TTY:-}" || ( -n "''${SSH_CONNECTION:-}" && -z "''${KITTY_WINDOW_ID:-}" ) ]]; then
         PROMPT='%n@%m:%~ %# '
         RPROMPT=
         unset RPS1
