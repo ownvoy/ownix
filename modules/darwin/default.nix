@@ -72,6 +72,15 @@ in
     "/usr/share/terminfo"
   ];
 
+  environment.extraInit = lib.mkForce ''
+    export NIX_USER_PROFILE_DIR="/nix/var/nix/profiles/per-user/$USER"
+    export NIX_PROFILES="/nix/var/nix/profiles/default /run/current-system/sw /etc/profiles/per-user/$USER $HOME/.nix-profile"
+
+    if [ -e "$HOME/.nix-defexpr/channels" ]; then
+      export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
+    fi
+  '';
+
   nix.settings = {
     experimental-features = [
       "nix-command"
