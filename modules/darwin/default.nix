@@ -28,10 +28,27 @@ in
     discord
     git
     google-chrome
+    kitty
     nh
     unstable.codex
     vim
+    vscode
     zotero
+  ];
+
+  fonts.packages = with pkgs; [
+    cascadia-code
+    fira-code
+    font-awesome
+    inter
+    jetbrains-mono
+    maple-mono.NF
+    nerd-fonts.caskaydia-cove
+    nerd-fonts.fira-code
+    nerd-fonts.jetbrains-mono
+    noto-fonts
+    noto-fonts-cjk-sans
+    noto-fonts-emoji
   ];
 
   nix.settings = {

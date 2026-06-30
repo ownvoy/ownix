@@ -18,6 +18,16 @@ let
         fu = "nh os switch /home/${username}/ownix --hostname ${host} --update";
         ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
       };
+  guiAliases =
+    if pkgs.stdenv.isDarwin then
+      {
+        brave = "open -a 'Brave Browser'";
+        chrome = "open -a 'Google Chrome'";
+        discord = "open -a Discord";
+        zotero = "open -a Zotero";
+      }
+    else
+      { };
 in
 {
   imports = [
@@ -81,6 +91,6 @@ in
       zu = "sh <(curl -L https://gitlab.com/Zaney/zaneyos/-/releases/latest/download/install-zaneyos.sh)";
       cat = "bat";
       man = "batman";
-    } // rebuildAliases;
+    } // rebuildAliases // guiAliases;
   };
 }
