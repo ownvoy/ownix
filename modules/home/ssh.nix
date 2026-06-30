@@ -7,6 +7,11 @@
     
     # 여기에 본인이 쓰던 설정 그대로 유지
     extraConfig = ''
+      Host 192.168.0.83 Wonjuns-MacBook-Air macbook-air
+        HostName 192.168.0.83
+        User wonjun
+        SetEnv TERM=xterm-256color
+
       Host hanbat_a100
         HostName 210.110.250.120
         User user
