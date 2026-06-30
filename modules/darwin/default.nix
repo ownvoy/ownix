@@ -14,6 +14,10 @@ let
     system = pkgs.system;
     config.allowUnfree = true;
   };
+  kittyTerminfoAlias = pkgs.runCommand "kitty-terminfo-alias" { } ''
+    mkdir -p "$out/share/terminfo/k"
+    ln -s "${pkgs.kitty.terminfo}/share/terminfo/x/xterm-kitty" "$out/share/terminfo/k/kitty"
+  '';
 in
 {
   imports = [
@@ -31,6 +35,8 @@ in
     git
     google-chrome
     kitty
+    kitty.terminfo
+    kittyTerminfoAlias
     nh
     unstable.codex
     vim

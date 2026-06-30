@@ -64,6 +64,16 @@ in
       bindkey "\ej" down-line-or-history
       bindkey "\ek" up-line-or-history
       bindkey "\el" forward-word
+
+      if [[ -n "''${SSH_CONNECTION:-}" || -n "''${SSH_TTY:-}" ]]; then
+        PROMPT='%n@%m:%~ %# '
+        RPROMPT=
+        unset RPS1
+        unset ZLE_RPROMPT_INDENT
+        POWERLEVEL9K_DISABLE_HOT_RELOAD=true
+        ZSH_AUTOSUGGEST_STRATEGY=()
+      fi
+
       if [ -f $HOME/.zshrc-personal ]; then
         source $HOME/.zshrc-personal
       fi
