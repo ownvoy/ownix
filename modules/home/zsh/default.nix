@@ -65,6 +65,14 @@ in
       bindkey "\ek" up-line-or-history
       bindkey "\el" forward-word
 
+      setopt append_history
+      setopt inc_append_history
+      setopt share_history
+      setopt hist_ignore_all_dups
+      setopt hist_reduce_blanks
+      ZSH_AUTOSUGGEST_STRATEGY=(history)
+      ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
+
       if [[ -n "''${SSH_CONNECTION:-}" || -n "''${SSH_TTY:-}" ]]; then
         PROMPT='%n@%m:%~ %# '
         RPROMPT=
