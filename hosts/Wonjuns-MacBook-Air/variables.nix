@@ -6,9 +6,10 @@
   alacrittyEnable = false;
   weztermEnable = false;
   ghosttyEnable = false;
+  vscodeEnable = true;
   helixEnable = false;
   doomEmacsEnable = false;
 
   browser = "open";
-  terminal = "ghostty";
+  terminal = "kitty";
 }

@@ -20,9 +20,12 @@ in
     ./gh.nix
     ./git.nix
     ./htop.nix
+    ./kitty.nix
     ./lazygit.nix
     ./neovim.nix
+    ./ssh.nix
     ./tealdeer.nix
+    ./vscode.nix
     ./yazi
     ./zoxide.nix
     ./zsh

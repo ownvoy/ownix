@@ -20,9 +20,13 @@ in
   };
 
   environment.systemPackages = with pkgs; [
+    brave
+    discord
     git
+    google-chrome
     nh
     vim
+    zotero
   ];
 
   programs.zsh.enable = true;
