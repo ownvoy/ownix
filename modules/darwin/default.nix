@@ -34,6 +34,17 @@ in
     zotero
   ];
 
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
+    trusted-users = [
+      "root"
+      username
+    ];
+  };
+
   programs.zsh.enable = true;
 
   services.tailscale.enable = true;
