@@ -27,7 +27,7 @@
   nvidiaID = "PCI:1:0:0";
 
   enableNFS = true;
-  printEnable = false;
+  printEnable = true;
   thunarEnable = true;
 
   stylixImage = ../../wallpapers/girl-vs-monster.jpg;
