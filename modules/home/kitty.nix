@@ -4,6 +4,9 @@
     package = pkgs.kitty;
     settings = {
       font_family = "Cascadia Code NF";
+      bold_font = "Cascadia Code NF Bold";
+      italic_font = "Cascadia Code NF Italic";
+      bold_italic_font = "Cascadia Code NF Bold Italic";
       font_size = 14;
       wheel_scroll_min_lines = 1;
       window_padding_width = 4;

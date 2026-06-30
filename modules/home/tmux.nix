@@ -13,10 +13,11 @@ in
     mouse = true;
     shell = "${pkgs.zsh}/bin/zsh";
     prefix = "C-Space";
-    terminal = "kitty";
+    terminal = "tmux-256color";
     keyMode = "vi";
 
     extraConfig = ''
+              set-option -sa terminal-overrides ",xterm-kitty:RGB,kitty:RGB,tmux-256color:RGB"
               set-option -g status-position top
               set-option -g status-justify left
               set-option -g status-style "bg=#1d2021,fg=#ebdbb2"
