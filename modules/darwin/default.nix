@@ -59,6 +59,16 @@ in
     noto-fonts-emoji
   ];
 
+  environment.variables.TERMINFO_DIRS = [
+    "${kittyTerminfoAlias}/share/terminfo"
+    "${pkgs.kitty.terminfo}/share/terminfo"
+    "$HOME/.nix-profile/share/terminfo"
+    "/etc/profiles/per-user/${username}/share/terminfo"
+    "/run/current-system/sw/share/terminfo"
+    "/nix/var/nix/profiles/default/share/terminfo"
+    "/usr/share/terminfo"
+  ];
+
   nix.settings = {
     experimental-features = [
       "nix-command"
