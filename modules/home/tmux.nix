@@ -12,7 +12,7 @@ in
     enable = true;
     mouse = true;
     shell = "${pkgs.zsh}/bin/zsh";
-    prefix = "C-Space";
+    prefix = if pkgs.stdenv.isDarwin then "C-a" else "C-Space";
     terminal = "tmux-256color";
     keyMode = "vi";
 
