@@ -17,6 +17,8 @@ in
     keyMode = "vi";
 
     extraConfig = ''
+              set-option -g default-shell "${pkgs.zsh}/bin/zsh"
+              set-option -g default-command "${pkgs.zsh}/bin/zsh -l"
               set-option -sa terminal-overrides ",xterm-kitty:RGB,kitty:RGB,tmux-256color:RGB"
               set-option -g status-position top
               set-option -g status-justify left
