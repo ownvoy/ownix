@@ -8,8 +8,6 @@ let
   rebuildAliases =
     if pkgs.stdenv.isDarwin then
       {
-        fr = "sudo darwin-rebuild switch --flake path:/Users/${username}/ownix#${host}";
-        fu = "cd /Users/${username}/ownix && nix flake update && sudo darwin-rebuild switch --flake path:/Users/${username}/ownix#${host}";
         ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d";
       }
     else
@@ -20,12 +18,7 @@ let
       };
   guiAliases =
     if pkgs.stdenv.isDarwin then
-      {
-        brave = "open -a 'Brave Browser'";
-        chrome = "open -a 'Google Chrome'";
-        discord = "open -a Discord";
-        zotero = "open -a Zotero";
-      }
+      { }
     else
       { };
 in

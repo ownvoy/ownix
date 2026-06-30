@@ -16,6 +16,7 @@ in
     ./btop.nix
     ./bottom.nix
     ./codex.nix
+    ./darwin-commands.nix
     ./eza.nix
     ./fastfetch
     ./gh.nix
