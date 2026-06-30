@@ -60,6 +60,11 @@
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
 
+      Host vml 100.73.57.38
+        HostName 100.73.57.38
+        User vml
+        IdentityFile ~/.ssh/id_ed25519
+
           '';
   };
 
