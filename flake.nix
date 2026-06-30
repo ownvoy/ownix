@@ -6,6 +6,10 @@
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nvf.url = "github:notashelf/nvf";
@@ -43,6 +47,7 @@
       self,
       nixpkgs,
       home-manager,
+      nix-darwin,
       nix-flatpak,
       nixpkgs-unstable,
       agenix,
@@ -51,6 +56,7 @@
     }@inputs:
     let
       system = "x86_64-linux";
+      darwinSystem = "aarch64-darwin";
       username = "ownvoy";
       rufloVersion = "3.5.80";
       ouroborosVersion = "0.41.0";
@@ -86,6 +92,24 @@
             #     antigravity-nix.packages.${system}.default
             #   ];
             # }
+          ];
+        };
+
+      mkDarwinConfig =
+        {
+          host,
+          system,
+        }:
+        nix-darwin.lib.darwinSystem {
+          inherit system;
+          specialArgs = {
+            inherit inputs;
+            inherit self;
+            inherit username;
+            inherit host;
+          };
+          modules = [
+            ./modules/darwin
           ];
         };
     in
@@ -131,5 +155,12 @@
           profile = machine.profile;
         }
       ) machines;
+
+      darwinConfigurations = {
+        Wonjuns-MacBook-Air = mkDarwinConfig {
+          host = "Wonjuns-MacBook-Air";
+          system = darwinSystem;
+        };
+      };
     };
 }

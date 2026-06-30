@@ -3,7 +3,23 @@
 , pkgs
 , lib
 , ...
-}: {
+}:
+let
+  rebuildAliases =
+    if pkgs.stdenv.isDarwin then
+      {
+        fr = "sudo darwin-rebuild switch --flake path:/Users/${username}/ownix#${host}";
+        fu = "cd /Users/${username}/ownix && nix flake update && sudo darwin-rebuild switch --flake path:/Users/${username}/ownix#${host}";
+        ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d";
+      }
+    else
+      {
+        fr = "nh os switch /home/${username}/ownix --hostname ${host}";
+        fu = "nh os switch /home/${username}/ownix --hostname ${host} --update";
+        ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
+      };
+in
+{
   imports = [
     ./zshrc-personal.nix
   ];
@@ -62,12 +78,9 @@
       c = "clear";
       lzg = "lazygit";
       lzd = "lazydocker";
-      fr = "nh os switch /home/${username}/ownix --hostname ${host}";
-      fu = "nh os switch /home/${username}/ownix --hostname ${host} --update";
       zu = "sh <(curl -L https://gitlab.com/Zaney/zaneyos/-/releases/latest/download/install-zaneyos.sh)";
-      ncg = "nix-collect-garbage --delete-old && sudo nix-collect-garbage -d && sudo /run/current-system/bin/switch-to-configuration boot";
       cat = "bat";
       man = "batman";
-    };
+    } // rebuildAliases;
   };
 }

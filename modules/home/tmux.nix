@@ -1,5 +1,13 @@
 # Tmux is a terminal multiplexer that allows you to run multiple terminal sessions in a single window.
-{ pkgs, ... }: {
+{ pkgs, ... }:
+let
+  copyCommand =
+    if pkgs.stdenv.isDarwin then
+      "tmux save-buffer - | pbcopy"
+    else
+      "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy";
+in
+{
   programs.tmux = {
     enable = true;
     mouse = true;
@@ -85,9 +93,9 @@
               bind-key -T copy-mode-vi v send-keys -X begin-selection
               bind-key -T copy-mode-vi V send-keys -X select-line
               bind-key -T copy-mode-vi C-v send-keys -X rectangle-toggle
-              bind-key -T copy-mode-vi y send-keys -X copy-selection \; run-shell "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy" \; send-keys -X cancel
-              bind-key -T copy-mode-vi Enter send-keys -X copy-selection \; run-shell "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy" \; send-keys -X cancel
-              bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection \; run-shell "tmux save-buffer - | ${pkgs.wl-clipboard}/bin/wl-copy" \; send-keys -X cancel
+              bind-key -T copy-mode-vi y send-keys -X copy-selection \; run-shell "${copyCommand}" \; send-keys -X cancel
+              bind-key -T copy-mode-vi Enter send-keys -X copy-selection \; run-shell "${copyCommand}" \; send-keys -X cancel
+              bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-selection \; run-shell "${copyCommand}" \; send-keys -X cancel
 
 
       ##### Display Popups #####

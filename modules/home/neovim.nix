@@ -1,4 +1,10 @@
 { lib, pkgs, ... }:
+let
+  linuxClipboardPackages = with pkgs; [
+    wl-clipboard
+    xsel
+  ];
+in
 {
   programs.neovim = {
     enable = true;
@@ -17,10 +23,7 @@
       fd
       imagemagick
       ueberzugpp
-      # Clipboards
-      wl-clipboard
-      xsel
-    ];
+    ] ++ lib.optionals pkgs.stdenv.isLinux linuxClipboardPackages;
   };
 
   home.activation.linkNeovimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
