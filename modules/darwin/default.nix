@@ -15,8 +15,11 @@ let
     config.allowUnfree = true;
   };
   kittyTerminfoAlias = pkgs.runCommand "kitty-terminfo-alias" { } ''
-    mkdir -p "$out/share/terminfo/k"
-    ln -s "${pkgs.kitty.terminfo}/share/terminfo/x/xterm-kitty" "$out/share/terminfo/k/kitty"
+    xterm_kitty="$(find "${pkgs.kitty.terminfo}/share/terminfo" -type f -name xterm-kitty | head -n 1)"
+    test -n "$xterm_kitty"
+    mkdir -p "$out/share/terminfo/6b" "$out/share/terminfo/k"
+    cp "$xterm_kitty" "$out/share/terminfo/6b/kitty"
+    ln -s "$out/share/terminfo/6b/kitty" "$out/share/terminfo/k/kitty"
   '';
 in
 {
