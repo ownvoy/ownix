@@ -12,13 +12,17 @@ in
     enable = true;
     mouse = true;
     shell = "${pkgs.zsh}/bin/zsh";
-    prefix = if pkgs.stdenv.isDarwin then "C-a" else "C-Space";
+    prefix = if pkgs.stdenv.isDarwin then "C-g" else "C-Space";
     terminal = "tmux-256color";
     keyMode = "vi";
 
     extraConfig = ''
               set-option -g default-shell "${pkgs.zsh}/bin/zsh"
               set-option -g default-command "${pkgs.zsh}/bin/zsh -l"
+              ${if pkgs.stdenv.isDarwin then ''
+                set-option -g prefix2 C-a
+                bind-key C-a send-prefix
+              '' else ""}
               set-option -sa terminal-overrides ",xterm-kitty:RGB,kitty:RGB,tmux-256color:RGB"
               set-option -g status-position top
               set-option -g status-justify left
