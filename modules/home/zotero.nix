@@ -1,6 +1,6 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
-{
+lib.mkIf pkgs.stdenv.isLinux {
   # Create a custom desktop entry that overrides the default one
   xdg.desktopEntries.zotero = {
     name = "Zotero";

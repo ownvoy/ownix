@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, host ? null, ... }:
 
 {
   # 1. 기존 SSH 설정 (선언적으로 관리됨)
@@ -69,6 +69,23 @@
         HostName 100.73.57.38
         User vml
         IdentityFile ~/.ssh/id_ed25519
+
+      Host my-desktop 100.127.76.68
+        HostName 100.127.76.68
+        User ownvoy
+        IdentityFile ~/.ssh/id_ed25519
+
+      ${lib.optionalString (host == "Wonjuns-MacBook-Air") ''
+      Host bai-vscode
+        ProxyJump my-desktop
+
+      Host bai-vscode-on-desktop
+        HostName 100.127.76.68
+        User ownvoy
+        IdentityFile ~/.ssh/id_ed25519
+        RequestTTY yes
+        RemoteCommand ssh bai-vscode
+      ''}
 
           '';
   };

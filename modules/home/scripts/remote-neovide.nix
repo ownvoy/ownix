@@ -1,5 +1,20 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
+  rofiCommand = lib.optionalString pkgs.stdenv.isLinux ''
+      if pidof rofi >/dev/null 2>&1; then
+        pkill rofi >/dev/null 2>&1 || true
+      fi
+
+      printf '%s\n' "$hosts" | ${pkgs.rofi-wayland}/bin/rofi -dmenu -i -config ~/.config/rofi/config-long.rasi -p "Remote host"
+      return
+  '';
+
+  notifyCommand =
+    if pkgs.stdenv.isDarwin then
+      ''/usr/bin/osascript -e "display notification \"$1\" with title \"Remote Neovide\"" >/dev/null 2>&1 || true''
+    else
+      ''${pkgs.libnotify}/bin/notify-send "Remote Neovide" "$1" >/dev/null 2>&1 || true'';
+
   remote-neovide = pkgs.writeShellScriptBin "remote-neovide" ''
     set -eu
 
@@ -22,7 +37,7 @@ EOF
     }
 
     notify_error() {
-      ${pkgs.libnotify}/bin/notify-send "Remote Neovide" "$1" >/dev/null 2>&1 || true
+      ${notifyCommand}
     }
 
     choose_host() {
@@ -48,15 +63,37 @@ EOF
         exit 1
       fi
 
-      if pidof rofi >/dev/null 2>&1; then
-        pkill rofi >/dev/null 2>&1 || true
+      ${rofiCommand}
+
+      if [ -t 0 ] && [ -t 1 ]; then
+        printf '%s\n' "$hosts" | ${pkgs.fzf}/bin/fzf --prompt="Remote host> "
+        return
       fi
 
-      printf '%s\n' "$hosts" | ${pkgs.rofi-wayland}/bin/rofi -dmenu -i -config ~/.config/rofi/config-long.rasi -p "Remote host"
+      printf '%s\n' "$hosts" >&2
+      notify_error "Pass a host explicitly, for example: remote-neovide my-desktop"
+      exit 1
     }
 
     sanitize_host() {
       printf '%s' "$1" | tr -c '[:alnum:]._-' '_'
+    }
+
+    ensure_workspace_host() {
+      mkdir -p "$(dirname "$workspace_file")"
+
+      if [ ! -s "$workspace_file" ]; then
+        printf '{}\n' > "$workspace_file"
+      fi
+
+      if ! ${pkgs.jq}/bin/jq -e --arg host "$host" 'has($host)' "$workspace_file" >/dev/null 2>&1; then
+        tmp_file="$workspace_file.tmp.$$"
+        ${pkgs.jq}/bin/jq \
+          --arg host "$host" \
+          '. + {($host): {provider: "ssh", host: $host, connection_options: ""}}' \
+          "$workspace_file" > "$tmp_file"
+        mv "$tmp_file" "$workspace_file"
+      fi
     }
 
     subcommand="start"
@@ -85,6 +122,7 @@ EOF
     log_file="$state_dir/$safe_host.log"
 
     mkdir -p "$runtime_dir" "$state_dir"
+    ensure_workspace_host
 
     if [ ! -f "$nvim_init_file" ]; then
       echo "remote-neovide: missing nvim init file: $nvim_init_file" >&2
@@ -168,7 +206,7 @@ in
 {
   home.packages = [ remote-neovide ];
 
-  xdg.desktopEntries.remote-neovide = {
+  xdg.desktopEntries.remote-neovide = lib.mkIf pkgs.stdenv.isLinux {
     name = "Remote Neovide";
     comment = "Pick a remote.nvim host and open it in Neovide";
     exec = "remote-neovide";
