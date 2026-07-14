@@ -20,7 +20,6 @@ in
       nix flake update
       exec sudo darwin-rebuild switch --flake path:/Users/${username}/ownix#${host} "$@"
     '')
-    (appCommand "brave" "Brave Browser")
     (appCommand "chrome" "Google Chrome")
     (appCommand "discord" "Discord")
     (appCommand "zotero" "Zotero")

@@ -39,6 +39,7 @@ in
     ./lazygit.nix
     ./obs-studio.nix
     ./open-design.nix
+    ./papers.nix
     ./zotero.nix
     ./ssh.nix
     ./steam-compat.nix

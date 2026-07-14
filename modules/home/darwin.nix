@@ -20,6 +20,7 @@ in
     ./darwin-commands.nix
     ./eza.nix
     ./fastfetch
+    ./fzf.nix
     ./gh.nix
     ./git.nix
     ./huggingface.nix
@@ -27,11 +28,14 @@ in
     ./kitty.nix
     ./lazygit.nix
     ./neovim.nix
+    ./papers.nix
+    ./scripts/remote-neovide.nix
     ./ssh.nix
     ./tealdeer.nix
     ./vscode.nix
     ./yazi
     ./zoxide.nix
+    ./zotero.nix
     ./zsh
   ]
   ++ (if helixEnable then [ ./evil-helix.nix ] else [ ])

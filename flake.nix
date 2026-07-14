@@ -13,6 +13,16 @@
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     hermes-agent.url = "github:NousResearch/hermes-agent";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
     nvf.url = "github:notashelf/nvf";
     stylix.url = "github:danth/stylix/release-25.05";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
@@ -49,6 +59,7 @@
       nixpkgs,
       home-manager,
       nix-darwin,
+      nix-homebrew,
       nix-flatpak,
       nixpkgs-unstable,
       agenix,
@@ -118,6 +129,7 @@
           };
           modules = [
             ./modules/darwin
+            nix-homebrew.darwinModules.nix-homebrew
           ];
         };
     in
