@@ -11,6 +11,7 @@ let
 in
 {
   imports = [
+    ./agenix.nix
     ./bashrc-personal.nix
     ./bat.nix
     ./btop.nix
@@ -22,6 +23,7 @@ in
     ./fzf.nix
     ./gh.nix
     ./git.nix
+    ./huggingface.nix
     ./htop.nix
     ./kitty.nix
     ./lazygit.nix

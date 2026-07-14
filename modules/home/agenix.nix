@@ -22,5 +22,8 @@
     "gh-token" = {
       file = ../../secrets/gh-token.age;
     };
+    "openai-token" = {
+      file = ../../secrets/openai-token.age;
+    };
   };
 }

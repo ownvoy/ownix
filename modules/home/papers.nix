@@ -1,22 +1,10 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
 }:
 let
-  unstable = import inputs.nixpkgs-unstable {
-    system = pkgs.system;
-    config.allowUnfree = true;
-  };
-  zotmoovPkg =
-    if pkgs ? zotmoov then
-      pkgs.zotmoov
-    else if unstable ? zotmoov then
-      unstable.zotmoov
-    else
-      null;
   homeDir = config.home.homeDirectory;
   papersDir = "${homeDir}/Documents/Papers";
   papersStorageDir = "${papersDir}/storage";
@@ -26,49 +14,113 @@ let
       "${homeDir}/Zotero"
     else
       "${homeDir}/.zotero/zotero";
-  zotmoovBin =
-    if zotmoovPkg != null then
-      "${zotmoovPkg}/bin/zotmoov"
-    else
-      "zotmoov";
+  zoteroStorageDir = "${zoteroDataDir}/storage";
+  syncZoteroPapers = pkgs.writeShellApplication {
+    name = "sync-zotero-papers";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.findutils
+      pkgs.gnugrep
+    ];
+    text = ''
+      set -eu
+
+      papers_dir="${papersDir}"
+      zotero_storage_dir="${zoteroStorageDir}"
+
+      mkdir -p "$papers_dir"
+
+      if [ ! -d "$zotero_storage_dir" ]; then
+        exit 0
+      fi
+
+      find "$zotero_storage_dir" -mindepth 2 -maxdepth 2 \( -type f -o -type l \) -name '*.pdf' | while read -r src; do
+        if [ -L "$src" ]; then
+          continue
+        fi
+
+        key="$(basename "$(dirname "$src")")"
+        base="$(basename "$src")"
+        dest="$papers_dir/$base"
+
+        if [ ! -e "$dest" ]; then
+          mv "$src" "$dest"
+          ln -s "$dest" "$src"
+          continue
+        fi
+
+        if cmp -s "$src" "$dest"; then
+          rm -f "$src"
+          ln -s "$dest" "$src"
+          continue
+        fi
+
+        stem="''${base%.pdf}"
+        alt_dest="$papers_dir/$stem [$key].pdf"
+
+        if [ ! -e "$alt_dest" ]; then
+          mv "$src" "$alt_dest"
+          ln -s "$alt_dest" "$src"
+          continue
+        fi
+
+        if cmp -s "$src" "$alt_dest"; then
+          rm -f "$src"
+          ln -s "$alt_dest" "$src"
+          continue
+        fi
+
+        conflict_dest="$papers_dir/$stem [$key]-conflict.pdf"
+        mv "$src" "$conflict_dest"
+        ln -s "$conflict_dest" "$src"
+      done
+    '';
+  };
+  syncLaunchAgentLabel = "com.ownix.sync-zotero-papers";
 in
 {
-  warnings = lib.optionals (zotmoovPkg == null) [
-    "ownix Papers module: zotmoov package was not found in nixpkgs or nixpkgs-unstable. The declarative scaffold is installed, but you will need to package/install zotmoov separately before using zotmoov-sync."
-  ];
-
   home.packages =
     [
       pkgs.git
       pkgs.git-lfs
-    ]
-    ++ lib.optionals (zotmoovPkg != null) [ zotmoovPkg ];
+      syncZoteroPapers
+    ];
 
   home.sessionVariables = {
     PAPERS_REPO_DIR = papersDir;
     ZOTERO_DATA_DIR = zoteroDataDir;
     ZOTERO_LINKED_ATTACHMENT_BASE_DIR = papersLinkedBaseDir;
-    ZOTMOOV_CONFIG = "${config.xdg.configHome}/zotmoov/config.toml";
   };
 
   home.shellAliases = {
     papers = "cd \"$PAPERS_REPO_DIR\"";
-    zotmoov-sync = "${zotmoovBin} sync --config \"$ZOTMOOV_CONFIG\"";
+    papers-sync = "${syncZoteroPapers}/bin/sync-zotero-papers";
   };
 
-  xdg.configFile."zotmoov/config.toml".text = ''
-    # ownix-managed zotmoov scaffold
-    # Adjust key names if your zotmoov build expects a different schema.
-    # The important part is that all paths stay declared here.
-
-    papers_dir = "${papersDir}"
-    storage_dir = "${papersStorageDir}"
-    zotero_data_dir = "${zoteroDataDir}"
-
-    # Recommended Zotero-side settings:
-    # - Linked Attachment Base Directory: ${papersLinkedBaseDir}
-    # - Better BibTeX auto-export target: ${papersDir}/library.bib
-  '';
+  home.file."Library/LaunchAgents/${syncLaunchAgentLabel}.plist" = lib.mkIf pkgs.stdenv.isDarwin {
+    text = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+        <dict>
+          <key>Label</key>
+          <string>${syncLaunchAgentLabel}</string>
+          <key>ProgramArguments</key>
+          <array>
+            <string>${syncZoteroPapers}/bin/sync-zotero-papers</string>
+          </array>
+          <key>RunAtLoad</key>
+          <true/>
+          <key>StartInterval</key>
+          <integer>300</integer>
+          <key>StandardOutPath</key>
+          <string>${homeDir}/Library/Logs/${syncLaunchAgentLabel}.log</string>
+          <key>StandardErrorPath</key>
+          <string>${homeDir}/Library/Logs/${syncLaunchAgentLabel}.log</string>
+        </dict>
+      </plist>
+    '';
+  };
 
   home.activation.clonePapersRepo = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     papers_dir="${papersDir}"
@@ -134,4 +186,14 @@ in
       fi
     fi
   '';
+
+  home.activation.loadPapersSyncAgent = lib.mkIf pkgs.stdenv.isDarwin (
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      agent_plist="${homeDir}/Library/LaunchAgents/${syncLaunchAgentLabel}.plist"
+
+      /bin/launchctl unload "$agent_plist" >/dev/null 2>&1 || true
+      /bin/launchctl load -w "$agent_plist" >/dev/null 2>&1 || true
+      ${syncZoteroPapers}/bin/sync-zotero-papers || true
+    ''
+  );
 }

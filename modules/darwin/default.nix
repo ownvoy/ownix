@@ -49,7 +49,7 @@ in
     unstable.codex
     vim
     vscode
-    zotero
+    unstable.zotero
   ];
 
   fonts.packages = with pkgs; [
