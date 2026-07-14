@@ -45,7 +45,7 @@ in
       "$modifier,Q,killactive,"
       "$modifier,P,pseudo,"
       clipboardBind
-      "$modifier SHIFT,I,togglesplit,"
+      "$modifier SHIFT,I,layoutmsg,togglesplit"
       "$modifier,F,fullscreen,"
       "$modifier SHIFT,F,togglefloating,"
       "$modifier ALT,F,workspaceopt, allfloat"

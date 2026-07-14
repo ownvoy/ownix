@@ -7,7 +7,7 @@
 
   # 1. 패키지 수동 설치 (Addon 포함)
   home.packages = [
-    (pkgs.fcitx5-with-addons.override {
+    (pkgs.qt6Packages.fcitx5-with-addons.override {
       addons = with pkgs; [
         fcitx5-hangul
         fcitx5-gtk

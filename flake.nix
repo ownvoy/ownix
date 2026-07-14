@@ -3,7 +3,7 @@
 
   inputs = {
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
@@ -13,6 +13,7 @@
     # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     hermes-agent.url = "github:NousResearch/hermes-agent";
+    claude-code.url = "github:sadjow/claude-code-nix";
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = {
@@ -24,7 +25,7 @@
       flake = false;
     };
     nvf.url = "github:notashelf/nvf";
-    stylix.url = "github:danth/stylix/release-25.05";
+    stylix.url = "github:danth/stylix";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:ryantm/agenix";

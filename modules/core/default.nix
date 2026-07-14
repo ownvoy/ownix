@@ -11,6 +11,7 @@ in
   imports = [
     ./boot.nix
     ./chromium.nix
+    ./hermes.nix
     ./flatpak.nix
     ./fonts.nix
     ./hardware.nix

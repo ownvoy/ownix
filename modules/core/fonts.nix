@@ -8,7 +8,7 @@
       fira-code
       dejavu_fonts
       corefonts
-      vistafonts
+      vista-fonts
       fira-code-symbols
       font-awesome
       hackgen-nf-font
@@ -21,7 +21,7 @@
       nerd-fonts.im-writing
       nerd-fonts.blex-mono
       noto-fonts
-      noto-fonts-emoji
+      noto-fonts-color-emoji
       noto-fonts-cjk-sans
       noto-fonts-cjk-serif
       noto-fonts-monochrome-emoji

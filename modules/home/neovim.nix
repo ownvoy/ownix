@@ -14,6 +14,13 @@ in
     vimAlias = true;
     withNodeJs = true;
     extraLuaPackages = ps: [ ps.magick ];
+    # home-manager owns ~/.config/nvim/init.lua (it wires up the lua paths for the
+    # magick luarock + node/python/ruby providers). Append the LazyVim bootstrap so
+    # it also loads our GitHub-managed config in ~/.config/nvim/lua/ — otherwise HM's
+    # init.lua shadows the repo's own init.lua and no plugins load.
+    extraLuaConfig = ''
+      require("config.lazy")
+    '';
     # This ensures dependencies needed by LazyVim are available in the path
     extraPackages = with pkgs; [
       # LazyVim build dependencies
