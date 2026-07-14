@@ -3,15 +3,19 @@
 
   inputs = {
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    hermes-agent.url = "github:NousResearch/hermes-agent";
+    claude-code.url = "github:sadjow/claude-code-nix";
+    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
     homebrew-core = {
       url = "github:homebrew/homebrew-core";
       flake = false;
@@ -20,9 +24,8 @@
       url = "github:homebrew/homebrew-cask";
       flake = false;
     };
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nvf.url = "github:notashelf/nvf";
-    stylix.url = "github:danth/stylix/release-25.05";
+    stylix.url = "github:danth/stylix";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     agenix.url = "github:ryantm/agenix";
@@ -61,6 +64,7 @@
       nix-flatpak,
       nixpkgs-unstable,
       agenix,
+      hermes-agent,
       # antigravity-nix,
       ...
     }@inputs:
@@ -101,6 +105,7 @@
           modules = [
             ./profiles/${profile}
             nix-flatpak.nixosModules.nix-flatpak
+            hermes-agent.nixosModules.default
             # {
             #   environment.systemPackages = [
             #     antigravity-nix.packages.${system}.default

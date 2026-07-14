@@ -24,7 +24,9 @@ in
 
   programs.noctalia-shell = {
     enable = true;
-    inherit settings;
+    # stylix's noctalia target also injects settings.*.backgroundOpacity / fonts;
+    # our explicit settings take priority to avoid conflicting-definition errors.
+    settings = lib.mkForce settings;
     plugins = {
       sources = [
         {

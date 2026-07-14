@@ -5,7 +5,7 @@ let
         pkill rofi >/dev/null 2>&1 || true
       fi
 
-      printf '%s\n' "$hosts" | ${pkgs.rofi-wayland}/bin/rofi -dmenu -i -config ~/.config/rofi/config-long.rasi -p "Remote host"
+      printf '%s\n' "$hosts" | ${pkgs.rofi}/bin/rofi -dmenu -i -config ~/.config/rofi/config-long.rasi -p "Remote host"
       return
   '';
 

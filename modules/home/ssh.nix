@@ -61,7 +61,8 @@
       Host bai-vscode
         User work
         HostName proxy3.nipa2025.ktcloud.com
-        Port 10524
+        Port 10509
+        IdentityFile ~/.ssh/id_ed25519
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
 
@@ -92,28 +93,19 @@
 
   # 2. [핵심] Activation Script: 설정 적용 후 권한 수정 자동화
   # Nix가 만든 심볼릭 링크를 실제 파일로 변환하고 권한을 600으로 변경합니다.
-  # home.activation.fixSshConfigPermission = lib.hm.dag.entryAfter ["writeBoundary"] ''
-  #   # ~/.ssh/config 파일 경로 정의
-  #   SSH_CONFIG="$HOME/.ssh/config"
-  #
-  #   # 만약 ~/.ssh/config가 심볼릭 링크라면 (Nix가 생성한 것이라면)
-  #   if [ -L "$SSH_CONFIG" ]; then
-  #     # 링크가 가리키는 원본(Nix Store) 경로를 가져옴
-  #     TARGET_PATH=$(readlink "$SSH_CONFIG")
-  #
-  #     # 1. 심볼릭 링크 삭제
-  #     $DRY_RUN_CMD rm "$SSH_CONFIG"
-  #
-  #     # 2. 원본 내용을 복사해서 '실제 파일'로 생성 (이제 수정 가능해짐)
-  #     $DRY_RUN_CMD cp "$TARGET_PATH" "$SSH_CONFIG"
-  #
-  #     # 3. 권한을 600 (나만 읽기/쓰기)으로 강제 변경
-  #     $DRY_RUN_CMD chmod 600 "$SSH_CONFIG"
-  #
-  #     # (선택사항) 로그 출력
-  #     if [ -z "$DRY_RUN_CMD" ]; then
-  #       echo "Fixed permissions for $SSH_CONFIG (converted symlink to file with 600)"
-  #     fi
-  #   fi
-  # '';
+  home.activation.fixSshConfigPermission = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    SSH_CONFIG="$HOME/.ssh/config"
+
+    if [ -L "$SSH_CONFIG" ]; then
+      TARGET_PATH=$(readlink "$SSH_CONFIG")
+
+      $DRY_RUN_CMD rm "$SSH_CONFIG"
+      $DRY_RUN_CMD cp "$TARGET_PATH" "$SSH_CONFIG"
+      $DRY_RUN_CMD chmod 600 "$SSH_CONFIG"
+
+      if [ -z "$DRY_RUN_CMD" ]; then
+        echo "Fixed permissions for $SSH_CONFIG (converted symlink to file with 600)"
+      fi
+    fi
+  '';
 }

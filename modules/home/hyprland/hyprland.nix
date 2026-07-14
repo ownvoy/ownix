@@ -79,9 +79,15 @@ in
         };
       };
 
+      # Must be top-level (not inside a category) — Hyprland 0.55 no longer
+      # hoists variables declared inside blocks to global scope.
+      "$modifier" = "SUPER";
+
+      # Hyprland 0.51+ replaced gestures:workspace_swipe / _fingers with the
+      # `gesture` keyword. The remaining workspace_swipe_* tuning still applies.
+      gesture = "3, horizontal, workspace";
+
       gestures = {
-        workspace_swipe = 1;
-        workspace_swipe_fingers = 3;
         workspace_swipe_distance = 500;
         workspace_swipe_invert = 1;
         workspace_swipe_min_speed_to_force = 30;
@@ -91,7 +97,6 @@ in
       };
 
       general = {
-        "$modifier" = "SUPER";
         layout = "dwindle";
         gaps_in = 6;
         gaps_out = 8;
@@ -109,7 +114,6 @@ in
         disable_hyprland_logo = true;
         disable_splash_rendering = true;
         enable_swallow = false;
-        vfr = true; # Variable Frame Rate
         vrr = 2; #Variable Refresh Rate  Might need to set to 0 for NVIDIA/AQ_DRM_DEVICES
         # Screen flashing to black momentarily or going black when app is fullscreen
         # Try setting vrr to 0
@@ -120,7 +124,6 @@ in
       };
 
       dwindle = {
-        pseudotile = true;
         preserve_split = true;
         force_split = 2;
       };

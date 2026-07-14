@@ -21,6 +21,7 @@ in
     ./btop.nix
     ./bottom.nix
     ./cava.nix
+    ./claude-code.nix
     ./codex.nix
     ./emoji.nix
     ./eza.nix
@@ -39,6 +40,7 @@ in
     ./obs-studio.nix
     ./open-design.nix
     ./papers.nix
+    ./pi.nix
     ./zotero.nix
     ./ssh.nix
     ./steam-compat.nix

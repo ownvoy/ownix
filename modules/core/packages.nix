@@ -1,6 +1,7 @@
 {
   pkgs,
   inputs,
+  lib,
   ...
 }:
 let
@@ -28,7 +29,6 @@ in
     seahorse.enable = true;
     fuse.userAllowOther = true;
     mtr.enable = true;
-    adb.enable = true;
     hyprlock.enable = true;
     gnupg.agent = {
       enable = true;
@@ -48,6 +48,7 @@ in
     #inputs.hyprsysteminfo.packages.${pkgs.system}.default
 
     amfora # Fancy Terminal Browser For Gemini Protocol
+    android-tools # provides adb (programs.adb removed; systemd 258 handles uaccess)
     audacity
     appimage-run # Needed For AppImage Support
     black
@@ -76,8 +77,8 @@ in
     git-lfs
     gnumake
     gnumake42
-    glxinfo # needed for inxi diag util
-    greetd.tuigreet # The Login Manager (Sometimes Referred To As Display Manager)
+    mesa-demos # provides glxinfo, needed for inxi diag util
+    tuigreet # The Login Manager (Sometimes Referred To As Display Manager)
     htop # Simple Terminal Based System Monitor
     hyprutils
     hyprpicker # Color Picker
@@ -148,4 +149,9 @@ in
     gcc
     zip
   ];
+
+  # Don't install "doc" outputs system-wide: on nixpkgs-unstable the Python HTML
+  # manual (a "doc" output) currently fails to build in Sphinx/docutils, which
+  # would block the whole system-path. man/info are cheap and kept.
+  environment.extraOutputsToInstall = lib.mkForce [ "man" "info" ];
 }
