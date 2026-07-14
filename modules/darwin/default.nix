@@ -36,10 +36,12 @@ in
       (final: prev: {
         ruby_4_0 = prev.ruby_4_0 or unstable.ruby_4_0;
       })
+      inputs.claude-code.overlays.default
     ];
   };
 
   environment.systemPackages = with pkgs; [
+    claude-code
     discord
     git
     kitty
