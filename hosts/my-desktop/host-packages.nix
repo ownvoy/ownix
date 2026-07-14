@@ -1,5 +1,7 @@
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 let
+  unstablePkgs = inputs.nixpkgs-unstable.legacyPackages.${pkgs.system};
+
   serialBridgePython = pkgs.python312.withPackages (ps: [ ps.pyserial ]);
 
   runtimeLibs = lib.makeLibraryPath [
@@ -377,6 +379,7 @@ in
     cameraOcrPreview
     cameraOcrSnapshot
     cameraOcrVideo
+    unstablePkgs.discordo
     ocrKoreanNote
     penSerialBridge
   ];

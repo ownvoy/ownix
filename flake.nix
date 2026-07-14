@@ -10,8 +10,9 @@
       url = "github:nix-darwin/nix-darwin/nix-darwin-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
-    # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # nixpkgs.url = "github:nixos/nixpkgs/nixos-25.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    hermes-agent.url = "github:NousResearch/hermes-agent";
     nvf.url = "github:notashelf/nvf";
     stylix.url = "github:danth/stylix/release-25.05";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
@@ -51,6 +52,7 @@
       nix-flatpak,
       nixpkgs-unstable,
       agenix,
+      hermes-agent,
       # antigravity-nix,
       ...
     }@inputs:
@@ -91,6 +93,7 @@
           modules = [
             ./profiles/${profile}
             nix-flatpak.nixosModules.nix-flatpak
+            hermes-agent.nixosModules.default
             # {
             #   environment.systemPackages = [
             #     antigravity-nix.packages.${system}.default

@@ -30,6 +30,8 @@ in
     ./gh.nix
     ./git.nix
     ./gtk.nix
+    ./hermes.nix
+    ./huggingface.nix
     ./htop.nix
     ./hyprland
     ./innorix.nix
