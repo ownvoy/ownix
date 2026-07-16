@@ -70,6 +70,18 @@ in
       setopt share_history
       setopt hist_ignore_all_dups
       setopt hist_reduce_blanks
+
+      # Fix stray "66;53;45M"-style characters when moving the trackpad at the
+      # shell prompt: a TUI (Claude Code, nvim, ...) that crashes without
+      # disabling mouse reporting leaves the mode on, so tmux forwards mouse
+      # events to zsh as text. Reset every mouse-tracking mode before each
+      # prompt. These are control sequences with no visible output, so they
+      # don't disturb powerlevel10k's instant prompt.
+      autoload -Uz add-zsh-hook
+      _reset_mouse_reporting() {
+        printf '\e[?1000l\e[?1002l\e[?1003l\e[?1005l\e[?1006l\e[?1015l\e[?1016l' >/dev/tty 2>/dev/null
+      }
+      add-zsh-hook precmd _reset_mouse_reporting
       ZSH_AUTOSUGGEST_STRATEGY=(history)
       ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=244'
 

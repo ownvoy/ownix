@@ -42,7 +42,6 @@ in
 
   environment.systemPackages = with pkgs; [
     claude-code
-    discord
     git
     kitty
     kitty.terminfo

@@ -21,7 +21,10 @@
     # Re-enable this tap when using OmniWM again.
     # taps = [ "BarutSRB/tap" ];
     casks = [
+      "discord"
       "google-chrome"
+      "hammerspoon"
+      "karabiner-elements"
       "neovide"
     ];
   };

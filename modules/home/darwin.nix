@@ -23,7 +23,9 @@ in
     ./fzf.nix
     ./gh.nix
     ./git.nix
+    ./hammerspoon.nix
     ./huggingface.nix
+    ./karabiner.nix
     ./htop.nix
     ./kitty.nix
     ./lazygit.nix
