@@ -76,7 +76,52 @@ let
       done
     '';
   };
-  syncLaunchAgentLabel = "com.ownix.sync-zotero-papers";
+  pushPapers = pkgs.writeShellApplication {
+    name = "sync-papers";
+    runtimeInputs = [
+      pkgs.coreutils
+      pkgs.git
+      pkgs.git-lfs
+      pkgs.gh
+    ];
+    text = ''
+      set -eu
+
+      papers_dir="${papersDir}"
+
+      if [ ! -d "$papers_dir/.git" ]; then
+        exit 0
+      fi
+
+      cd "$papers_dir"
+
+      export GIT_TERMINAL_PROMPT=0
+
+      git add -A
+
+      if ! git diff --cached --quiet; then
+        git commit -m "auto: sync papers $(date '+%Y-%m-%d %H:%M')"
+      fi
+
+      # Offline or auth failure: try again on the next run.
+      if ! git fetch origin main >/dev/null 2>&1; then
+        exit 0
+      fi
+
+      if [ -n "$(git rev-list 'HEAD..origin/main' 2>/dev/null | head -1)" ]; then
+        git pull --rebase --autostash origin main || {
+          git rebase --abort >/dev/null 2>&1 || true
+          exit 1
+        }
+      fi
+
+      if [ -n "$(git rev-list 'origin/main..HEAD' 2>/dev/null | head -1)" ]; then
+        git push origin main
+      fi
+    '';
+  };
+  oldSyncLaunchAgentLabel = "com.ownix.sync-zotero-papers";
+  pushLaunchAgentLabel = "com.ownix.papers-autopush";
 in
 {
   home.packages =
@@ -84,6 +129,7 @@ in
       pkgs.git
       pkgs.git-lfs
       syncZoteroPapers
+      pushPapers
     ];
 
   home.sessionVariables = {
@@ -95,31 +141,55 @@ in
   home.shellAliases = {
     papers = "cd \"$PAPERS_REPO_DIR\"";
     papers-sync = "${syncZoteroPapers}/bin/sync-zotero-papers";
+    papers-push = "${pushPapers}/bin/sync-papers";
   };
 
-  home.file."Library/LaunchAgents/${syncLaunchAgentLabel}.plist" = lib.mkIf pkgs.stdenv.isDarwin {
+  home.file."Library/LaunchAgents/${pushLaunchAgentLabel}.plist" = lib.mkIf pkgs.stdenv.isDarwin {
     text = ''
       <?xml version="1.0" encoding="UTF-8"?>
       <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "https://www.apple.com/DTDs/PropertyList-1.0.dtd">
       <plist version="1.0">
         <dict>
           <key>Label</key>
-          <string>${syncLaunchAgentLabel}</string>
+          <string>${pushLaunchAgentLabel}</string>
           <key>ProgramArguments</key>
           <array>
-            <string>${syncZoteroPapers}/bin/sync-zotero-papers</string>
+            <string>${pushPapers}/bin/sync-papers</string>
           </array>
           <key>RunAtLoad</key>
           <true/>
           <key>StartInterval</key>
           <integer>300</integer>
           <key>StandardOutPath</key>
-          <string>${homeDir}/Library/Logs/${syncLaunchAgentLabel}.log</string>
+          <string>${homeDir}/Library/Logs/${pushLaunchAgentLabel}.log</string>
           <key>StandardErrorPath</key>
-          <string>${homeDir}/Library/Logs/${syncLaunchAgentLabel}.log</string>
+          <string>${homeDir}/Library/Logs/${pushLaunchAgentLabel}.log</string>
         </dict>
       </plist>
     '';
+  };
+
+  systemd.user.services.papers-autosync = lib.mkIf pkgs.stdenv.isLinux {
+    Unit = {
+      Description = "Sync Papers repo with GitHub";
+    };
+    Service = {
+      Type = "oneshot";
+      ExecStart = "${pushPapers}/bin/sync-papers";
+    };
+  };
+
+  systemd.user.timers.papers-autosync = lib.mkIf pkgs.stdenv.isLinux {
+    Unit = {
+      Description = "Periodic Papers repo sync";
+    };
+    Timer = {
+      OnBootSec = "2m";
+      OnUnitActiveSec = "5m";
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
   };
 
   home.activation.clonePapersRepo = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -187,13 +257,16 @@ in
     fi
   '';
 
-  home.activation.loadPapersSyncAgent = lib.mkIf pkgs.stdenv.isDarwin (
+  home.activation.loadPapersPushAgent = lib.mkIf pkgs.stdenv.isDarwin (
     lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      agent_plist="${homeDir}/Library/LaunchAgents/${syncLaunchAgentLabel}.plist"
+      old_agent_plist="${homeDir}/Library/LaunchAgents/${oldSyncLaunchAgentLabel}.plist"
+      agent_plist="${homeDir}/Library/LaunchAgents/${pushLaunchAgentLabel}.plist"
+
+      /bin/launchctl bootout "gui/$(id -u)/${oldSyncLaunchAgentLabel}" >/dev/null 2>&1 || true
+      rm -f "$old_agent_plist"
 
       /bin/launchctl unload "$agent_plist" >/dev/null 2>&1 || true
       /bin/launchctl load -w "$agent_plist" >/dev/null 2>&1 || true
-      ${syncZoteroPapers}/bin/sync-zotero-papers || true
     ''
   );
 }
