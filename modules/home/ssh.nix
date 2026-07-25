@@ -91,7 +91,24 @@
           '';
   };
 
-  # 2. [핵심] Activation Script: 설정 적용 후 권한 수정 자동화
+  # 2a. [선행 정리] link 단계 전에 이전 activation이 남긴 실제 파일/백업을 제거.
+  # fixSshConfigPermission이 심볼릭 링크를 실제 파일로 바꿔 두기 때문에, 다음 rebuild 때
+  # home-manager의 checkLinkTargets가 "방해되는 파일"로 인식해 config.hm-backup으로
+  # 백업하려다, 이전 백업이 남아 있으면 activation이 실패한다. 링크 전에 청소해서 이 루프를 끊는다.
+  home.activation.cleanSshConfigBeforeLink = lib.hm.dag.entryBefore ["checkLinkTargets"] ''
+    SSH_CONFIG="$HOME/.ssh/config"
+
+    # 우리가 실제 파일로 변환해 둔 config를 제거해 home-manager가 깨끗하게 재링크하도록 함.
+    # (내용은 선언적으로 관리되므로 손실 없음)
+    if [ -e "$SSH_CONFIG" ] && [ ! -L "$SSH_CONFIG" ]; then
+      $DRY_RUN_CMD rm -f "$SSH_CONFIG"
+    fi
+
+    # activation을 막을 수 있는 오래된 백업 제거.
+    $DRY_RUN_CMD rm -f "$SSH_CONFIG.hm-backup"
+  '';
+
+  # 2b. [핵심] Activation Script: 설정 적용 후 권한 수정 자동화
   # Nix가 만든 심볼릭 링크를 실제 파일로 변환하고 권한을 600으로 변경합니다.
   home.activation.fixSshConfigPermission = lib.hm.dag.entryAfter ["writeBoundary"] ''
     SSH_CONFIG="$HOME/.ssh/config"
