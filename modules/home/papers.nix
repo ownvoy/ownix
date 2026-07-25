@@ -14,68 +14,10 @@ let
       "${homeDir}/Zotero"
     else
       "${homeDir}/.zotero/zotero";
-  zoteroStorageDir = "${zoteroDataDir}/storage";
-  syncZoteroPapers = pkgs.writeShellApplication {
-    name = "sync-zotero-papers";
-    runtimeInputs = [
-      pkgs.coreutils
-      pkgs.findutils
-      pkgs.gnugrep
-    ];
-    text = ''
-      set -eu
-
-      papers_dir="${papersDir}"
-      zotero_storage_dir="${zoteroStorageDir}"
-
-      mkdir -p "$papers_dir"
-
-      if [ ! -d "$zotero_storage_dir" ]; then
-        exit 0
-      fi
-
-      find "$zotero_storage_dir" -mindepth 2 -maxdepth 2 \( -type f -o -type l \) -name '*.pdf' | while read -r src; do
-        if [ -L "$src" ]; then
-          continue
-        fi
-
-        key="$(basename "$(dirname "$src")")"
-        base="$(basename "$src")"
-        dest="$papers_dir/$base"
-
-        if [ ! -e "$dest" ]; then
-          mv "$src" "$dest"
-          ln -s "$dest" "$src"
-          continue
-        fi
-
-        if cmp -s "$src" "$dest"; then
-          rm -f "$src"
-          ln -s "$dest" "$src"
-          continue
-        fi
-
-        stem="''${base%.pdf}"
-        alt_dest="$papers_dir/$stem [$key].pdf"
-
-        if [ ! -e "$alt_dest" ]; then
-          mv "$src" "$alt_dest"
-          ln -s "$alt_dest" "$src"
-          continue
-        fi
-
-        if cmp -s "$src" "$alt_dest"; then
-          rm -f "$src"
-          ln -s "$alt_dest" "$src"
-          continue
-        fi
-
-        conflict_dest="$papers_dir/$stem [$key]-conflict.pdf"
-        mv "$src" "$conflict_dest"
-        ln -s "$conflict_dest" "$src"
-      done
-    '';
-  };
+  # File layout inside the Papers repo is produced by the ZotMoov Zotero
+  # plugin (dst_dir = Papers, subdirectory move on with {%c} = collection
+  # path). Nix no longer flattens Zotero storage; it just pushes whatever
+  # structure ZotMoov writes.
   pushPapers = pkgs.writeShellApplication {
     name = "sync-papers";
     runtimeInputs = [
@@ -128,7 +70,6 @@ in
     [
       pkgs.git
       pkgs.git-lfs
-      syncZoteroPapers
       pushPapers
     ];
 
@@ -140,7 +81,6 @@ in
 
   home.shellAliases = {
     papers = "cd \"$PAPERS_REPO_DIR\"";
-    papers-sync = "${syncZoteroPapers}/bin/sync-zotero-papers";
     papers-push = "${pushPapers}/bin/sync-papers";
   };
 
