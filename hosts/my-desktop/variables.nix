@@ -64,10 +64,17 @@
   printerName = "Samsung_C3060_Series_SEC84251976DF29";
   printerLocation = "Office";
   printerDescription = "Samsung C3060 Series";
-  # The previously configured fixed IP queue was unreachable; use the queue CUPS
-  # actually discovered on this network instead.
+  # NOTE: Do NOT declaratively ensure this printer.
+  # The "everywhere" (IPP Everywhere / driverless) model makes `lpadmin` connect
+  # to the live printer at add-time to fetch its PPD. When the printer is OFF (or
+  # the implicitclass:// discovery queue doesn't exist), lpadmin fails
+  # ("IPP Everywhere driver requires an IPP connection"), which makes
+  # ensure-printers.service fail, which makes every `fr`/nixos switch exit with
+  # status 4 -> no new boot generation gets registered and the boot menu freezes
+  # on the last good generation. Leaving printerModel = null disables the
+  # declarative queue; CUPS + avahi still auto-discover the printer when it's on.
   printerUri = "implicitclass://Samsung_C3060_Series_SEC84251976DF29/";
-  printerModel = "everywhere";
+  printerModel = null;
   printerPPDOptions = {
     PageSize = "A4";
     Duplex = "DuplexNoTumble";
