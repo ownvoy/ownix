@@ -7,17 +7,17 @@ let
     ;
   launcherBind =
     if desktopShell == "noctalia" then
-      "$modifier ,A,exec,noctalia-shell ipc call launcher toggle"
+      "$modifier ,A,exec,noctalia msg panel-toggle launcher"
     else
       "$modifier ,A,exec,rofi-launcher";
   sessionBind =
     if desktopShell == "noctalia" then
-      "$modifier, backspace,exec,noctalia-shell ipc call sessionMenu toggle"
+      "$modifier, backspace,exec,noctalia msg panel-toggle session"
     else
       "$modifier, backspace,exec,wlogout";
   clipboardBind =
     if desktopShell == "noctalia" then
-      "$modifier,V,exec,noctalia-shell ipc call launcher clipboard"
+      "$modifier,V,exec,noctalia msg panel-toggle clipboard"
     else
       "$modifier,V,exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy";
 in

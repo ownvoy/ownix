@@ -9,7 +9,10 @@ pkgs.writeShellScriptBin "start-noctalia-shell" ''
   pkill -x waybar >/dev/null 2>&1 || true
   pkill -x swaync >/dev/null 2>&1 || true
 
-  if ! pgrep -x noctalia-shell >/dev/null 2>&1; then
-    env QT_IM_MODULE=wayland noctalia-shell >/dev/null 2>&1 &
+  # noctalia v5 ships a single `noctalia` binary (was `noctalia-shell` in v4).
+  # Its wrapped process comm is `.noctalia-wrapp`, so match the cmdline path
+  # end instead of `pgrep -x noctalia` (which never matches the wrapper).
+  if ! pgrep -f 'noctalia$' >/dev/null 2>&1; then
+    noctalia >/dev/null 2>&1 &
   fi
 ''

@@ -2,51 +2,21 @@
 let
   inherit (import ../../../hosts/${host}/variables.nix)
     desktopShell
-    terminal
     ;
-  settings = lib.foldl' lib.recursiveUpdate { } [
-    (import ./app-launcher-audio.nix { inherit terminal; })
-    (import ./bar.nix)
-    (import ./control-center.nix)
-    (import ./desktop-dock.nix)
-    (import ./general-ui.nix { inherit username; })
-    (import ./notifications-session.nix)
-    (import ./wallpaper.nix { inherit username; })
-  ];
+  settings = import ./settings.nix { inherit username; };
 in
 {
   imports = [ inputs.noctalia.homeModules.default ];
 
-  home.file.".config/noctalia/plugins/todo" = {
-    source = ./plugins/todo;
-    recursive = true;
-  };
-
-  programs.noctalia-shell = {
+  programs.noctalia = {
     enable = true;
-    # stylix's noctalia target also injects settings.*.backgroundOpacity / fonts;
-    # our explicit settings take priority to avoid conflicting-definition errors.
+    package = inputs.noctalia.packages.${pkgs.system}.default;
+    # We hand-migrated this config to the v5 TOML schema. Build-time validation
+    # runs `noctalia config validate`; flip to true once the config is settled.
+    validateConfig = false;
+    # stylix's noctalia target also injects settings (opacity/fonts); mkForce so
+    # our explicit config wins and avoids conflicting-definition errors.
     settings = lib.mkForce settings;
-    plugins = {
-      sources = [
-        {
-          enabled = true;
-          name = "Official Noctalia Plugins";
-          url = "https://github.com/noctalia-dev/noctalia-plugins";
-        }
-      ];
-      states = {
-        clipper = {
-          enabled = true;
-          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-        };
-        todo = {
-          enabled = true;
-          sourceUrl = "https://github.com/noctalia-dev/noctalia-plugins";
-        };
-      };
-      version = 2;
-    };
   };
 
   home.activation.reloadNoctaliaShell = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -62,7 +32,9 @@ in
       exit 0
     fi
 
-    if ! ${pkgs.procps}/bin/pgrep -x noctalia-shell >/dev/null 2>&1; then
+    # v5's wrapped comm is `.noctalia-wrapp`; match the cmdline path end
+    # instead of `pgrep -x noctalia` (which never matches the wrapper).
+    if ! ${pkgs.procps}/bin/pgrep -f 'noctalia$' >/dev/null 2>&1; then
       exit 0
     fi
 
