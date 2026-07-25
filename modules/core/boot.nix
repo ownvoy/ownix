@@ -6,6 +6,13 @@
 
     kernelModules = [ "v4l2loopback" ];
     extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
+
+    # This AMD Rembrandt (Radeon 680M) box hangs on reboot: it powers off and
+    # back on but never re-POSTs (black screen); only a full cold boot recovers.
+    # Force the kernel's reboot method to do a full hardware reset. If "pci"
+    # doesn't fix it, try these values in order (rebuild + reboot each time):
+    #   "bios" -> "acpi" -> "efi" -> "pci,hard" -> "hard" -> "cold" -> "warm"
+    kernelParams = [ "reboot=pci" ];
     
     # 2. Realtek 8852BE 전원 관리 비활성화 옵션 추가
     extraModprobeConfig = ''
