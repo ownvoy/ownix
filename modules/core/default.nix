@@ -26,6 +26,7 @@ in
     (if vars.displayManager == "tui" then ./greetd.nix else ./sddm.nix)
     ./security.nix
     ./services.nix
+    ./sshfs-mounts.nix
     ./steam.nix
     ./stylix.nix
     ./syncthing.nix

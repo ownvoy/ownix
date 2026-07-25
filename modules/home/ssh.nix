@@ -61,7 +61,7 @@
       Host bai-vscode
         User work
         HostName proxy3.nipa2025.ktcloud.com
-        Port 10509
+        Port 10540
         IdentityFile ~/.ssh/id_ed25519
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null

@@ -375,6 +375,7 @@ in
     libcamera
     python312
     texlive.combined.scheme-full
+    sshfs
     wev
     cameraOcrPreview
     cameraOcrSnapshot
