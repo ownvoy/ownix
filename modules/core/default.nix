@@ -13,6 +13,7 @@ in
     ./chromium.nix
     ./hermes.nix
     ./flatpak.nix
+    ./keyd.nix
     ./fonts.nix
     ./hardware.nix
     ./network.nix

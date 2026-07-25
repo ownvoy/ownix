@@ -38,10 +38,10 @@ in
       "$modifier,Y,exec,kitty -e yazi"
       "$modifier,E,exec,emopicker9000"
       "$modifier SHIFT,S,exec,screenshootin"
-      "$modifier,D,exec,discord"
+      "$modifier,M,exec,discord"
       "$modifier,O,exec,obsidian"
       "$modifier,C,exec,hyprpicker -a"
-      "$modifier,M,exec,pavucontrol"
+      "$modifier,D,exec,pavucontrol"
       "$modifier,Q,killactive,"
       "$modifier,P,pseudo,"
       clipboardBind
