@@ -40,6 +40,7 @@ in
     ./obs-studio.nix
     ./open-design.nix
     ./papers.nix
+    ./paseo.nix
     ./pi.nix
     ./zotero.nix
     ./ssh.nix

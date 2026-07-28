@@ -925,6 +925,26 @@
         "type": "github"
       }
     },
+    "paseo": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785104439,
+        "narHash": "sha256-93jJB6vXabxJHUbSSttFti/wvgW4c0QXrDWSlXC2bZo=",
+        "owner": "getpaseo",
+        "repo": "paseo",
+        "rev": "1a1ff8828f002fce08e239bae3d46aff75e22f52",
+        "type": "github"
+      },
+      "original": {
+        "owner": "getpaseo",
+        "repo": "paseo",
+        "type": "github"
+      }
+    },
     "purescript-overlay": {
       "inputs": {
         "flake-compat": "flake-compat_2",
@@ -1039,6 +1059,7 @@
         "noctalia": "noctalia",
         "nvf": "nvf",
         "open-design": "open-design",
+        "paseo": "paseo",
         "stylix": "stylix"
       }
     },

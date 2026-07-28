@@ -19,6 +19,8 @@ in
     ./network.nix
     ./nfs.nix
     ./nh.nix
+    ./paseo.nix
+    ./paseo-tunnel.nix
     #./quickshell.nix  #Disabled for now not using it yet
     ./packages.nix
     ./printing.nix

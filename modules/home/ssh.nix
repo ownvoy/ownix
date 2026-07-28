@@ -91,6 +91,13 @@
           '';
   };
 
+  # ── SSH 에이전트 (systemd user service) ──
+  # Paseo 에이전트가 SSH 접속(hanbat_a100, bai-vscode, H100_proxy 등)할 때
+  # SSH_AUTH_SOCK = /run/user/$UID/ssh-agent 를 통해 키 사용
+  services.ssh-agent = {
+    enable = true;
+  };
+
   # 2a. [선행 정리] link 단계 전에 이전 activation이 남긴 실제 파일/백업을 제거.
   # fixSshConfigPermission이 심볼릭 링크를 실제 파일로 바꿔 두기 때문에, 다음 rebuild 때
   # home-manager의 checkLinkTargets가 "방해되는 파일"로 인식해 config.hm-backup으로

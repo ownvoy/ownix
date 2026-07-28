@@ -14,6 +14,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     hermes-agent.url = "github:NousResearch/hermes-agent";
     claude-code.url = "github:sadjow/claude-code-nix";
+    paseo = {
+      url = "github:getpaseo/paseo";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
     homebrew-core = {
@@ -65,6 +69,7 @@
       nixpkgs-unstable,
       agenix,
       hermes-agent,
+      paseo,
       # antigravity-nix,
       ...
     }@inputs:
