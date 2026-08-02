@@ -74,6 +74,7 @@ in
     # 원격 데몬 SSH 터널 (paseo-tunnel.nix):
     #   localhost:6768 = bai-vscode daemon
     #   localhost:6769 = H100_proxy daemon
+    #   localhost:6770 = hanbat_a100 daemon
     #
     # (SSH config는 home-manager의 ssh.nix에 선언됨)
     # ──────────────────────────────────────────────

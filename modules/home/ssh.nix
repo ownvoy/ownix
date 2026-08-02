@@ -16,6 +16,7 @@
         HostName 210.110.250.120
         User user
         Port 16022
+        IdentityFile ~/.ssh/id_ed25519
         ForwardX11 yes
         ForwardX11Trusted yes
 

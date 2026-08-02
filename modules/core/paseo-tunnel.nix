@@ -56,11 +56,34 @@
   };
 
   # ──────────────────────────────────────────────
+  # hanbat_a100 터널 → localhost:6770
+  # ──────────────────────────────────────────────
+  systemd.services."tunnel-hanbat-a100" = {
+    description = "SSH tunnel to hanbat_a100 Paseo daemon (localhost:6770)";
+    after = [ "network.target" "sshd.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      User = "ownvoy";
+      Restart = "on-failure";
+      RestartSec = 10;
+    };
+    script = ''
+      exec ${pkgs.openssh}/bin/ssh \
+        -o ServerAliveInterval=30 \
+        -o ServerAliveCountMax=3 \
+        -o ExitOnForwardFailure=yes \
+        -o StrictHostKeyChecking=accept-new \
+        -N -L 6770:localhost:6767 hanbat_a100
+    '';
+  };
+
+  # ──────────────────────────────────────────────
   # 데스크탑 앱에서 쉽게 전환할 수 있도록
   # 환경변수로 터널 정보 노출
   # ──────────────────────────────────────────────
   environment.sessionVariables = {
     PASEO_TUNNEL_BAI_VSCODE = "localhost:6768";
     PASEO_TUNNEL_H100_PROXY = "localhost:6769";
+    PASEO_TUNNEL_HANBAT_A100 = "localhost:6770";
   };
 }
