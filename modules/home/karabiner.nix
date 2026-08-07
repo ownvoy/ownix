@@ -36,17 +36,29 @@ let
 
   # Every other letter: Caps Lock also works as a plain Control key, so
   # e.g. readline/emacs/tmux ctrl+<letter> shortcuts work through it too.
-  # Excludes the letters already claimed above (c/v/q/a) and the ones
-  # Hammerspoon's app launcher owns (g/m/t/y) — see modules/home/hammerspoon.nix.
+  # Excludes the letters already claimed above (c/v/q/a/e), the ones
+  # Hammerspoon's app launcher owns (g/m/t/y/o), the ones its yabai-backed
+  # window management owns (h/j/k/l/f/i/n), and hs.reload (r) — see
+  # modules/home/hammerspoon.nix.
   claimedLetters = [
     "c"
     "v"
     "q"
     "a"
+    "e"
     "g"
     "m"
     "t"
     "y"
+    "o"
+    "h"
+    "j"
+    "k"
+    "l"
+    "f"
+    "i"
+    "n"
+    "r"
   ];
   allLetters = [
     "a"
@@ -138,6 +150,12 @@ in
           description = "Hyper (Caps Lock) + a -> Spotlight (cmd+space)";
           manipulators = [
             (hyperTo "a" "spacebar" [ "left_command" ])
+          ];
+        }
+        {
+          description = "Hyper (Caps Lock) + e -> Emoji & Symbols picker (cmd+ctrl+space)";
+          manipulators = [
+            (hyperTo "e" "spacebar" [ "left_command" "left_control" ])
           ];
         }
         {

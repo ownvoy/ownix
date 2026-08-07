@@ -22,6 +22,7 @@ in
     '')
     (appCommand "chrome" "Google Chrome")
     (appCommand "discord" "Discord")
+    (appCommand "spotify" "Spotify")
     (appCommand "zotero" "Zotero")
   ];
 }

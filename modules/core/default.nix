@@ -30,6 +30,7 @@ in
     ./security.nix
     ./services.nix
     ./sshfs-mounts.nix
+    ./spicetify.nix
     ./steam.nix
     ./stylix.nix
     ./syncthing.nix

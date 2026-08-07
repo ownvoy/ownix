@@ -26,7 +26,10 @@ in
   imports = [
     inputs.home-manager.darwinModules.home-manager
     ./homebrew.nix
+    ./mas-apps.nix
+    ./spicetify.nix
     ./tailscale.nix
+    ./yabai.nix
   ];
 
   nixpkgs = {
@@ -42,6 +45,7 @@ in
 
   environment.systemPackages = with pkgs; [
     claude-code
+    discord
     git
     kitty
     kitty.terminfo
@@ -87,7 +91,14 @@ in
     fi
   '';
 
+  nix.gc = {
+    automatic = true;
+    interval = { Weekday = 0; Hour = 3; Minute = 0; };
+    options = "--delete-older-than 7d";
+  };
+
   nix.settings = {
+    auto-optimise-store = true;
     experimental-features = [
       "nix-command"
       "flakes"

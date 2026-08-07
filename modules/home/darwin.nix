@@ -31,10 +31,14 @@ in
     ./lazygit.nix
     ./neovim.nix
     ./papers.nix
+    ./paseo-darwin.nix
+    ./pi.nix
+    ./python.nix
     ./scripts/remote-neovide.nix
     ./ssh.nix
     ./tealdeer.nix
     ./vscode.nix
+    ./yabai.nix
     ./yazi
     ./zoxide.nix
     ./zotero.nix

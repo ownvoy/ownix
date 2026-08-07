@@ -17,9 +17,10 @@
     -- Karabiner-Elements — see modules/home/karabiner.nix) so it still
     -- works before Karabiner's permissions are granted.
     ------------------------------------------------------------------
+    local hyperMod = { "cmd", "alt", "ctrl", "shift" } -- Hyper key (Caps Lock)
     local appMods = {
       { "alt", "cmd" },
-      { "cmd", "alt", "ctrl", "shift" }, -- Hyper key (Caps Lock)
+      hyperMod,
     }
 
     local function toggleApp(name)
@@ -45,52 +46,87 @@
     bindApp("Y", function()
       hs.execute("open -na kitty --args -e yazi", true)
     end)
+    bindApp("O", function() toggleApp("Obsidian") end)
 
     bindApp("R", hs.reload)
 
-    -- Hyper (Caps Lock) + c/v/q -> clean cmd+c / cmd+v / cmd+q is handled
-    -- directly in Karabiner-Elements (see modules/home/karabiner.nix), not
-    -- here — Karabiner cleanly overrides the held modifiers per-event,
+    -- Hyper (Caps Lock) + c/v/q/e -> clean cmd+c / cmd+v / cmd+q / cmd+ctrl+space
+    -- is handled directly in Karabiner-Elements (see modules/home/karabiner.nix),
+    -- not here — Karabiner cleanly overrides the held modifiers per-event,
     -- while Hammerspoon's synthetic keystrokes let the extra ctrl/alt/shift
     -- from the still-held Caps Lock leak through to the target app.
 
     ------------------------------------------------------------------
-    -- Window management (ctrl+alt+cmd+<key>)
+    -- Window management (Hyper key only, single modifier) -- delegates to
+    -- yabai, which owns actual tiling/layout (see modules/home/yabai.nix).
+    -- Hammerspoon is just a hotkey -> `yabai -m ...` shell-out layer here.
+    -- Mirrors the $modifier-based hjkl/arrow/number scheme from the
+    -- my-desktop Hyprland config (modules/home/hyprland/binds.nix), with
+    -- Caps Lock standing in for Hyprland's Super key.
     ------------------------------------------------------------------
-    local wmMod = { "ctrl", "alt", "cmd" }
+    local yabai = "/opt/homebrew/bin/yabai"
 
-    local function move(x, y, w, h)
-      return function()
-        local win = hs.window.focusedWindow()
-        if not win then return end
-        local f = win:screen():frame()
-        win:setFrame({
-          x = f.x + f.w * x,
-          y = f.y + f.h * y,
-          w = f.w * w,
-          h = f.h * h,
-        })
-      end
+    local function yabaiCmd(args)
+      return function() hs.execute(yabai .. " " .. args, true) end
     end
 
-    -- halves / maximize / centered float
-    hs.hotkey.bind(wmMod, "Left",  move(0,    0,    0.5, 1))
-    hs.hotkey.bind(wmMod, "Right", move(0.5,  0,    0.5, 1))
-    hs.hotkey.bind(wmMod, "Up",    move(0,    0,    1,   1))
-    hs.hotkey.bind(wmMod, "Down",  move(0.15, 0.15, 0.7, 0.7))
+    -- focus window in a direction (mirrors $modifier+hjkl,movefocus)
+    hs.hotkey.bind(hyperMod, "H", yabaiCmd("-m window --focus west"))
+    hs.hotkey.bind(hyperMod, "J", yabaiCmd("-m window --focus south"))
+    hs.hotkey.bind(hyperMod, "K", yabaiCmd("-m window --focus north"))
+    hs.hotkey.bind(hyperMod, "L", yabaiCmd("-m window --focus east"))
 
-    -- quarters, laid out spatially on the keyboard (u i / j k)
-    hs.hotkey.bind(wmMod, "U", move(0,   0,   0.5, 0.5))
-    hs.hotkey.bind(wmMod, "I", move(0.5, 0,   0.5, 0.5))
-    hs.hotkey.bind(wmMod, "J", move(0,   0.5, 0.5, 0.5))
-    hs.hotkey.bind(wmMod, "K", move(0.5, 0.5, 0.5, 0.5))
+    -- move window in a direction (mirrors $modifier SHIFT+arrows,movewindow)
+    hs.hotkey.bind(hyperMod, "Left",  yabaiCmd("-m window --swap west"))
+    hs.hotkey.bind(hyperMod, "Right", yabaiCmd("-m window --swap east"))
+    hs.hotkey.bind(hyperMod, "Up",    yabaiCmd("-m window --swap north"))
+    hs.hotkey.bind(hyperMod, "Down",  yabaiCmd("-m window --swap south"))
+
+    -- fullscreen within the current space (mirrors $modifier+F,fullscreen)
+    hs.hotkey.bind(hyperMod, "F", yabaiCmd("-m window --toggle zoom-fullscreen"))
+
+    -- toggle split orientation (mirrors $modifier SHIFT+I,layoutmsg togglesplit)
+    hs.hotkey.bind(hyperMod, "I", yabaiCmd("-m window --toggle split"))
 
     -- throw focused window to the next display
-    hs.hotkey.bind(wmMod, "N", function()
-      local win = hs.window.focusedWindow()
-      if win then win:moveToScreen(win:screen():next()) end
+    hs.hotkey.bind(hyperMod, "N", yabaiCmd("-m window --display next --focus"))
+
+    -- switch to space N (mirrors $modifier+1-9,workspace)
+    -- send focused window to space N (mirrors $modifier SHIFT+1-9,movetoworkspace;
+    -- uses alt+cmd instead of Hyper+shift since Hyper already bakes in shift)
+    for i = 1, 9 do
+      hs.hotkey.bind(hyperMod, tostring(i), yabaiCmd("-m space --focus " .. i))
+      hs.hotkey.bind({ "alt", "cmd" }, tostring(i), yabaiCmd("-m window --space " .. i .. " --focus"))
+    end
+
+    -- keybind cheat sheet (mirrors $modifier+slash,exec list-keybinds)
+    hs.hotkey.bind(hyperMod, "/", function()
+      hs.alert.show(
+        "hjkl focus | arrows move | f fullscreen | i split | n next display\n" ..
+        "1-9 space | alt+cmd+1-9 send window to space",
+        5
+      )
     end)
+
+    -- lock screen (mirrors $modifier+backspace,exec session menu)
+    hs.hotkey.bind(hyperMod, "delete", hs.caffeinate.lockScreen)
 
     hs.alert.show("Hammerspoon config loaded")
   '';
+
+  # Hammerspoon has no built-in "launch at login" that's manageable
+  # declaratively (it's a GUI checkbox backed by a macOS Login Item), so
+  # start it via a launchd agent instead — same pattern as yabai's agent
+  # in modules/home/yabai.nix.
+  launchd.agents.hammerspoon = {
+    enable = true;
+    config = {
+      ProgramArguments = [
+        "/usr/bin/open"
+        "-a"
+        "Hammerspoon"
+      ];
+      RunAtLoad = true;
+    };
+  };
 }

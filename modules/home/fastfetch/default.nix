@@ -1,3 +1,4 @@
+{ pkgs, ... }:
 {
   programs.fastfetch = {
     enable = true;
@@ -12,7 +13,7 @@
       };
 
       logo = {
-        source = "NixOS";
+        source = if pkgs.stdenv.isDarwin then "macos" else "NixOS";
         type = "builtin";
         padding = {
           top = 1;

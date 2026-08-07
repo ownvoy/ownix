@@ -65,6 +65,27 @@ EOF
 
       ${rofiCommand}
 
+      ${lib.optionalString pkgs.stdenv.isDarwin ''
+      if [ ! -t 0 ] || [ ! -t 1 ]; then
+        choice="$(/usr/bin/osascript \
+          -e 'on run argv' \
+          -e 'set hostList to paragraphs of (item 1 of argv)' \
+          -e 'try' \
+          -e 'set chosenHost to choose from list hostList with title "Remote Neovide" with prompt "Choose a remote host:"' \
+          -e 'on error' \
+          -e 'return ""' \
+          -e 'end try' \
+          -e 'if chosenHost is false then' \
+          -e 'return ""' \
+          -e 'end if' \
+          -e 'return item 1 of chosenHost' \
+          -e 'end run' \
+          "$hosts" 2>/dev/null)"
+        printf '%s\n' "$choice"
+        return
+      fi
+      ''}
+
       if [ -t 0 ] && [ -t 1 ]; then
         printf '%s\n' "$hosts" | ${pkgs.fzf}/bin/fzf --prompt="Remote host> "
         return
@@ -134,8 +155,33 @@ EOF
       exit 1
     fi
 
-    is_running() {
+    # True as soon as the local coordinator nvim process is up, regardless of
+    # whether its remote-nvim.nvim session is actually still connected.
+    is_local_running() {
       nvim --server "$control_socket" --remote-expr "1" >/dev/null 2>&1
+    }
+
+    # True only if the local coordinator is up AND remote-nvim.nvim still
+    # considers its remote server session alive. A local coordinator can
+    # outlive a dropped SSH/remote connection (e.g. network blip, remote
+    # crash), leaving a "zombie" session that responds locally but will never
+    # do anything useful again. Checking remote-nvim.nvim's own session state
+    # (rather than just the local socket) lets `start` detect that and
+    # transparently clean up + reconnect instead of reporting false "already
+    # running" forever.
+    is_running() {
+      is_local_running || return 1
+
+      result="$(nvim --server "$control_socket" --remote-expr "luaeval('(function() local ok, rn = pcall(require, \"remote-nvim\"); if not ok then return 0 end; local s = rn.session_provider:get_session(vim.env.REMOTE_NVIM_HOST); if s == nil then return 0 end; local ok2, running = pcall(function() return s:is_remote_server_running() end); if not (ok2 and running) then return 0 end; return 1 end)()')" 2>/dev/null)"
+      [ "$result" = "1" ]
+    }
+
+    kill_stale_session() {
+      if is_local_running; then
+        echo "remote-neovide: cleaning up stale session for $host" >&2
+        pkill -f "nvim --listen $control_socket" >/dev/null 2>&1 || true
+        sleep 0.3
+      fi
     }
 
     wait_for_server() {
@@ -144,7 +190,7 @@ EOF
         if [ -S "$control_socket" ]; then
           return 0
         fi
-        if is_running; then
+        if is_local_running; then
           return 0
         fi
         sleep 0.1
@@ -159,6 +205,8 @@ EOF
           echo "remote-neovide: $host is already running"
           exit 0
         fi
+
+        kill_stale_session
 
         if [ -S "$control_socket" ] || [ -e "$control_socket" ]; then
           rm -f "$control_socket"
@@ -181,13 +229,16 @@ EOF
         exit 1
         ;;
       stop)
-        if ! is_running; then
+        if is_running; then
+          nvim --server "$control_socket" --remote-send "<Cmd>RemoteStop $host<CR><Cmd>qall!<CR>"
+          echo "remote-neovide: stopping $host"
+        elif is_local_running; then
+          kill_stale_session
+          echo "remote-neovide: $host was a stale session, cleaned up"
+        else
           echo "remote-neovide: $host is not running"
           exit 1
         fi
-
-        nvim --server "$control_socket" --remote-send "<Cmd>RemoteStop $host<CR><Cmd>qall!<CR>"
-        echo "remote-neovide: stopping $host"
         ;;
       status)
         if is_running; then
@@ -197,10 +248,60 @@ EOF
           exit 0
         fi
 
+        if is_local_running; then
+          echo "remote-neovide: $host has a stale local session (remote link dead)"
+          echo "socket: $control_socket"
+          echo "log: $log_file"
+          exit 1
+        fi
+
         echo "remote-neovide: $host is not running"
         exit 1
         ;;
     esac
+  '';
+
+  remoteNeovideApp = pkgs.runCommand "remote-neovide-app" { } ''
+    app_dir="$out/Remote Neovide.app"
+    mkdir -p "$app_dir/Contents/MacOS"
+
+    cat > "$app_dir/Contents/Info.plist" <<'PLIST'
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>CFBundleName</key>
+  <string>Remote Neovide</string>
+  <key>CFBundleDisplayName</key>
+  <string>Remote Neovide</string>
+  <key>CFBundleIdentifier</key>
+  <string>dev.ownvoy.remote-neovide</string>
+  <key>CFBundleVersion</key>
+  <string>1.0</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
+  <key>CFBundleExecutable</key>
+  <string>remote-neovide-launcher</string>
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+  <key>LSUIElement</key>
+  <true/>
+  <key>LSMinimumSystemVersion</key>
+  <string>10.13</string>
+</dict>
+</plist>
+PLIST
+
+    cat > "$app_dir/Contents/MacOS/remote-neovide-launcher" <<LAUNCHER
+#!/bin/sh
+# GUI-launched apps (Finder/Spotlight/Launchpad) get a minimal PATH that is
+# missing nvim (nix-darwin) and neovide (Homebrew cask). Shell rc files are
+# not a reliable fix (Homebrew's shellenv usually only loads for interactive
+# shells), so prepend the known locations directly instead.
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:\$HOME/.nix-profile/bin:/etc/profiles/per-user/\$USER/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin:/usr/local/bin:\$PATH"
+exec "${remote-neovide}/bin/remote-neovide" "\$@"
+LAUNCHER
+    chmod +x "$app_dir/Contents/MacOS/remote-neovide-launcher"
   '';
 in
 {
@@ -215,4 +316,20 @@ in
     type = "Application";
     categories = [ "Development" "Network" ];
   };
+
+  home.activation.installRemoteNeovideApp = lib.mkIf pkgs.stdenv.isDarwin (
+    lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      app_src="${remoteNeovideApp}/Remote Neovide.app"
+      app_dest="$HOME/Applications/Remote Neovide.app"
+      mkdir -p "$HOME/Applications"
+      if [ -e "$app_dest" ]; then
+        chmod -R u+w "$app_dest" 2>/dev/null || true
+        rm -rf "$app_dest"
+      fi
+      /usr/bin/ditto "$app_src" "$app_dest"
+      chmod -R u+w "$app_dest"
+      /usr/bin/xattr -dr com.apple.quarantine "$app_dest" 2>/dev/null || true
+      /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f "$app_dest" >/dev/null 2>&1 || true
+    ''
+  );
 }

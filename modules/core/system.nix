@@ -4,6 +4,11 @@ let
 in
 {
   nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 7d";
+    };
     settings = {
       download-buffer-size = 200000000;
       auto-optimise-store = true;

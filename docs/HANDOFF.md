@@ -27,6 +27,13 @@ sessions. Keep it short, factual, and easy to overwrite.
 
 ## Recent Changes
 
+- `modules/home/python.nix` (new, 2026-07-21): declarative Python env
+  (`python3.withPackages`: requests, beautifulsoup4, opencv4, numpy) for the
+  deepfake news-scraping dataset work; imported from `modules/home/darwin.nix`.
+  Validation: env built from the pinned nixpkgs via `nix build --expr`; full
+  `darwinConfigurations.Wonjuns-MacBook-Air.system` build kicked off. Not yet
+  switched — user runs `fr` manually. Note: nixpkgs opencv has no `cv2.data`;
+  haarcascade XMLs live in `<opencv>/share/opencv4/haarcascades`.
 - `docs/README.md`: documentation index.
 - `docs/REPO_MAP.md`: repository structure and source-of-truth map.
 - `docs/CUSTOMIZATION.md`: common settings and where to edit them.
