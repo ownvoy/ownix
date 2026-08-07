@@ -69,8 +69,11 @@
     };
     script = ''
       exec ${pkgs.openssh}/bin/ssh \
-        -o ServerAliveInterval=30 \
-        -o ServerAliveCountMax=3 \
+        -o ForwardX11=no \
+        -o ForwardX11Trusted=no \
+        -o ServerAliveInterval=10 \
+        -o ServerAliveCountMax=6 \
+        -o TCPKeepAlive=yes \
         -o ExitOnForwardFailure=yes \
         -o StrictHostKeyChecking=accept-new \
         -N -L 6770:localhost:6767 hanbat_a100

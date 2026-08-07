@@ -14,6 +14,7 @@ in
     ./hermes.nix
     ./flatpak.nix
     ./keyd.nix
+    ./letta.nix
     ./fonts.nix
     ./hardware.nix
     ./network.nix

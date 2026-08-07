@@ -1,0 +1,13 @@
+{
+  "lastAgent": "agent-local-7323ec49-7a30-410a-b091-0add06c1b57c",
+  "sessionsByServer": {
+    "local:/home/ownvoy/.letta/lc-local-backend": {
+      "agentId": "agent-local-7323ec49-7a30-410a-b091-0add06c1b57c",
+      "conversationId": "default"
+    }
+  },
+  "lastSession": {
+    "agentId": "agent-local-7323ec49-7a30-410a-b091-0add06c1b57c",
+    "conversationId": "default"
+  }
+}

@@ -912,11 +912,11 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1780902656,
-        "narHash": "sha256-DKD2dGw8IlBZJ5z5ToiYkzbH0/1+HUpXK++hgTRvyic=",
+        "lastModified": 1785490447,
+        "narHash": "sha256-k/R9c5Pw0WBe1yS5+hbhcSKyS/8beINgowJdMocN+E0=",
         "owner": "nexu-io",
         "repo": "open-design",
-        "rev": "532ced93f1064262a9b550ac488f6dfa51cda19d",
+        "rev": "517f39acde402c1a7af2189167a8d6957a3dac71",
         "type": "github"
       },
       "original": {
@@ -932,11 +932,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1785104439,
-        "narHash": "sha256-93jJB6vXabxJHUbSSttFti/wvgW4c0QXrDWSlXC2bZo=",
+        "lastModified": 1785610579,
+        "narHash": "sha256-D7of8bEzqLm7sPUAH311PTA1FhvltqVMJugffkwRZGc=",
         "owner": "getpaseo",
         "repo": "paseo",
-        "rev": "1a1ff8828f002fce08e239bae3d46aff75e22f52",
+        "rev": "048b82f2a7b3ecc9b62bc5b817729f4ca2741863",
         "type": "github"
       },
       "original": {
