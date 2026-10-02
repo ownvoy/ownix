@@ -52,7 +52,7 @@ in
     enable = true;
     package = pkgs.hyprland;
     systemd = {
-      enable = true;
+      enable = false;
       enableXdgAutostart = true;
       variables = [ "--all" ];
     };

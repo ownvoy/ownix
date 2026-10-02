@@ -36,11 +36,33 @@
     stylix.url = "github:danth/stylix";
     nix-flatpak.url = "github:gmodena/nix-flatpak?ref=latest";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Keep the last nixpkgs revision where Zotero 10.0.0 and Firefox ESR
+    # 140.14.0 matched. The unstable package has since moved to Zotero 10.0.2
+    # and Firefox ESR 153, so use this package directly rather than overriding
+    # a removed firefox-esr-140 argument on the new derivation.
+    nixpkgs-zotero-gecko.url = "github:NixOS/nixpkgs/09e9eb0b2d7c8c9a3f76b017920aae3bb4f30579";
     agenix.url = "github:ryantm/agenix";
-    cava-bg.url = "github:leriart/cava-bg";
-    open-design.url = "github:nexu-io/open-design";
+    # Upstream retired its Nix distribution in 49cc5105 (2026-08-31): flake.nix,
+    # flake.lock and the whole nix/ dir (incl. the home-manager module we import
+    # in modules/home/open-design.nix) were deleted. Pinned to the last rev that
+    # still ships them; unpin only if upstream restores a flake.
+    open-design.url = "github:nexu-io/open-design/517f39acde402c1a7af2189167a8d6957a3dac71";
     endcord-src = {
       url = "github:sparklost/endcord";
+      flake = false;
+    };
+    # claw-hwp: Claude Code skill for reading/creating/editing Korean HWP/HWPX
+    # docs. Consumed as a plain source tree (all JS/Python deps are vendored),
+    # placed into ~/.claude/skills by modules/home/claw-hwp.nix.
+    claw-hwp = {
+      url = "github:DoHyun468/claw-hwp";
+      flake = false;
+    };
+    # hallmark: Claude Code design skill (anti-AI-slop UI generation). Plain
+    # markdown + references, placed into ~/.claude/skills by
+    # modules/home/hallmark.nix.
+    hallmark = {
+      url = "github:Nutlope/hallmark";
       flake = false;
     };
     noctalia = {
@@ -160,6 +182,8 @@
             exec npx --yes @claude-flow/cli@${rufloVersion} "$@"
           '';
         };
+
+        opencodex = pkgs.callPackage ./pkgs/opencodex { };
 
         ouroboros = pkgs.writeShellApplication {
           name = "ouroboros";

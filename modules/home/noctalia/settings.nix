@@ -42,7 +42,7 @@
 
     start = [ "launcher" "clock" "sysmon" "active_window" "media" ];
     center = [ "workspaces" ];
-    end = [ "tray" "notifications" "clipboard" "volume" "brightness" "battery" "control-center" "session" ];
+    end = [ "tray" "network" "notifications" "clipboard" "volume" "brightness" "battery" "control-center" "session" ];
   };
 
   # ── Dock ─────────────────────────────────────────────────────────────────
@@ -106,6 +106,15 @@
   # ── System monitor sampling ──────────────────────────────────────────────
   system.monitor.enabled = true;
 
+  # ── Idle / power ─────────────────────────────────────────────────────────
+  idle = {
+    enabled = true;
+    screen_off_timeout = 1200; # 20 min
+    lock_timeout = 1260; # 21 min, shortly after screen off
+    suspend_timeout = 0; # disabled, keep box awake for remote access
+    fade_duration = 5;
+  };
+
   # ── Per-widget config ────────────────────────────────────────────────────
   widget.clock = {
     format = "{:%H:%M}";
@@ -116,4 +125,8 @@
     stat = "cpu_usage";
     display = "text";
   };
+
+  # nm-applet is kept running for VPN and secret-agent prompts, but its tray
+  # item has no Activate method, so Noctalia cannot open it on left-click.
+  widget.tray.hidden = [ "nm-applet" ];
 }

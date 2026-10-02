@@ -10,7 +10,19 @@
 { config, pkgs, inputs, ... }:
 
 let
-  paseoPkgs = inputs.paseo.packages.${pkgs.system};
+  # Patched so the context-window tooltip shows Codex quota for our
+  # opencodex-native GPT models proxied through the "claude" provider — see
+  # modules/core/paseo.nix (paseoUsageProviderOverridePatch) for the full
+  # rationale and the same override applied to services.paseo.package.
+  # This home-manager profile is what actually lands on PATH as
+  # `paseo-desktop` (/etc/profiles/per-user/<user>/bin takes precedence over
+  # /run/current-system/sw/bin), so it must carry the same patch or the
+  # desktop app silently reverts to the unpatched build on every launch.
+  paseoPkgs = inputs.paseo.packages.${pkgs.system} // {
+    desktop = (inputs.paseo.packages.${pkgs.system}.desktop).overrideAttrs (old: {
+      patches = (old.patches or [ ]) ++ [ ../../patches/paseo-claude-usage-shows-codex-quota.patch ];
+    });
+  };
 in
 {
   # ──────────────────────────────────────────────

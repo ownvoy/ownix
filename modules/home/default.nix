@@ -22,6 +22,7 @@ in
     ./bottom.nix
     ./cava.nix
     ./claude-code.nix
+    ./claw-hwp.nix
     ./codex.nix
     ./emoji.nix
     ./eza.nix
@@ -30,6 +31,8 @@ in
     # ./figma.nix
     ./gh.nix
     ./git.nix
+    ./graphify.nix
+    ./hallmark.nix
     ./gtk.nix
     ./huggingface.nix
     ./htop.nix
@@ -39,6 +42,7 @@ in
     ./lazygit.nix
     ./obs-studio.nix
     ./open-design.nix
+    ./opencodex.nix
     ./papers.nix
     ./paseo.nix
     ./pi.nix

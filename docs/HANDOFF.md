@@ -27,6 +27,19 @@ sessions. Keep it short, factual, and easy to overwrite.
 
 ## Recent Changes
 
+- `modules/home/graphify.nix` (new, 2026-08-19): Graphify
+  (github:Graphify-Labs/graphify) — codebase→knowledge-graph tool for Claude
+  Code. PyPI `graphifyy` needs ~30 pinned tree-sitter wheels not in nixpkgs, so
+  the `graphify` CLI is a version-pinned `uvx` wrapper (0.9.46, extras
+  mcp/pdf/watch) plus a `fetchurl`-pinned `~/.claude/skills/graphify/SKILL.md`.
+  Imported from `modules/home/default.nix`. The skill drives graphify as a
+  Python library (`python3 -c "from graphify... import"`) and self-installs via
+  `pip --break-system-packages`, so the module also ships `graphify-python`
+  (`uv run --with` wrapper) and sed-patches SKILL.md to use it everywhere
+  (inline `-c`, `-m graphify.serve/.watch`, MCP `"command"`); a runCommand
+  guard fails the build if any pip/python3 reference survives. Validation:
+  `uv run` import of `graphify.detect` works; `nh os build` for `my-desktop`
+  succeeded. Not yet switched — user runs `fr` manually (sudo).
 - `modules/home/python.nix` (new, 2026-07-21): declarative Python env
   (`python3.withPackages`: requests, beautifulsoup4, opencv4, numpy) for the
   deepfake news-scraping dataset work; imported from `modules/home/darwin.nix`.

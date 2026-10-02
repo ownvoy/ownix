@@ -1,4 +1,4 @@
-{ config, lib, pkgs, host ? null, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   # 1. 기존 SSH 설정 (선언적으로 관리됨)
@@ -52,20 +52,18 @@
         ProxyJump H200_up_up
         IdentityFile ~/.ssh/kaist-id-rsa
 
+      Host kaist_GB300
+        HostName 143.248.249.13
+        User mlp
+        Port 22
+        IdentityFile ~/.ssh/id_ed25519
+
       Host 10.0.2.*
         User work
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
         # NixOS니까 nc 경로를 명확히 찾기 위해 경로 없이 쓰거나, 아래 2단계 확인 필수
         ProxyCommand nc -X 5 -x 127.0.0.1:1080 %h %p
-
-      Host bai-vscode
-        User work
-        HostName proxy3.nipa2025.ktcloud.com
-        Port 10540
-        IdentityFile ~/.ssh/id_ed25519
-        StrictHostKeyChecking no
-        UserKnownHostsFile /dev/null
 
       Host vml 100.73.57.38
         HostName 100.73.57.38
@@ -77,23 +75,11 @@
         User ownvoy
         IdentityFile ~/.ssh/id_ed25519
 
-      ${lib.optionalString (host == "Wonjuns-MacBook-Air") ''
-      Host bai-vscode
-        ProxyJump my-desktop
-
-      Host bai-vscode-on-desktop
-        HostName 100.127.76.68
-        User ownvoy
-        IdentityFile ~/.ssh/id_ed25519
-        RequestTTY yes
-        RemoteCommand ssh bai-vscode
-      ''}
-
           '';
   };
 
   # ── SSH 에이전트 (systemd user service) ──
-  # Paseo 에이전트가 SSH 접속(hanbat_a100, bai-vscode, H100_proxy 등)할 때
+  # Paseo 에이전트가 SSH 접속(hanbat_a100, H100_proxy 등)할 때
   # SSH_AUTH_SOCK = /run/user/$UID/ssh-agent 를 통해 키 사용
   services.ssh-agent = {
     enable = true;

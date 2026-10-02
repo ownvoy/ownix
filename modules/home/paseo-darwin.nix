@@ -4,14 +4,13 @@
 #
 # The Paseo.app cask (modules/darwin/homebrew.nix) is only the desktop GUI —
 # it has no daemon of its own on this machine. These agents open background
-# SSH tunnels to the three existing remote daemons and forward each one to
+# SSH tunnels to the existing remote daemons and forward each one to
 # a local port, so the app can add them as Direct Connections:
 #
-#   bai-vscode -> localhost:6768
 #   H100_proxy -> localhost:6769
 #   my-desktop -> localhost:6770
 #
-# All three SSH aliases are already declared in modules/home/ssh.nix.
+# Both SSH aliases are already declared in modules/home/ssh.nix.
 { config, lib, ... }:
 let
   mkTunnel = { name, remotePort ? 6767, localPort, host }: {
@@ -41,7 +40,6 @@ let
 in
 {
   launchd.agents = lib.mkMerge [
-    (mkTunnel { name = "bai-vscode"; localPort = 6768; host = "bai-vscode"; })
     (mkTunnel { name = "h100-proxy"; localPort = 6769; host = "H100_proxy"; })
     (mkTunnel { name = "my-desktop"; localPort = 6770; host = "my-desktop"; })
   ];

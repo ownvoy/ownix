@@ -11,6 +11,7 @@ in
   imports = [
     ./boot.nix
     ./chromium.nix
+    ./guest-access.nix
     ./hermes.nix
     ./flatpak.nix
     ./keyd.nix
@@ -29,7 +30,6 @@ in
     (if vars.displayManager == "tui" then ./greetd.nix else ./sddm.nix)
     ./security.nix
     ./services.nix
-    ./sshfs-mounts.nix
     ./spicetify.nix
     ./steam.nix
     ./stylix.nix

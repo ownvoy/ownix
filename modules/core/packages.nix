@@ -9,6 +9,13 @@ let
     system = pkgs.system;
     config.allowUnfree = true;
   };
+  # See the nixpkgs-zotero-gecko comment in flake.nix. Keep the complete
+  # matching Zotero/Gecko package from that revision: current unstable removed
+  # the firefox-esr-140 override argument when it moved to ESR 153.
+  zotero = (import inputs.nixpkgs-zotero-gecko {
+    system = pkgs.system;
+    config.allowUnfree = true;
+  }).zotero;
   endcord = pkgs.callPackage ../../pkgs/endcord.nix {
     protobuf = unstable.python312Packages.protobuf;
     src = inputs.endcord-src;
@@ -136,7 +143,7 @@ in
     unstable.codex
     unstable.pear-desktop
     unstable.winboat
-    unstable.zotero
+    zotero
     usbutils # Good Tools For USB Devices
     uwsm # Universal Wayland Session Manager (optional must be enabled)
     uv

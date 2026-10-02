@@ -8,12 +8,34 @@
 #   - SSH agent forwarding: agents spawned by Paseo can SSH into
 #     remote servers defined in ssh.nix:
 #       hanbat_a100, seoultech_h100, seoultech_a6000, A6000,
-#       H100_proxy, H200_up_up, H200_main, bai-vscode, vml, my-desktop
+#       H100_proxy, H200_up_up, H200_main, vml, my-desktop
 #
-{ config, pkgs, inputs, host, ... }:
+{ config, pkgs, inputs, host, self, ... }:
 
 let
-  paseoPkgs = inputs.paseo.packages.${pkgs.system};
+  paseoPkgsUnpatched = inputs.paseo.packages.${pkgs.system};
+
+  # Paseo's context-window tooltip shows quota for whatever Paseo `provider`
+  # (e.g. "claude") the agent is nominally running under. Our GPT models
+  # (agents.providers.claude.additionalModels below) are proxied through
+  # `ocx claude` but actually spend Codex/ChatGPT subscription quota, not
+  # Anthropic quota — so the tooltip showed nothing useful for them. This
+  # patch teaches the tooltip to look up "codex" usage instead, keyed off the
+  # `claude-ocx-native--` model-id prefix opencodex uses for its native GPT
+  # catalog (modules/home/opencodex.nix). That prefix is our own naming
+  # choice, not an upstream convention, so this stays a local patch rather
+  # than something to send upstream.
+  paseoUsageProviderOverridePatch = ../../patches/paseo-claude-usage-shows-codex-quota.patch;
+
+  applyUsageProviderPatch = drv: drv.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ [ paseoUsageProviderOverridePatch ];
+  });
+
+  paseoPkgs = paseoPkgsUnpatched // {
+    paseo = applyUsageProviderPatch paseoPkgsUnpatched.paseo;
+    default = applyUsageProviderPatch paseoPkgsUnpatched.default;
+    desktop = applyUsageProviderPatch paseoPkgsUnpatched.desktop;
+  };
 
   # SSH 에이전트 소켓 경로.
   # home-manager의 services.ssh-agent.enable = true 로 실행된
@@ -21,6 +43,27 @@ let
   # UID를 직접 못 구하면 1000으로 fallback (NixOS 기본값).
   uid = toString (config.users.users.ownvoy.uid or 1000);
   sshAuthSock = "/run/user/${uid}/ssh-agent";
+
+  # Paseo's `agents.providers.claude.command` override (ProviderOverrideSchema,
+  # a plain argv array) gets converted internally to {mode:"replace", argv}
+  # (provider-registry.js toRuntimeSettings), which correctly carries the full
+  # argv wherever Paseo compares/executes a command directly (isAvailable,
+  # getDiagnostic, resolveClaudeAuth). BUT the actual agent-spawn path
+  # (resolveClaudeBinary in providers/claude/agent.js) only keeps
+  # `availability.resolvedPath ?? launch.command` — it silently drops
+  # `launch.args` — and hands that single path to the Claude Agent SDK as
+  # `pathToClaudeCodeExecutable`. So `command = ["ocx" "claude"]` would only
+  # ever spawn bare `ocx` (missing the "claude" subcommand `ocx` needs to know
+  # to proxy Claude Code at all), while working fine for the shell alias
+  # (modules/home/zsh/default.nix) which does pass "claude" through.
+  # Workaround: give Paseo a single-token wrapper binary that already bakes in
+  # `ocx claude`, so there's no second argv element for Paseo to drop.
+  ocxClaudeWrapper = pkgs.writeShellApplication {
+    name = "ocx-claude";
+    text = ''
+      exec "${self.packages.${pkgs.system}.opencodex}/bin/ocx" claude "$@"
+    '';
+  };
 in
 {
   imports = [ inputs.paseo.nixosModules.default ];
@@ -39,6 +82,10 @@ in
   # ──────────────────────────────────────────────
   services.paseo = {
     enable = true;
+
+    # Patched build — see paseoUsageProviderOverridePatch above (daemon also
+    # serves its own web-ui, so it needs the patch independently of desktop).
+    package = paseoPkgs.default;
 
     # Run as your user so spawned agents see your
     # dev environment (git, ssh, nix, etc.).
@@ -69,10 +116,9 @@ in
     #
     #   hanbat_a100, seoultech_h100, seoultech_a6000,
     #   A6000, H100_proxy, H200_up_up, H200_main,
-    #   bai-vscode, vml, my-desktop
+    #   vml, my-desktop
     #
     # 원격 데몬 SSH 터널 (paseo-tunnel.nix):
-    #   localhost:6768 = bai-vscode daemon
     #   localhost:6769 = H100_proxy daemon
     #   localhost:6770 = hanbat_a100 daemon
     #
@@ -94,8 +140,41 @@ in
     # WARNING: overrides any runtime mutations
     # (set-password, MCP toggles, etc.) on restart.
     settings = {
-      # Example — add agent providers:
-      # agents.providers.claude = { extends = "claude-code"; };
+      # Route Paseo's built-in "claude" provider through the opencodex proxy
+      # (modules/home/opencodex.nix) instead of invoking `claude` directly.
+      # Must be a single-token command — see ocxClaudeWrapper above for why
+      # `["ocx" "claude"]` doesn't work here (Paseo drops the "claude" arg on
+      # the actual spawn path, even though it's honored elsewhere). The
+      # wrapper already execs `ocx claude "$@"`, which ensures the proxy is
+      # running, injects ANTHROPIC_BASE_URL/model env, and execs the real
+      # `claude` binary with stdio inherited (it never writes to stdout
+      # itself), so it's a transparent drop-in for whatever args Paseo/the
+      # Claude Agent SDK append after it.
+      agents.providers.claude = {
+        command = [ "${ocxClaudeWrapper}/bin/ocx-claude" ];
+        additionalModels = [
+          {
+            id = "claude-ocx-native--gpt-5.5";
+            label = "gpt-5.5 (native)";
+          }
+          {
+            id = "claude-ocx-native--gpt-5.6-sol";
+            label = "gpt-5.6-sol (native)";
+          }
+          {
+            id = "claude-ocx-native--gpt-5.6-terra";
+            label = "gpt-5.6-terra (native)";
+          }
+          {
+            id = "claude-ocx-native--gpt-5.6-luna";
+            label = "gpt-5.6-luna (native)";
+          }
+          {
+            id = "claude-ocx-native--gpt-6-astra";
+            label = "gpt-6-astra (native)";
+          }
+        ];
+      };
       # agents.providers.codex   = { extends = "codex"; };
       # agents.providers.opencode = { extends = "opencode"; };
 
