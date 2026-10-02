@@ -10,7 +10,7 @@
 #       hanbat_a100, seoultech_h100, seoultech_a6000, A6000,
 #       H100_proxy, H200_up_up, H200_main, vml, my-desktop
 #
-{ config, pkgs, inputs, host, self, ... }:
+{ config, lib, pkgs, inputs, host, self, ... }:
 
 let
   paseoPkgsUnpatched = inputs.paseo.packages.${pkgs.system};
@@ -40,8 +40,10 @@ let
   # SSH 에이전트 소켓 경로.
   # home-manager의 services.ssh-agent.enable = true 로 실행된
   # ssh-agent는 /run/user/<UID>/ssh-agent 에 바인딩됩니다.
-  # UID를 직접 못 구하면 1000으로 fallback (NixOS 기본값).
-  uid = toString (config.users.users.ownvoy.uid or 1000);
+  # UID를 선언하지 않으면 users.users.ownvoy.uid 는 속성이 없는 게 아니라
+  # null 이라 `or 1000` 이 안 걸린다 (그래서 /run/user//ssh-agent 가 됐었음).
+  # null 이면 1000으로 fallback (NixOS 기본값).
+  uid = toString (lib.defaultTo 1000 config.users.users.ownvoy.uid);
   sshAuthSock = "/run/user/${uid}/ssh-agent";
 
   # Paseo's `agents.providers.claude.command` override (ProviderOverrideSchema,
