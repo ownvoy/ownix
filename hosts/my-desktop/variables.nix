@@ -84,6 +84,10 @@
   # Yazi is default File Manager
   thunarEnable = true;
 
+  # Guest SSH access via Tailscale Funnel (modules/core/guest-access.nix).
+  # Puts sshd on the public internet while on, so only enable when needed.
+  guestAccessEnable = false;
+
   # Themes, waybar and animation.
   #  Only uncomment your selection
   # The others much be commented out.
