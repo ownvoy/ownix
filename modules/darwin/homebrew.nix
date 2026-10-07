@@ -34,12 +34,15 @@
       # mas is used by ./mas-apps.nix (App Store apps are installed there, not
       # via homebrew.masApps — see the comment in that module for why).
       "mas"
-      "yabai"
+      "koekeishiya/formulae/yabai"
     ];
     casks = [
       "google-chrome"
       "hammerspoon"
       "karabiner-elements"
+      # Streams the Linux desktop's Hyprland session (Sunshine host, see
+      # modules/core/sunshine.nix).
+      "moonlight"
       "neovide"
       "paseo"
     ];

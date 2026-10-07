@@ -40,6 +40,9 @@ let
     [projects."${homeDir}/ownix"]
     trust_level = "trusted"
 
+    [projects."${homeDir}/ct"]
+    trust_level = "trusted"
+
     [projects."${homeDir}/ownsidian"]
     trust_level = "trusted"
 

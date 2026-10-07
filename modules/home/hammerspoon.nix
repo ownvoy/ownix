@@ -43,8 +43,11 @@
     end)
     bindApp("M", function() toggleApp("Discord") end)
     bindApp("T", function() toggleApp("kitty") end)
+    -- `open -n` spawns a separate kitty process (and Dock icon) per yazi
+    -- window, and macOS kitty keeps running after its last window closes,
+    -- so make this instance quit once yazi exits instead of piling up.
     bindApp("Y", function()
-      hs.execute("open -na kitty --args -e yazi", true)
+      hs.execute("open -na kitty --args -o macos_quit_when_last_window_closed=yes -e yazi", true)
     end)
     bindApp("O", function() toggleApp("Obsidian") end)
 

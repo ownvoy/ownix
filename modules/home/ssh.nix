@@ -19,6 +19,8 @@
         IdentityFile ~/.ssh/id_ed25519
         ForwardX11 yes
         ForwardX11Trusted yes
+        RequestTTY yes
+        RemoteCommand bash -lc 'f="$HOME/.tmux.conf"; [ -f "$f" ] || touch "$f"; grep -qE "set(-option)? -g set-clipboard on" "$f" || printf "\n# added by ssh.nix\nset -g mouse on\nset -g set-clipboard on\n" >> "$f"; exec $SHELL'
 
       Host seoultech_h100
         HostName 117.17.185.235
@@ -39,6 +41,8 @@
         HostName 117.17.185.235
         User seoultech
         ProxyJump A6000
+        RequestTTY yes
+        RemoteCommand bash -lc 'f="$HOME/.tmux.conf"; [ -f "$f" ] || touch "$f"; grep -qE "set(-option)? -g set-clipboard on" "$f" || printf "\n# added by ssh.nix\nset -g mouse on\nset -g set-clipboard on\n" >> "$f"; exec $SHELL'
 
       # New H200 Configurations
       Host H200_up_up

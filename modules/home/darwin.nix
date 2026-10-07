@@ -18,6 +18,7 @@ in
     ./bottom.nix
     ./codex.nix
     ./darwin-commands.nix
+    ./dev-socks-darwin.nix
     ./eza.nix
     ./fastfetch
     ./fzf.nix
