@@ -90,6 +90,28 @@ let
   ];
   ctrlLetters = builtins.filter (k: !(builtins.elem k claimedLetters)) allLetters;
   cleanCtrl = key: hyperTo key key [ "left_control" ];
+
+  # Caps Lock held -> Hyper; tapped alone -> `aloneKey`.
+  capsLockHyper = aloneKey: {
+    type = "basic";
+    from = {
+      key_code = "caps_lock";
+      modifiers = {
+        optional = [ "any" ];
+      };
+    };
+    to = [
+      {
+        key_code = "left_shift";
+        modifiers = [
+          "left_command"
+          "left_control"
+          "left_option"
+        ];
+      }
+    ];
+    to_if_alone = [ aloneKey ];
+  };
 in
 {
   # Karabiner-Elements itself is installed via the "karabiner-elements"
@@ -108,34 +130,31 @@ in
       title = "Hyper Key (Caps Lock)";
       rules = [
         {
-          description = "Caps Lock held with another key -> Hyper (^⌥⇧⌘); tapped alone -> real Caps Lock (keeps 한/영 toggle working)";
+          description = "Caps Lock held with another key -> Hyper (^⌥⇧⌘); tapped alone -> real Caps Lock (keeps 한/영 toggle working; fn/🌐 in Spotlight)";
           manipulators = [
-            {
-              type = "basic";
-              from = {
-                key_code = "caps_lock";
-                modifiers = {
-                  optional = [ "any" ];
-                };
-              };
-              to = [
-                {
-                  key_code = "left_shift";
-                  modifiers = [
-                    "left_command"
-                    "left_control"
-                    "left_option"
-                  ];
-                }
-              ];
-              # Pass the real caps_lock key event through untouched on a lone
-              # tap, instead of remapping it — this is what lets whatever
-              # macOS/keyboard already binds to a caps-lock tap (e.g. the
-              # 한/영 input-source toggle on Korean keyboards) keep working.
-              to_if_alone = [
-                { key_code = "caps_lock"; }
-              ];
-            }
+            # Spotlight's search field is an overlay that never becomes the
+            # frontmost app, and the Caps Lock 한/영 toggle doesn't reliably
+            # reach it. The Globe (fn) key does — it's handled by the
+            # system-wide TextInputSwitcher — so tap fn there instead. Relies
+            # on "Press 🌐 key to: Change Input Source", and on
+            # Karabiner-Elements >= 16.0, which detects overlay windows like
+            # Spotlight as frontmost. Keep it first: first match wins.
+            (
+              capsLockHyper { apple_vendor_top_case_key_code = "keyboard_fn"; }
+              // {
+                conditions = [
+                  {
+                    type = "frontmost_application_if";
+                    bundle_identifiers = [ "^com\\.apple\\.Spotlight$" ];
+                  }
+                ];
+              }
+            )
+            # Pass the real caps_lock key event through untouched on a lone
+            # tap, instead of remapping it — this is what lets whatever
+            # macOS/keyboard already binds to a caps-lock tap (e.g. the
+            # 한/영 input-source toggle on Korean keyboards) keep working.
+            (capsLockHyper { key_code = "caps_lock"; })
           ];
         }
         {
