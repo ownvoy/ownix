@@ -27,6 +27,14 @@ sessions. Keep it short, factual, and easy to overwrite.
 
 ## Recent Changes
 
+- `modules/home/zsh/default.nix` (2026-10-18): the shared `claude = "ocx claude"`
+  alias broke on the Mac (no `ocx` there). Decided to keep ocx/Claude Code on
+  my-desktop only: on darwin the alias is now
+  `ssh -t my-desktop "cd ~ && ocx claude"`; NixOS unchanged. Mac Paseo.app
+  uses the my-desktop daemon via the `paseo-tunnel-my-desktop` launchd tunnel
+  (`localhost:6770`, verified responding) or the app.paseo.sh relay.
+  Validation: both hosts' alias evaluated with `nix eval`. Not yet switched on
+  the Mac.
 - `modules/home/graphify.nix` (new, 2026-08-19): Graphify
   (github:Graphify-Labs/graphify) — codebase→knowledge-graph tool for Claude
   Code. PyPI `graphifyy` needs ~30 pinned tree-sitter wheels not in nixpkgs, so

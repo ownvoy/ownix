@@ -21,6 +21,14 @@ let
       { }
     else
       { };
+  # Route interactive `claude` through opencodex (modules/home/opencodex.nix)
+  # so /model can pick non-Anthropic models. opencodex only runs on my-desktop
+  # (the Mac has no `ocx`), so on darwin run it there over SSH instead.
+  claudeAlias =
+    if pkgs.stdenv.isDarwin then
+      ''ssh -t my-desktop "cd ~ && ocx claude"''
+    else
+      "ocx claude";
 in
 {
   imports = [
@@ -114,14 +122,13 @@ in
       zu = "sh <(curl -L https://gitlab.com/Zaney/zaneyos/-/releases/latest/download/install-zaneyos.sh)";
       cat = "bat";
       man = "batman";
-      # Route interactive `claude` through opencodex (modules/home/opencodex.nix)
-      # so /model can pick non-Anthropic models. This is a shell alias, not a
+      # See claudeAlias above. This is a shell alias, not a
       # PATH-level rename, on purpose: it only expands when you type `claude`
       # yourself, and is invisible to anything that spawns the `claude` binary
       # directly by name (Paseo's own provider override in
       # modules/core/paseo.nix does that already; `ocx claude` itself execs the
       # real `claude` binary under the hood) — so there's no recursion risk.
-      claude = "ocx claude";
+      claude = claudeAlias;
     } // rebuildAliases // guiAliases;
   };
 }
