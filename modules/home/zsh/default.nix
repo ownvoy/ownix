@@ -23,10 +23,21 @@ let
       { };
   # Route interactive `claude` through opencodex (modules/home/opencodex.nix)
   # so /model can pick non-Anthropic models. opencodex only runs on my-desktop
-  # (the Mac has no `ocx`), so on darwin run it there over SSH instead.
+  # (the Mac has no `ocx`); on darwin, Claude Code runs locally on the Mac's
+  # files and talks to my-desktop's proxy through the ocx-tunnel-my-desktop
+  # launchd tunnel (modules/home/paseo-darwin.nix). The env mirrors what
+  # `ocx claude` exports there (no ANTHROPIC_AUTH_TOKEN: claude.ai login stays).
   claudeAlias =
     if pkgs.stdenv.isDarwin then
-      ''ssh -t my-desktop "cd ~ && ocx claude"''
+      lib.concatStringsSep " " [
+        "ANTHROPIC_BASE_URL=http://127.0.0.1:10100"
+        "CLAUDE_CODE_ENABLE_GATEWAY_MODEL_DISCOVERY=1"
+        "CLAUDE_CODE_AUTO_COMPACT_WINDOW=829800"
+        "ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-5-5[1m]'"
+        "ANTHROPIC_DEFAULT_SONNET_MODEL='claude-sonnet-5[1m]'"
+        "ANTHROPIC_DEFAULT_FABLE_MODEL='claude-fable-5-1[1m]'"
+        "claude"
+      ]
     else
       "ocx claude";
 in

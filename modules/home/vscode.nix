@@ -1,6 +1,10 @@
-{ lib, pkgs, ... }: {
+{ lib, pkgs, osConfig, ... }:
+# Only needed on NixOS (home-manager.useGlobalPkgs = false); on darwin the
+# global pkgs already allow unfree and HM forbids any nixpkgs.* definition
+# there (even an mkIf false one), so leave the option out entirely.
+lib.optionalAttrs (!osConfig.home-manager.useGlobalPkgs) {
   nixpkgs.config.allowUnfree = true;
-
+} // {
   programs.vscode = {
     enable = true;
     profiles = {

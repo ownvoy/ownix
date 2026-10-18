@@ -28,13 +28,17 @@ sessions. Keep it short, factual, and easy to overwrite.
 ## Recent Changes
 
 - `modules/home/zsh/default.nix` (2026-10-18): the shared `claude = "ocx claude"`
-  alias broke on the Mac (no `ocx` there). Decided to keep ocx/Claude Code on
-  my-desktop only: on darwin the alias is now
-  `ssh -t my-desktop "cd ~ && ocx claude"`; NixOS unchanged. Mac Paseo.app
-  uses the my-desktop daemon via the `paseo-tunnel-my-desktop` launchd tunnel
-  (`localhost:6770`, verified responding) or the app.paseo.sh relay.
-  Validation: both hosts' alias evaluated with `nix eval`. Not yet switched on
-  the Mac.
+  alias broke on the Mac (no `ocx` there). ocx stays on my-desktop only: on
+  darwin, Claude Code runs locally (Mac files) with `ANTHROPIC_BASE_URL` etc.
+  mirroring `ocx claude`'s env, pointed at my-desktop's proxy through the new
+  `ocx-tunnel-my-desktop` launchd agent (`modules/home/paseo-darwin.nix`,
+  localhost:10100 -> my-desktop:10100). NixOS alias unchanged. Mac needs a
+  one-time claude.ai `/login` (ocx passes the client login through; GPT models
+  work without it). Also fixed forward for the Mac's newer home-manager:
+  `git.nix` -> `programs.git.settings`, `vscode.nix` drops `nixpkgs.*` when
+  `useGlobalPkgs`. Validation: tunnel + GPT reply tested from the Mac; Mac
+  system eval passes (build was interrupted by the Mac sleeping); my-desktop
+  toplevel evaluates. Not yet switched on the Mac.
 - `modules/home/graphify.nix` (new, 2026-08-19): Graphify
   (github:Graphify-Labs/graphify) — codebase→knowledge-graph tool for Claude
   Code. PyPI `graphifyy` needs ~30 pinned tree-sitter wheels not in nixpkgs, so
